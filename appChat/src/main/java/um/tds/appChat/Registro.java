@@ -175,12 +175,12 @@ public class Registro {
 		gbc_dateChooser.gridy = 5;
 		frame.getContentPane().add(dateChooser, gbc_dateChooser);
 		
-		JLabel lblFotoSubida = new JLabel("Inserte una imagen ");
-		GridBagConstraints gbc_lblFotoSubida = new GridBagConstraints();
-		gbc_lblFotoSubida.insets = new Insets(0, 0, 5, 5);
-		gbc_lblFotoSubida.gridx = 3;
-		gbc_lblFotoSubida.gridy = 5;
-		frame.getContentPane().add(lblFotoSubida, gbc_lblFotoSubida);
+		JLabel lblSubirFoto = new JLabel("Inserte una imagen ");
+		GridBagConstraints gbc_lblSubirFoto = new GridBagConstraints();
+		gbc_lblSubirFoto.insets = new Insets(0, 0, 5, 5);
+		gbc_lblSubirFoto.gridx = 3;
+		gbc_lblSubirFoto.gridy = 5;
+		frame.getContentPane().add(lblSubirFoto, gbc_lblSubirFoto);
 		
 		JLabel lblSaludo = new JLabel("Saludo:");
 		GridBagConstraints gbc_lblSaludo = new GridBagConstraints();
@@ -216,8 +216,12 @@ public class Registro {
 				ImageIcon icon = new ImageIcon(currentFile.getPath()); 
 				Image fotoEscalada = icon.getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
 				foto.setIcon(new ImageIcon(fotoEscalada));
+				GridBagConstraints gbc_lblFotoSubida = new GridBagConstraints();
+				gbc_lblFotoSubida.insets = new Insets(0, 0, 5, 5);
+				gbc_lblFotoSubida.gridx = 3;
+				gbc_lblFotoSubida.gridy = 5;
 				frame.getContentPane().add(foto, gbc_lblFotoSubida);
-				frame.getContentPane().remove(lblFotoSubida);
+				frame.getContentPane().remove(lblSubirFoto);
 				frame.revalidate();
 				frame.repaint();	
 			}
