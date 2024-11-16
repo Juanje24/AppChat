@@ -1,10 +1,11 @@
-package um.tds.appChat;
+package um.tds.appChat.ventanas;
 
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
+import java.awt.GridBagLayout;
 
-public class Main {
+public class Principal {
 
 	private JFrame frame;
 
@@ -15,7 +16,7 @@ public class Main {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Main window = new Main();
+					Principal window = new Principal();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -27,8 +28,11 @@ public class Main {
 	/**
 	 * Create the application.
 	 */
-	public Main() {
+	public Principal() {
 		initialize();
+	}
+	public void mostrar() {
+		frame.setVisible(true);
 	}
 
 	/**
@@ -36,8 +40,14 @@ public class Main {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 300);
+		frame.setBounds(100, 100, 1280, 720);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		GridBagLayout gridBagLayout = new GridBagLayout();
+		gridBagLayout.columnWidths = new int[]{0};
+		gridBagLayout.rowHeights = new int[]{0};
+		gridBagLayout.columnWeights = new double[]{Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{Double.MIN_VALUE};
+		frame.getContentPane().setLayout(gridBagLayout);
 	}
 
 }

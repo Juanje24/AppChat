@@ -1,4 +1,4 @@
-package um.tds.appChat.persistencia;
+package um.tds.appChat.singletons;
 
 import java.time.LocalDate;
 import java.util.Collection;

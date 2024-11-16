@@ -170,7 +170,10 @@ public class Inicio {
 		panelSur.add(btnAceptar);
 		btnAceptar.addActionListener(e ->{
 			System.out.println(textField.getText()); 
-			System.out.println(passwordField.getPassword()); 
+			System.out.println(passwordField.getPassword()); //Pedir al controlador que compruebe si el usuario existe
+			new Principal().mostrar();
+			frameLogin.setVisible(false);
+			frameLogin.dispose();
 		});
 	}
 
