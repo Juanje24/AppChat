@@ -1,6 +1,7 @@
 package um.tds.appChat.dominio;
 
-import java.util.List;
+import java.time.LocalDate;
+import java.util.LinkedList;
 
 public class Usuario {
     
@@ -13,7 +14,7 @@ public class Usuario {
     private LocalDate birthday;
     private String saludo;
     private String urlImagen;
-    private List<Contacto> contactos; //podría ser un Set
+    private LinkedList<Contacto> contactos; //podría ser un Set
 
 
     public Usuario(String name, String lastName, String telefono, String password, LocalDate birthday, String saludo, String urlImagen){
@@ -24,8 +25,8 @@ public class Usuario {
         this.birthday = birthday;
         this.saludo = saludo;
         this.urlImagen = urlImagen;
-        this.isPremium = false;
-        this.contactos = new List<Contacto>();
+        this.premium = false;
+        this.contactos = new LinkedList<>();
     }
 
     public Usuario(String name, String lastName, String telefono, String password, LocalDate birthday, String saludo){ //sin imagen, con fecha
@@ -40,25 +41,34 @@ public class Usuario {
         this(name, lastName, telefono, password, null, saludo, urlImagen);
     }
 
-    public void sendMessage(Mensaje mensaje, Contacto contacto){
-        contacto.
-    }
+	public String getEmail() {
+		
+		return null;
+	}
 
-    public List<Mensaje> searchMessageByText (){
+	public String getContraseña() {
+		return null;
+	}
 
-    }
-
-    public List<Mensaje> searchMessageByNumber (){
-        this.me
-    }
-
-    public List<Mensaje> searchMessageByContactName (){
-
-    }
-
-    public List<Mensaje> searchMessage (String text, String number, String contactName){
-        
-    }
+//    public void sendMessage(Mensaje mensaje, Contacto contacto){
+//        contacto.
+//    }
+//
+//    public List<Mensaje> searchMessageByText (){
+//
+//    }
+//
+//    public List<Mensaje> searchMessageByNumber (){
+//        this.me
+//    }
+//
+//    public List<Mensaje> searchMessageByContactName (){
+//
+//    }
+//
+//    public List<Mensaje> searchMessage (String text, String number, String contactName){
+//        
+//    }
 
 
     

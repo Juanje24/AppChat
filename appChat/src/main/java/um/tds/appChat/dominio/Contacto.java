@@ -1,5 +1,8 @@
 package um.tds.appChat.dominio;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public abstract class Contacto {
     
     private int id;
@@ -9,7 +12,7 @@ public abstract class Contacto {
 
     private List<Mensaje> searchMessageByText(String text){
         return mensajes.stream()
-                .filter(mensaje -> mensaje.matchText(texto))
+                .filter(mensaje -> mensaje.matchText(text))
                 .collect(Collectors.toList());
     }
 

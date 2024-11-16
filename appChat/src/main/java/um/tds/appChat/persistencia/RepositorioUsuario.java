@@ -32,11 +32,11 @@ public enum RepositorioUsuario {
         return new Usuario(name, lastName, telefono, password, birthday, saludo);
     }
 
-    public Usuario(String name, String lastName, String telefono, String password, String saludo){ //sin imagen y sin fecha
+    public Usuario Usuario(String name, String lastName, String telefono, String password, String saludo){ //sin imagen y sin fecha
         return new Usuario(name, lastName, telefono, password, null, saludo, null);
     }
 
-    public Usuario(String name, String lastName, String telefono, String password, String saludo, String urlImagen){ //con imagen, sin fecha
+    public Usuario Usuario(String name, String lastName, String telefono, String password, String saludo, String urlImagen){ //con imagen, sin fecha
         return new Usuario(name, lastName, telefono, password, null, saludo, urlImagen);
     }
 
@@ -52,7 +52,12 @@ public enum RepositorioUsuario {
 		return searchUsuarioByEmail(usuario.getEmail()).isPresent();
 	}
 
-    public boolean addUsuario(Usuario usuario) {
+    Optional<um.tds.appChat.dominio.Usuario> searchUsuarioByEmail(String email) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public boolean addUsuario(Usuario usuario) {
 		if(!usuarioExistente(usuario)) {
 			usuarios.add(usuario);
 			return true;
@@ -64,6 +69,11 @@ public enum RepositorioUsuario {
 		if (u.isPresent()) {
 			return u.get().getContraseña().equals(contraseña);
 		} else return false;
+	}
+
+	Optional<um.tds.appChat.dominio.Usuario> searchUsuarioByUsuario(String usuario) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
     //Es posible que se tenga que implementar la actualización de usuarios por git
