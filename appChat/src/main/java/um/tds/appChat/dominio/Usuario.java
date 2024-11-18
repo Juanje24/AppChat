@@ -2,6 +2,8 @@ package um.tds.appChat.dominio;
 
 import java.time.LocalDate;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class Usuario {
     
@@ -28,6 +30,8 @@ public class Usuario {
         this.premium = false;
         this.contactos = new LinkedList<>();
     }
+    
+    //CONSTRUCTORES
 
     public Usuario(String name, String lastName, String telefono, String password, LocalDate birthday, String saludo){ //sin imagen, con fecha
         this(name, lastName, telefono, password, birthday, saludo, null);
@@ -40,35 +44,118 @@ public class Usuario {
     public Usuario(String name, String lastName, String telefono, String password, String saludo, String urlImagen){ //con imagen, sin fecha
         this(name, lastName, telefono, password, null, saludo, urlImagen);
     }
+    
+    //FUNCIONALIDAD
+    
+    
+    public void sendMessage(Mensaje mensaje, Contacto contacto){ //
+        contacto.addMessage(mensaje);
+    }
+    
+//    public List<Mensaje> searchMessages(MessageSearchBuilder builder) {
+//        return contactos.stream()
+//                .filter(contacto -> builder.getNombreContacto().isEmpty() || contacto.getNombre().equalsIgnoreCase(builder.getNombreContacto().get()))
+//                .flatMap(contacto -> contacto.getMensajes().stream()
+//                        .filter(mensaje -> builder.getText().isEmpty() || mensaje.getContenido().contains(builder.getText().get()))
+//                        .filter(mensaje -> builder.getNumero().isEmpty() || mensaje.getNumero() == builder.getNumero().get())
+//                )
+//                .distinct()
+//                .collect(Collectors.toList());
+//    }
+    
+    public List<Mensaje> searchMessageByText (String text){
+    	return contactos.stream()
+                .flatMap(contacto -> contacto.searchMessageByText(text).stream())
+                .distinct()
+                .collect(Collectors.toList());
+    }
+    
+    
+    //GETTERS Y SETTERS
 
-	public String getEmail() {
-		
-		return null;
+	public int getId() {
+		return id;
 	}
 
-	public String getContraseña() {
-		return null;
+	public void setId(int id) {
+		this.id = id;
 	}
 
-//    public void sendMessage(Mensaje mensaje, Contacto contacto){
-//        contacto.
-//    }
-//
-//    public List<Mensaje> searchMessageByText (){
-//
-//    }
-//
-//    public List<Mensaje> searchMessageByNumber (){
-//        this.me
-//    }
-//
-//    public List<Mensaje> searchMessageByContactName (){
-//
-//    }
-//
-//    public List<Mensaje> searchMessage (String text, String number, String contactName){
-//        
-//    }
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getTelefono() {
+		return telefono;
+	}
+
+	public void setTelefono(String telefono) {
+		this.telefono = telefono;
+	}
+
+	public boolean isPremium() {
+		return premium;
+	}
+
+	public void setPremium(boolean premium) {
+		this.premium = premium;
+	}
+
+	public LocalDate getBirthday() {
+		return birthday;
+	}
+
+	public void setBirthday(LocalDate birthday) {
+		this.birthday = birthday;
+	}
+
+	public String getSaludo() {
+		return saludo;
+	}
+
+	public void setSaludo(String saludo) {
+		this.saludo = saludo;
+	}
+
+	public String getUrlImagen() {
+		return urlImagen;
+	}
+
+	public void setUrlImagen(String urlImagen) {
+		this.urlImagen = urlImagen;
+	}
+
+	public List<Contacto> getContactos() {
+		return contactos;
+	}
+
+	public void setContactos(LinkedList<Contacto> contactos) {
+		this.contactos = new LinkedList<Contacto>(contactos);
+	}
+	
+	
+
+
 
 
     
