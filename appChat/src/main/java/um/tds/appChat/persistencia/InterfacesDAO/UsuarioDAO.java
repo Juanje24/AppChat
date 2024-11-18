@@ -5,7 +5,7 @@ import java.util.List;
 import um.tds.appChat.dominio.Usuario;
 
 public interface UsuarioDAO {
-	public Usuario registrarUsuario(Usuario usuario);
+	public void registrarUsuario(Usuario usuario);
 	public void borrarUsuario(Usuario usuario);
 	public Usuario modificarUsuario(Usuario usuario);
 	public Usuario recuperarUsuarioPorId(int id);

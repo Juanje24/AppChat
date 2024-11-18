@@ -50,6 +50,52 @@ public class Usuario {
 		return null;
 	}
 
+	public int getId() {
+		// TODO Auto-generated method stub
+		return id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public String getTelefono() {
+		return telefono;
+	}
+
+	public boolean isPremium() {
+		return premium;
+	}
+
+	public LocalDate getBirthday() {
+		return birthday;
+	}
+
+	public String getSaludo() {
+		return saludo;
+	}
+
+	public String getUrlImagen() {
+		return urlImagen;
+	}
+
+	public LinkedList<Contacto> getContactos() {
+		return contactos;
+	}
+
+	public void setId(int id2) {
+		id = id2;
+		
+	}
+
 //    public void sendMessage(Mensaje mensaje, Contacto contacto){
 //        contacto.
 //    }

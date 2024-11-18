@@ -9,6 +9,8 @@ import beans.Propiedad;
 
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -28,9 +30,30 @@ public class UsuarioDAO_TDS implements UsuarioDAO {
 	}
 	
 	@Override
-	public Usuario registrarUsuario(Usuario usuario) {
-		Entidad eUsuario = new Entidad();
-		return null;
+	public void registrarUsuario(Usuario usuario) {
+		Entidad eUsuario = null;
+		try {
+			eUsuario = servicioPersistencia.recuperarEntidad(usuario.getId());
+		} catch (NullPointerException e) {
+			eUsuario = null;
+		}
+		if(eUsuario!=null) {
+			return;
+			}
+		//registrar Contactos,grupos y mensajes
+		eUsuario = new Entidad();
+		eUsuario.setNombre("Usuario");
+		eUsuario.setPropiedades(new ArrayList<Propiedad>(
+				Arrays.asList(new Propiedad("name", usuario.getName()),
+						new Propiedad("lastName", usuario.getLastName()),
+						new Propiedad("password", usuario.getPassword()),
+						new Propiedad("telefono", usuario.getTelefono()),
+						new Propiedad("premium", String.valueOf(usuario.isPremium())),
+						new Propiedad("birthday", sdf.format(usuario.getBirthday())),
+						new Propiedad("saludo", usuario.getSaludo()),
+						new Propiedad("urlImagen", usuario.getUrlImagen()))));
+	   eUsuario = servicioPersistencia.registrarEntidad(eUsuario);
+	   usuario.setId(eUsuario.getId());
 	}
 
 	@Override

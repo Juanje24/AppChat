@@ -1,5 +1,6 @@
 package um.tds.appChat.singletons;
 
-public class AppChat {
-
+public enum AppChat {
+	INSTANCE;
+	
 }

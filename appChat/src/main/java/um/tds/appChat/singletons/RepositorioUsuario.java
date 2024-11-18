@@ -56,6 +56,7 @@ public enum RepositorioUsuario {
 		// TODO Auto-generated method stub
 		return null;
 	}
+    //public Optional<Usuario> searchUsuarioByEmail(String email) {
 
 	public boolean addUsuario(Usuario usuario) {
 		if(!usuarioExistente(usuario)) {
