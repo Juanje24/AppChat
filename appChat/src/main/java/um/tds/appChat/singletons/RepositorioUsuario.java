@@ -44,22 +44,22 @@ public enum RepositorioUsuario {
 		return usuarios.stream().collect(Collectors.toList());
 	}
 
-    public void removeUsuario(String email) {
-		usuarios.removeIf(usuario -> usuario.getEmail().equals(email));
-	}
+//    public void removeUsuario(String email) {
+//		usuarios.removeIf(usuario -> usuario.getEmail().equals(email));
+//	}
 
-    private boolean usuarioExistente(Usuario usuario) {
-		return searchUsuarioByEmail(usuario.getEmail()).isPresent();
-	}
+//    private boolean usuarioExistente(Usuario usuario) {
+//		return searchUsuarioByTelefono(usuario.getTelefono()).isPresent();
+//	}
 
-    Optional<um.tds.appChat.dominio.Usuario> searchUsuarioByEmail(String email) {
+    Optional<um.tds.appChat.dominio.Usuario> searchUsuarioByTelefono(String telefono) {
 		// TODO Auto-generated method stub
 		return null;
 	}
     //public Optional<Usuario> searchUsuarioByEmail(String email) {
 
 	public boolean addUsuario(Usuario usuario) {
-		if(!usuarioExistente(usuario)) {
+		if(searchUsuarioByTelefono(usuario.getTelefono()).isPresent()) {
 			usuarios.add(usuario);
 			return true;
 		} else return false;
@@ -75,6 +75,10 @@ public enum RepositorioUsuario {
 	Optional<um.tds.appChat.dominio.Usuario> searchUsuarioByUsuario(String usuario) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	public boolean containsUsuario(int id) {
+		
 	}
 
     //Es posible que se tenga que implementar la actualización de usuarios por git

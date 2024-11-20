@@ -5,9 +5,14 @@ import java.util.List;
 import um.tds.appChat.dominio.Grupo;
 
 public interface GrupoDAO {
-	public void registrarGrupo(Grupo grupo);
-	public void borrarGrupo(Grupo grupo);
-	public Grupo modificarGrupo(Grupo grupo);
-	public Grupo recuperarGrupoPorId(int id);
-	public List<Grupo> recuperarTodosGrupos();
+	
+	Grupo craete(Grupo grupo);
+	
+	boolean delete(Grupo grupo);
+	
+	void update(Grupo grupo);
+	
+	Grupo get(int id);
+	
+	List<Grupo> getAll();
 }

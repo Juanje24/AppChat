@@ -5,9 +5,14 @@ import java.util.List;
 import um.tds.appChat.dominio.ContactoIndividual;
 
 public interface ContactoIndividualDAO {
-	public void registrarContactoIndividual(ContactoIndividual contactoIndividual);
-	public void borrarContactoIndividual(ContactoIndividual contactoIndividual);
-	public ContactoIndividual modificarContactoIndividual(ContactoIndividual contactoIndividual);
-	public ContactoIndividual recuperarContactoIndividualPorId(int id);
-	public List<ContactoIndividual> recuperarTodosContactosIndividuales();
+	
+	ContactoIndividual craete(ContactoIndividual ci);
+	
+	boolean delete(ContactoIndividual ci);
+	
+	void update(ContactoIndividual ci);
+	
+	ContactoIndividual get(int id);
+	
+	List<ContactoIndividual> getAll();
 }
