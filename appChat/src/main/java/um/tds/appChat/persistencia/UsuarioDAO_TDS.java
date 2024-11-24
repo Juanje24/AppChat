@@ -25,24 +25,27 @@ public class UsuarioDAO_TDS {
 	}
 	
 	private Usuario entidadToUsuario(Entidad eUsuario) {
-		if (RepositorioUsuario.INSTANCE.containsUsuario(id))
-		String nombre = servPersistencia.recuperarPropiedadEntidad(eUsuario, NOMBRE);
-		String apellido = servPersistencia.recuperarPropiedadEntidad(eUsuario, APELLIDO);
-		String contraseña = servPersistencia.recuperarPropiedadEntidad(eUsuario, CONTRASEÑA);
-		String telefono = servPersistencia.recuperarPropiedadEntidad(eUsuario, TELEFONO);
-		String premium = servPersistencia.recuperarPropiedadEntidad(eUsuario, PREMIUM);
-		//String birthday = servPersistencia.recuperarPropiedadEntidad(eUsuario, BIRTHDAY);
-		String saludo = servPersistencia.recuperarPropiedadEntidad(eUsuario, SALUDO);
-		String urlImagen = servPersistencia.recuperarPropiedadEntidad(eUsuario, URLIMAGEN);
-		Usuario usuario = new Usuario(nombre, apellido, telefono, contraseña, saludo, urlImagen);
-		usuario.setId(eUsuario.getId());
-		usuario.setPremium(Boolean.valueOf(premium));
-		return usuario;
+		if (RepositorioUsuario.INSTANCE.containsUsuario(eUsuario.getId())) {
+			String nombre = servPersistencia.recuperarPropiedadEntidad(eUsuario, NOMBRE);
+			String apellido = servPersistencia.recuperarPropiedadEntidad(eUsuario, APELLIDO);
+			String contraseña = servPersistencia.recuperarPropiedadEntidad(eUsuario, CONTRASEÑA);
+			String telefono = servPersistencia.recuperarPropiedadEntidad(eUsuario, TELEFONO);
+			String premium = servPersistencia.recuperarPropiedadEntidad(eUsuario, PREMIUM);
+			//String birthday = servPersistencia.recuperarPropiedadEntidad(eUsuario, BIRTHDAY);
+			String saludo = servPersistencia.recuperarPropiedadEntidad(eUsuario, SALUDO);
+			String urlImagen = servPersistencia.recuperarPropiedadEntidad(eUsuario, URLIMAGEN);
+			Usuario usuario = new Usuario(nombre, apellido, telefono, contraseña, saludo, urlImagen);
+			usuario.setId(eUsuario.getId());
+			usuario.setPremium(Boolean.valueOf(premium));
+			return usuario;
+		}
+		return null;
 	}
 	
 	private Entidad usuarioToEntidad(Usuario usuario) {
 		Entidad eUsuario = new Entidad();
 		eUsuario.setNombre(USUARIO);
+		return eUsuario;
 	}
 	
 

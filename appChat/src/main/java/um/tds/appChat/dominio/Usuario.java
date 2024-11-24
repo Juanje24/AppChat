@@ -120,6 +120,7 @@ public class Usuario {
 		return urlImagen;
 	}
 
+
 	public LinkedList<Contacto> getContactos() {
 		return contactos;
 	}
