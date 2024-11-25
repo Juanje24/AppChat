@@ -4,7 +4,12 @@ import java.util.Set;
 
 public class Grupo extends Contacto{
     
-    private Set<Usuario> miembros;
+    public Grupo(String nombre) {
+		super(nombre);
+		// TODO Auto-generated constructor stub
+	}
+
+	private Set<Usuario> miembros;
 
 	public Set<Usuario> getMiembros() {
 		return miembros;

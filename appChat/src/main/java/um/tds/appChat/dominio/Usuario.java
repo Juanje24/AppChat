@@ -80,19 +80,19 @@ public class Usuario {
 		this.id = id;
 	}
 
-	public String getnombre() {
+	public String getNombre() {
 		return nombre;
 	}
 	
-	public void setnombre(String nombre) {
+	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
 
-	public String getapellido() {
+	public String getApellido() {
 		return apellido;
 	}
 
-	public String getcontraseña() {
+	public String getContraseña() {
 		return contraseña;
 	}
 
@@ -127,6 +127,11 @@ public class Usuario {
 	
 	public void setContactos(LinkedList<Contacto> contactos) {
 		this.contactos = new LinkedList<Contacto>(contactos);
+	}
+
+	public ContactoIndividual getContactoIndividual(String string) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 

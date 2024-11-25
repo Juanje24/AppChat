@@ -18,7 +18,7 @@ import um.tds.appChat.dominio.ContactoIndividual;
 import java.awt.*;
 import java.io.IOException;
 
-public class ContactoListCellRenderer extends JPanel implements ListCellRenderer<ContactoIndividual> {
+public class ContactoListCellRenderer extends JPanel implements ListCellRenderer<Contacto> {
 	private static final Border SELECCIONADO = BorderFactory.createLineBorder(Color.BLUE, 2);
     private static final Border NO_SELECCIONADO = BorderFactory.createEmptyBorder(2, 2, 2, 2);
 
@@ -49,10 +49,10 @@ public class ContactoListCellRenderer extends JPanel implements ListCellRenderer
 	}
 
 	@Override
-	public Component getListCellRendererComponent(JList<? extends ContactoIndividual> listacontactos, ContactoIndividual contacto, int index,
+	public Component getListCellRendererComponent(JList<? extends Contacto> listacontactos, Contacto contacto, int index,
 			boolean isSelected, boolean cellHasFocus) {
 		// Configuración de la imagen
-		String fotoUsuario = contacto.getUsuario().getImagen();
+		String fotoUsuario = contacto.getUsuario().getUrlImagen();
 		URL url = getClass().getResource(fotoUsuario);
 		if (url != null) {
 			Image imagenOriginal;
@@ -72,7 +72,7 @@ public class ContactoListCellRenderer extends JPanel implements ListCellRenderer
 
 		// Configuración del texto
 		lblNombre.setText(contacto.getNombre());
-		lblTelefono.setText("Tel: " + contacto.getUsuario().getMovil());
+		lblTelefono.setText("Tel: " + contacto.getUsuario().getTelefono());
 		lblSaludo.setText(contacto.getUsuario().getSaludo());
 
 		// Configuración de colores para selección

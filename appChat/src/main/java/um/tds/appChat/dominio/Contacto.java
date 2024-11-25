@@ -8,7 +8,7 @@ public abstract class Contacto {
     
     private int id;
     private String nombre;
-    //private Usuario Usuario;
+    private Usuario usuario;
     private LinkedList<Mensaje> mensajes;
     
     // CONSTRUCTORES
@@ -67,6 +67,11 @@ public abstract class Contacto {
 
 	public void setMensajes(List<Mensaje> mensajes) {
 		this.mensajes = new LinkedList<Mensaje>(mensajes);
+	}
+
+	public Usuario getUsuario() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 

@@ -44,9 +44,9 @@ public class UsuarioDAO_TDS implements UsuarioDAO {
 		eUsuario = new Entidad();
 		eUsuario.setNombre("Usuario");
 		eUsuario.setPropiedades(new ArrayList<Propiedad>(
-				Arrays.asList(new Propiedad("name", usuario.getName()),
-						new Propiedad("lastName", usuario.getLastName()),
-						new Propiedad("password", usuario.getPassword()),
+				Arrays.asList(new Propiedad("name", usuario.getNombre()),
+						new Propiedad("apellido", usuario.getApellido()),
+						new Propiedad("contraseña", usuario.getContraseña()),
 						new Propiedad("telefono", usuario.getTelefono()),
 						new Propiedad("premium", String.valueOf(usuario.isPremium())),
 						new Propiedad("birthday", sdf.format(usuario.getBirthday())),
