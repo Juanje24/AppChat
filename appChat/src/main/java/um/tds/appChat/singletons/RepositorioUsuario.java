@@ -59,13 +59,14 @@ public enum RepositorioUsuario {
 //		return searchUsuarioByTelefono(usuario.getTelefono()).isPresent();
 //	}
 
+
     Optional<um.tds.appChat.dominio.Usuario> searchUsuarioByTelefono(String telefono) {
 		Optional<Usuario> usuario = usuarios.stream()
 				.filter(u -> u.getTelefono() == telefono)
 				.findFirst();
 		return usuario;
-	}
-    //public Optional<Usuario> searchUsuarioByEmail(String email) {
+    }
+
 
 	public boolean addUsuario(Usuario usuario) {
 		if(searchUsuarioByTelefono(usuario.getTelefono()).isPresent()) {
@@ -87,7 +88,13 @@ public enum RepositorioUsuario {
 	}
 	
 	public boolean containsUsuario(int id) {
-		
+		return usuarios.stream().anyMatch(usuario -> usuario.getId() == id);
+	}
+	
+
+	Object buscarUsuarioPorMovil(String string) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
     //Es posible que se tenga que implementar la actualización de usuarios por git

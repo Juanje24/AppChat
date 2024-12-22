@@ -25,6 +25,7 @@ public class UsuarioDAO_TDS {
 	}
 	
 	private Usuario entidadToUsuario(Entidad eUsuario) {
+		
 //		if (RepositorioUsuario.INSTANCE.containsUsuario(id)) {
 //			return RepositorioUsuario.INSTANCE.getUsuarioById(id);
 //		}
@@ -40,11 +41,13 @@ public class UsuarioDAO_TDS {
 		usuario.setId(eUsuario.getId());
 		usuario.setPremium(Boolean.valueOf(premium));
 		return usuario;
+
 	}
 	
 	private Entidad usuarioToEntidad(Usuario usuario) {
 		Entidad eUsuario = new Entidad();
 		eUsuario.setNombre(USUARIO);
+		return eUsuario;
 	}
 	
 

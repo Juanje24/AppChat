@@ -1,16 +1,23 @@
 package um.tds.appChat.ventanas;
 
 import java.awt.EventQueue;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import java.awt.BorderLayout;
 import javax.swing.JPanel;
+
+import um.tds.appChat.dominio.Contacto;
+import um.tds.appChat.dominio.ContactoIndividual;
+import um.tds.appChat.dominio.Usuario;
+
 import javax.swing.JComboBox;
 import javax.swing.JButton;
 
-public class Principal {
+public class Principal extends JFrame {
 
 	private JFrame frame;
+	private PanelContactos panelContactos;
 
 	/**
 	 * Launch the application.
@@ -50,8 +57,10 @@ public class Principal {
 		JPanel panelNorte = new JPanel();
 		frame.getContentPane().add(panelNorte, BorderLayout.NORTH);
 		
-		JPanel panelOeste = new JPanel();
-		frame.getContentPane().add(panelOeste, BorderLayout.WEST);
+		
+		panelContactos = new PanelContactos();
+		frame.getContentPane().add(panelContactos, BorderLayout.WEST);
+		
 		
 		JPanel panelCentro = new JPanel();
 		frame.getContentPane().add(panelCentro, BorderLayout.CENTER);
@@ -65,5 +74,4 @@ public class Principal {
 		panelCentro.add(btnChatear);
 		
 	}
-
 }

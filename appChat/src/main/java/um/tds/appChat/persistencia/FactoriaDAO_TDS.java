@@ -8,6 +8,8 @@ public class FactoriaDAO_TDS extends FactoriaDAO {
 	@Override
 	public UsuarioDAO getUsuarioDAO() {
 		//return UsuarioDAO_TDS.get
+		return null;
+
 	}
 
 	@Override
