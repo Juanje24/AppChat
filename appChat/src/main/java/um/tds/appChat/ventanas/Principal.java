@@ -14,7 +14,7 @@ import um.tds.appChat.dominio.Usuario;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
 
-public class Principal {
+public class Principal extends JFrame {
 
 	private JFrame frame;
 	private PanelContactos panelContactos;

@@ -18,12 +18,12 @@ public enum AppChat {
 		return null;
 	}
 
-	void registrarUsuario(String string, String string2, String string3, LocalDate of, String string4, String string5) {
+	public void registrarUsuario(String nombre, String apellidos, String contrasena, LocalDate fechaNacimiento, String foto, String saludo) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	void login(String string, String string2) {
+	public void login(String string, String string2) {
 		// TODO Auto-generated method stub
 		
 	}

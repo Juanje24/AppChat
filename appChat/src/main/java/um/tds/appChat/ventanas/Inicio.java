@@ -26,9 +26,9 @@ import java.awt.Insets;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
 
-public class Inicio {
+public class Inicio extends JFrame{
 
-	private JFrame frameLogin;
+	private static final long serialVersionUID = 1L;
 	private JButton btnRegistrar;
 	private JButton btnCancelar;
 	private JButton btnAceptar;
@@ -47,8 +47,8 @@ public class Inicio {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Inicio window = new Inicio();
-					window.frameLogin.setVisible(true);
+					Inicio ventana = new Inicio();
+					ventana.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -60,6 +60,11 @@ public class Inicio {
 	 * Create the application.
 	 */
 	public Inicio() {
+		super();
+		this.setTitle("Login - AppChat");
+		this.setBounds(100, 100, 768, 612);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.getContentPane().setLayout(new BorderLayout(0, 0));
 		initialize();
 	}
 
@@ -68,17 +73,17 @@ public class Inicio {
 	 * @return 
 	 */
 	public void mostrar() {
-		frameLogin.setVisible(true);
+		this.setVisible(true);
 	}
 	private void initialize() {
-		frameLogin = new JFrame();
-		frameLogin.setTitle("Login - AppChat");
-		frameLogin.setBounds(100, 100, 768, 612);
-		frameLogin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frameLogin.getContentPane().setLayout(new BorderLayout(0, 0));
+		
+		this.setTitle("Login - AppChat");
+		this.setBounds(100, 100, 768, 612);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.getContentPane().setLayout(new BorderLayout(0, 0));
 		
 		panelNorte = new JPanel();
-		frameLogin.getContentPane().add(panelNorte, BorderLayout.NORTH);
+		this.getContentPane().add(panelNorte, BorderLayout.NORTH);
 		ImageIcon icon = new ImageIcon(getClass().getResource("/logo.png")); 
 		Image iconoEscalado = icon.getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
 	    JLabel lblImage = new JLabel(new ImageIcon(iconoEscalado));
@@ -92,7 +97,7 @@ public class Inicio {
 		
 		JPanel panelCentro = new JPanel();
 		panelCentro.setBorder(new TitledBorder(new LineBorder(new Color(184, 207, 229)), "Login", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(51, 51, 51)));
-		frameLogin.getContentPane().add(panelCentro, BorderLayout.CENTER);
+		this.getContentPane().add(panelCentro, BorderLayout.CENTER);
 		panelCentro.setLayout(new BoxLayout(panelCentro, BoxLayout.Y_AXIS));
 		
 		panel_2 = new Panel();
@@ -145,14 +150,14 @@ public class Inicio {
 		panel_3.add(passwordField, gbc_passwordField);
 		
 		JPanel panelSur = new JPanel();
-		frameLogin.getContentPane().add(panelSur, BorderLayout.SOUTH);
+		this.getContentPane().add(panelSur, BorderLayout.SOUTH);
 		FlowLayout fl_panelSur = new FlowLayout(FlowLayout.CENTER, 5, 5);
 		panelSur.setLayout(fl_panelSur);
 		
 		btnRegistrar = new JButton("Registrar");
 		btnRegistrar.addActionListener(e -> {
 			Registro ventanaRegistro = new Registro(this);
-			frameLogin.setVisible(false);
+			this.setVisible(false);
 			ventanaRegistro.mostrar();
 			
 		});
@@ -161,8 +166,8 @@ public class Inicio {
 		
 		btnCancelar = new JButton("Cancelar");
 		btnCancelar.addActionListener( e -> {
-		    frameLogin.setVisible(false);
-		    frameLogin.dispose();
+		    this.setVisible(false);
+		    this.dispose();
 		});
 		panelSur.add(btnCancelar);
 		
@@ -172,8 +177,8 @@ public class Inicio {
 			System.out.println(textField.getText()); 
 			System.out.println(passwordField.getPassword()); //Pedir al controlador que compruebe si el usuario existe
 			new Principal().mostrar();
-			frameLogin.setVisible(false);
-			frameLogin.dispose();
+			this.setVisible(false);
+			this.dispose();
 		});
 	}
 
