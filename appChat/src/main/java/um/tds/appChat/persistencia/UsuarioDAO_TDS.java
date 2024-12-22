@@ -25,7 +25,9 @@ public class UsuarioDAO_TDS {
 	}
 	
 	private Usuario entidadToUsuario(Entidad eUsuario) {
-		if (RepositorioUsuario.INSTANCE.containsUsuario(id))
+//		if (RepositorioUsuario.INSTANCE.containsUsuario(id)) {
+//			return RepositorioUsuario.INSTANCE.getUsuarioById(id);
+//		}
 		String nombre = servPersistencia.recuperarPropiedadEntidad(eUsuario, NOMBRE);
 		String apellido = servPersistencia.recuperarPropiedadEntidad(eUsuario, APELLIDO);
 		String contraseña = servPersistencia.recuperarPropiedadEntidad(eUsuario, CONTRASEÑA);

@@ -16,12 +16,15 @@ public abstract class FactoriaDAO {
 		return INSTANCE;
 	}
 
-	public static FactoriaDAO getFActoriaDAO(){
+	public static FactoriaDAO getFActoriaDAO() throws DAOException {
+		if (INSTANCE == null) {
+			return getFactoriaDAO(FactoriaDAO.DAO_TDS);
+		}
 		return INSTANCE;
 	}
 
-	protected FactoriaDAO() {
-	}
+	protected FactoriaDAO() {}
+	
 	public abstract UsuarioDAO getUsuarioDAO();
 	public abstract ContactoIndividualDAO getContactoIndividualDAO();
 	public abstract GrupoDAO getGrupoDAO();
