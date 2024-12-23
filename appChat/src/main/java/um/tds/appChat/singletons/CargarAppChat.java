@@ -34,7 +34,7 @@ public class CargarAppChat {
 		appChat.login("22", "bb");
 		
 		//ContactoIndividual c1 =appChat.agregarContacto("jesus", "11");
-		ContactoIndividual c1 = ((Usuario) RepositorioUsuario.INSTANCE.buscarUsuarioPorMovil("22")).getContactoIndividual("11");
+		ContactoIndividual c1 =  RepositorioUsuario.INSTANCE.buscarUsuarioPorMovil("22").get().getContactoIndividual("11");
 		ContactoIndividual c4 = appChat.agregarContacto("diego", "44");
 		ContactoIndividual c5 = appChat.agregarContacto("anne", "55");
 		

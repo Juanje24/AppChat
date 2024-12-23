@@ -2,7 +2,7 @@ package um.tds.appChat.dominio;
 
 import java.time.LocalDate;
 import java.util.LinkedList;
-
+import java.util.Random;
 
 public class Usuario {
     
@@ -20,6 +20,7 @@ public class Usuario {
 
     public Usuario(String nombre, String apellido, String telefono, String contraseña, LocalDate birthday, String saludo, String urlImagen){
         this.nombre = nombre;
+        this.id = new Random().nextInt();
         this.apellido = apellido;
         this.telefono = telefono;
         this.contraseña = contraseña;
@@ -31,7 +32,8 @@ public class Usuario {
     }
     
     //CONSTRUCTORES
-
+    
+    
     public Usuario(String nombre, String apellido, String telefono, String contraseña, LocalDate birthday, String saludo){ //sin imagen, con fecha
         this(nombre, apellido, telefono, contraseña, birthday, saludo, null);
     }

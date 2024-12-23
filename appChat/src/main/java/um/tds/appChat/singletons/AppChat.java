@@ -44,17 +44,20 @@ public enum AppChat {
 	}
 
 	public void registrarUsuario(String nombre, String apellidos, String contrasena, LocalDate fechaNacimiento, String numTlf, String foto, String saludo) {
-		if (repositorioUsuarios.buscarUsuarioPorMovil(numTlf)) {
+		if (repositorioUsuarios.buscarUsuarioPorMovil(numTlf).isPresent()) {
 			return;
 		}
 		repositorioUsuarios.addUsuario(nombre, apellidos, numTlf, contrasena, fechaNacimiento, saludo, foto);
-		usuarioDAO.registrarUsuario(repositorioUsuarios.getUsuarioPorMovil(numTlf));
+		usuarioDAO.registrarUsuario(repositorioUsuarios.buscarUsuarioPorMovil(numTlf).get());
 		
 	}
 
 	public boolean login(String nombre, String contrasena) {
-		// TODO Auto-generated method stub
-		return true;
+		if (repositorioUsuarios.buscarUsuarioPorNombre(nombre).isPresent()) {
+			usuarioActual = repositorioUsuarios.buscarUsuarioPorNombre(nombre).get();
+			return usuarioActual.getContraseña().equals(contrasena);
+		}
+		return false;
 	}
 	
 }
