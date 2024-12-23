@@ -1,30 +1,31 @@
 package um.tds.appChat.persistencia;
 
+import tds.driver.FactoriaServicioPersistencia;
 import um.tds.appChat.persistencia.ClasesDAO.*;
 import um.tds.appChat.persistencia.InterfacesDAO.*;
 
 public class FactoriaDAO_TDS extends FactoriaDAO {
 
 	@Override
-	public UsuarioDAO crearUsuarioDAO() {
+	public UsuarioDAO getUsuarioDAO() {
 
-		return new UsuarioDAO_TDS();
+		
 	}
 
 	@Override
-	public ContactoIndividualDAO crearContactoIndividualDAO() {
+	public ContactoIndividualDAO getContactoIndividualDAO() {
 	
 		return new ContactoIndividualDAO_TDS();
 	}
 
 	@Override
-	public GrupoDAO crearGrupoDAO() {
+	public GrupoDAO getGrupoDAO() {
 
 		return new GrupoDAO_TDS();
 	}
 
 	@Override
-	public MensajeDAO crearMensajeDAO() {
+	public MensajeDAO getMensajeDAO() {
 
 		return new MensajeDAO_TDS();
 	}

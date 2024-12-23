@@ -60,8 +60,6 @@ public enum RepositorioUsuario {
 //		return searchUsuarioByTelefono(usuario.getTelefono()).isPresent();
 //	}
 
-    //public Optional<Usuario> searchUsuarioByEmail(String email) {
-
     Optional<um.tds.appChat.dominio.Usuario> searchUsuarioByTelefono(String telefono) {
 		Optional<Usuario> usuario = usuarios.stream()
 				.filter(u -> u.getTelefono() == telefono)

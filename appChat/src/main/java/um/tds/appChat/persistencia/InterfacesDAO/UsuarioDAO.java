@@ -11,7 +11,7 @@ public interface UsuarioDAO {
 
 	public void borrarUsuario(Usuario usuario);
 
-	public Usuario modificarUsuario(Usuario usuario);
+	public void modificarUsuario(Usuario usuario);
 
 	public Optional<Usuario> recuperarUsuarioPorId(int id);
 
