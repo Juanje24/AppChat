@@ -44,6 +44,13 @@ public enum RepositorioUsuario {
     public List<Usuario> getAllUsuarios(){
 		return usuarios.stream().collect(Collectors.toList());
 	}
+    
+    public Optional<Usuario> getUsuarioById(int id) {
+    	Optional<Usuario> usuario = usuarios.stream()
+    			.filter(u -> u.getId() == id)
+    			.findFirst();
+    	return usuario;
+    }
 
 //    public void removeUsuario(String email) {
 //		usuarios.removeIf(usuario -> usuario.getEmail().equals(email));
@@ -54,6 +61,14 @@ public enum RepositorioUsuario {
 //	}
 
     //public Optional<Usuario> searchUsuarioByEmail(String email) {
+
+    Optional<um.tds.appChat.dominio.Usuario> searchUsuarioByTelefono(String telefono) {
+		Optional<Usuario> usuario = usuarios.stream()
+				.filter(u -> u.getTelefono() == telefono)
+				.findFirst();
+		return usuario;
+    }
+
 
 	public boolean addUsuario(Usuario usuario) {
 		if(!buscarUsuarioPorMovil(usuario.getTelefono())) {
