@@ -8,25 +8,25 @@ public class FactoriaDAO_TDS extends FactoriaDAO {
 	@Override
 	public UsuarioDAO crearUsuarioDAO() {
 
-		return new UsuarioDAO_TDS();
+		return UsuarioDAO_TDS.getUnicaInstancia();
 	}
 
 	@Override
 	public ContactoIndividualDAO crearContactoIndividualDAO() {
 	
-		return new ContactoIndividualDAO_TDS();
+		return ContactoIndividualDAO_TDS.getUnicaInstancia();
 	}
 
 	@Override
 	public GrupoDAO crearGrupoDAO() {
 
-		return new GrupoDAO_TDS();
+		return GrupoDAO_TDS.getUnicaInstancia();
 	}
 
 	@Override
 	public MensajeDAO crearMensajeDAO() {
 
-		return new MensajeDAO_TDS();
+		return MensajeDAO_TDS.getUnicaInstancia();
 	}
 	
 

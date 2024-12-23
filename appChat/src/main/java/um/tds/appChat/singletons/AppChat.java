@@ -1,6 +1,7 @@
 package um.tds.appChat.singletons;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import um.tds.appChat.dominio.*;
 import um.tds.appChat.persistencia.*;
@@ -43,18 +44,20 @@ public enum AppChat {
 		return null;
 	}
 
-	public void registrarUsuario(String nombre, String apellidos, String contrasena, LocalDate fechaNacimiento, String numTlf, String foto, String saludo) {
+	public boolean registrarUsuario(String nombre, String apellidos, String contrasena, LocalDate fechaNacimiento, String numTlf, String foto, String saludo) {
+
 		if (repositorioUsuarios.buscarUsuarioPorMovil(numTlf).isPresent()) {
-			return;
+			return false;
 		}
 		repositorioUsuarios.addUsuario(nombre, apellidos, numTlf, contrasena, fechaNacimiento, saludo, foto);
 		usuarioDAO.registrarUsuario(repositorioUsuarios.buscarUsuarioPorMovil(numTlf).get());
-		
+		return true;
 	}
 
-	public boolean login(String nombre, String contrasena) {
-		if (repositorioUsuarios.buscarUsuarioPorNombre(nombre).isPresent()) {
-			usuarioActual = repositorioUsuarios.buscarUsuarioPorNombre(nombre).get();
+	public boolean login(String telefono, String contrasena) {
+
+		if (repositorioUsuarios.buscarUsuarioPorMovil(telefono).isPresent()) {
+			usuarioActual = repositorioUsuarios.buscarUsuarioPorMovil(telefono).get();
 			return usuarioActual.getContraseña().equals(contrasena);
 		}
 		return false;

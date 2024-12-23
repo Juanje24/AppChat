@@ -3,19 +3,20 @@ package um.tds.appChat.dominio;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.Random;
 
 public abstract class Contacto {
     
     private int id;
     private String nombre;
-    private Usuario usuario;
-    private LinkedList<Mensaje> mensajes;
+    private List<Mensaje> mensajes;
     
     // CONSTRUCTORES
     
-    public Contacto(String nombre) {
+    public Contacto(String nombre,int id) {
     	this.nombre = nombre;
     	this.mensajes = new LinkedList<Mensaje>();
+    	this.id = id;
     }
     
     // FUNCIONALIDAD
@@ -69,10 +70,7 @@ public abstract class Contacto {
 		this.mensajes = new LinkedList<Mensaje>(mensajes);
 	}
 
-	public Usuario getUsuario() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
 
 
 }

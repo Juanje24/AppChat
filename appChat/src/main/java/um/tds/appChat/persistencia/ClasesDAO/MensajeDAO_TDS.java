@@ -1,17 +1,21 @@
 package um.tds.appChat.persistencia.ClasesDAO;
 
 import java.util.List;
-import java.util.Optional;
-
 import um.tds.appChat.dominio.Mensaje;
 import um.tds.appChat.persistencia.InterfacesDAO.MensajeDAO;
 
 
 public class MensajeDAO_TDS implements MensajeDAO {
+	
+	private static MensajeDAO_TDS unicaInstancia = new MensajeDAO_TDS();
+	
+	public static MensajeDAO_TDS getUnicaInstancia() {
+		return unicaInstancia;
+	}
+	
 	@Override
-	public Mensaje registrarMensaje(Mensaje mensaje) {
+	public void registrarMensaje(Mensaje mensaje) {
 		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
@@ -21,15 +25,15 @@ public class MensajeDAO_TDS implements MensajeDAO {
 	}
 
 	@Override
-	public Mensaje modificarMensaje(Mensaje mensaje) {
+	public void modificarMensaje(Mensaje mensaje) {
 		// TODO Auto-generated method stub
-		return null;
+
 	}
 
 	@Override
-	public Optional<Mensaje> recuperarMensajePorId(int id) {
+	public Mensaje recuperarMensajePorId(int id) {
 		// TODO Auto-generated method stub
-		return Optional.empty();
+		return null;
 	}
 
 	@Override

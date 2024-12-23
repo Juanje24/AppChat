@@ -2,6 +2,7 @@ package um.tds.appChat.dominio;
 
 import java.time.LocalDate;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 
 public class Usuario {
@@ -15,9 +16,24 @@ public class Usuario {
     private LocalDate birthday;
     private String saludo;
     private String urlImagen;
-    private LinkedList<Contacto> contactos; //podría ser un Set
+    private List<Contacto> contactos; //podría ser un Set
 
-
+    
+    public Usuario( int id, String nombre,String apellido, String telefono, String contraseña, LocalDate birthday,
+    		boolean isPremium, String saludo, String urlImagen){
+        this.nombre = nombre;
+        this.id = id;
+        this.apellido = apellido;
+        this.telefono = telefono;
+        this.contraseña = contraseña;
+        this.birthday = birthday;
+        this.saludo = saludo;
+        this.urlImagen = urlImagen;
+        this.premium = isPremium;
+        this.contactos = new LinkedList<Contacto>();
+    }
+    
+    
     public Usuario(String nombre, String apellido, String telefono, String contraseña, LocalDate birthday, String saludo, String urlImagen){
         this.nombre = nombre;
         this.id = new Random().nextInt();
@@ -30,6 +46,7 @@ public class Usuario {
         this.premium = false;
         this.contactos = new LinkedList<>();
     }
+    
     
     //CONSTRUCTORES
     
@@ -123,7 +140,7 @@ public class Usuario {
 	}
 
 
-	public LinkedList<Contacto> getContactos() {
+	public List<Contacto> getContactos() {
 		return contactos;
 	}
 	
@@ -131,10 +148,9 @@ public class Usuario {
 		this.contactos = new LinkedList<Contacto>(contactos);
 	}
 
-	public ContactoIndividual getContactoIndividual(String string) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public void addContacto(Contacto contacto) {
+        this.contactos.add(contacto);
+    }
 	
 
 

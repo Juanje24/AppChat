@@ -28,6 +28,10 @@ public enum RepositorioUsuario {
         	usuarios.add( new Usuario(name, lastName, telefono, password, birthday, saludo, urlImagen)) ;
         }        
     }
+
+	public void cargarUsuarios(Collection<Usuario> usuarios) {
+		this.usuarios.addAll(usuarios);
+	}
     //El repositorio es el que crea los usuarios nuevos, ya que tiene la colección de usuarios
     
     public List<Usuario> getAllUsuarios(){

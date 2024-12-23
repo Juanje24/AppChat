@@ -52,6 +52,7 @@ public class Inicio extends JFrame{
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					System.out.println("Hey!");
 					Inicio ventana = new Inicio();
 					ventana.setVisible(true);
 				} catch (Exception e) {
@@ -187,7 +188,7 @@ public class Inicio extends JFrame{
 				this.dispose();
 			}
 			else {
-				JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos", "Warning", JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(this, "Teléfono o contraseña incorrectos", "Warning", JOptionPane.WARNING_MESSAGE);
 			}
 		});
 	}

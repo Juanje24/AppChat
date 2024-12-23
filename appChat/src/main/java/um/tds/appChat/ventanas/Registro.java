@@ -223,14 +223,20 @@ public class Registro extends JDialog {
 			if (!passwordCheck(passwordField.getPassword(), passwordField_1.getPassword())) {
 				JOptionPane.showMessageDialog(this, "Las contraseñas no coinciden", "Error", JOptionPane.ERROR_MESSAGE);
                 }
-			else if(campoNombre.getText().isEmpty() || campoApellidos.getText().isEmpty() || campoMovil.getText().isEmpty() || passwordField.getPassword().length==0 || dateChooser.getDate()==null || textArea.getText().isEmpty() || path==null) {
-				JOptionPane.showMessageDialog(this, "Por favor, rellene todos los campos", "Error", JOptionPane.ERROR_MESSAGE);
+			else if(campoNombre.getText().isEmpty() || campoApellidos.getText().isEmpty() || campoMovil.getText().isEmpty() || passwordField.getPassword().length==0 || dateChooser.getDate()==null) {
+				JOptionPane.showMessageDialog(this, "Por favor, rellene los campos nombre, apellido, movil, contraseña y fecha", "Error", JOptionPane.ERROR_MESSAGE);
 			}
 			else {
-				AppChat.INSTANCE.registrarUsuario(campoNombre.getText(), campoApellidos.getText(), new String(passwordField.getPassword()), dateChooser.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), campoMovil.getText(), path ,textArea.getText());
-				this.setVisible(false);
-			    this.dispose();
-			    ventanaLogin.mostrar();
+				if(AppChat.INSTANCE.registrarUsuario(campoNombre.getText(), campoApellidos.getText(), new String(passwordField.getPassword()),
+						dateChooser.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), campoMovil.getText(), path ,textArea.getText())) {
+					JOptionPane.showMessageDialog(this, "Usuario registrado correctamente", "Registro", JOptionPane.INFORMATION_MESSAGE);
+					this.setVisible(false);
+				    this.dispose();
+				    ventanaLogin.mostrar();
+				}
+				else {
+					JOptionPane.showMessageDialog(this, "El teléfono ya está registrado", "Error", JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		});
 		GridBagConstraints gbc_btnRegistrar = new GridBagConstraints();

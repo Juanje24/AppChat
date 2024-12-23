@@ -1,17 +1,19 @@
 package um.tds.appChat.persistencia.ClasesDAO;
 
 import java.util.List;
-import java.util.Optional;
-
 import um.tds.appChat.dominio.ContactoIndividual;
 import um.tds.appChat.persistencia.InterfacesDAO.ContactoIndividualDAO;
 
 public class ContactoIndividualDAO_TDS implements ContactoIndividualDAO{
-
+	private static ContactoIndividualDAO_TDS unicaInstancia = new ContactoIndividualDAO_TDS();
+	
+	public static ContactoIndividualDAO_TDS getUnicaInstancia() { // patron singleton
+		return unicaInstancia;
+	}
+	
 	@Override
-	public ContactoIndividual registrarContactoIndividual(ContactoIndividual ContactoIndividual) {
+	public void registrarContactoIndividual(ContactoIndividual ContactoIndividual) {
 		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
@@ -21,15 +23,14 @@ public class ContactoIndividualDAO_TDS implements ContactoIndividualDAO{
 	}
 
 	@Override
-	public ContactoIndividual modificarContactoIndividual(ContactoIndividual ContactoIndividual) {
+	public void modificarContactoIndividual(ContactoIndividual ContactoIndividual) {
 		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
-	public Optional<ContactoIndividual> recuperarContactoIndividualPorId(int id) {
+	public ContactoIndividual recuperarContactoIndividualPorId(int id) {
 		// TODO Auto-generated method stub
-		return Optional.empty();
+		return null;
 	}
 
 	@Override
