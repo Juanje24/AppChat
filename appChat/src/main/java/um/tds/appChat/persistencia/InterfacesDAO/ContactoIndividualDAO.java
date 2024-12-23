@@ -1,18 +1,19 @@
 package um.tds.appChat.persistencia.InterfacesDAO;
 
 import java.util.List;
+import java.util.Optional;
 
 import um.tds.appChat.dominio.ContactoIndividual;
 
 public interface ContactoIndividualDAO {
 	
-	ContactoIndividual craete(ContactoIndividual ci);
-	
-	boolean delete(ContactoIndividual ci);
-	
-	void update(ContactoIndividual ci);
-	
-	ContactoIndividual get(int id);
-	
-	List<ContactoIndividual> getAll();
+	public ContactoIndividual registrarContactoIndividual(ContactoIndividual ContactoIndividual);
+
+	public void borrarContactoIndividual(ContactoIndividual ContactoIndividual);
+
+	public ContactoIndividual modificarContactoIndividual(ContactoIndividual ContactoIndividual);
+
+	public Optional<ContactoIndividual> recuperarContactoIndividualPorId(int id);
+
+	public List<ContactoIndividual> recuperarTodosContactoIndividuales();
 }

@@ -6,7 +6,7 @@ import tds.driver.ServicioPersistencia;
 import um.tds.appChat.dominio.Usuario;
 import um.tds.appChat.singletons.RepositorioUsuario;
 
-public class UsuarioDAO_TDS {
+public class UtilsUsuarioDAO {
 	
 	private static final String USUARIO = "usuario";
 	private static final String NOMBRE = "nombre";
@@ -18,13 +18,13 @@ public class UsuarioDAO_TDS {
 	private static final String SALUDO = "saludo";
 	private static final String URLIMAGEN = "urlimagen";
 	
-	private ServicioPersistencia servPersistencia;
+	private static ServicioPersistencia servPersistencia;
 	
-	public UsuarioDAO_TDS() {
+	public UtilsUsuarioDAO() {
 		servPersistencia = FactoriaServicioPersistencia.getInstance().getServicioPersistencia();
 	}
 	
-	private Usuario entidadToUsuario(Entidad eUsuario) {
+	public static Usuario entidadToUsuario(Entidad eUsuario) {
 		if (RepositorioUsuario.INSTANCE.containsUsuario(eUsuario.getId())) {
 			String nombre = servPersistencia.recuperarPropiedadEntidad(eUsuario, NOMBRE);
 			String apellido = servPersistencia.recuperarPropiedadEntidad(eUsuario, APELLIDO);

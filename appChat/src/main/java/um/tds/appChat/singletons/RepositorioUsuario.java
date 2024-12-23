@@ -24,8 +24,9 @@ public enum RepositorioUsuario {
 		usuarios.clear();
 	}
     
-    public Usuario creUsuario(String name, String lastName, String telefono, String password, LocalDate birthday, String saludo, String urlImagen){
-        return new Usuario(name, lastName, telefono, password, birthday, saludo, urlImagen) ;
+    public void addUsuario(String name, String lastName, String telefono, String password, LocalDate birthday, String saludo, String urlImagen){
+        usuarios.add( new Usuario(name, lastName, telefono, password, birthday, saludo, urlImagen)) ;
+        
     }
 
     public Usuario creUsuario(String name, String lastName, String telefono, String password, LocalDate birthday, String saludo){
@@ -52,42 +53,31 @@ public enum RepositorioUsuario {
 //		return searchUsuarioByTelefono(usuario.getTelefono()).isPresent();
 //	}
 
-    Optional<Usuario> searchUsuarioByTelefono(String telefono) {
-		// TODO Auto-generated method stub
-		return null;
-	}
     //public Optional<Usuario> searchUsuarioByEmail(String email) {
 
 	public boolean addUsuario(Usuario usuario) {
-		if(searchUsuarioByTelefono(usuario.getTelefono()).isPresent()) {
+		if(!buscarUsuarioPorMovil(usuario.getTelefono())) {
 			usuarios.add(usuario);
 			return true;
 		} else return false;
 	}
 
-    public boolean logUsuario(String usuario, String contraseña) {
-		Optional<Usuario> u = searchUsuarioByUsuario(usuario);
-		if (u.isPresent()) {
-			return u.get().getContraseña().equals(contraseña);
-		} else return false;
-	}
-
-	Optional<um.tds.appChat.dominio.Usuario> searchUsuarioByUsuario(String usuario) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 	
 	public boolean containsUsuario(int id) {
 		return usuarios.stream().anyMatch(usuario -> usuario.getId() == id);
 	}
 	
 
-	Object buscarUsuarioPorMovil(String string) {
-		// TODO Auto-generated method stub
-		return null;
+	public boolean buscarUsuarioPorMovil(String numTlf) {
+		return usuarios.stream().anyMatch(usuario -> usuario.getTelefono().equals(numTlf));
 	}
 
-    //Es posible que se tenga que implementar la actualización de usuarios por git
+	public Usuario getUsuarioPorMovil(String numTlf) {
+		return usuarios.stream().
+				filter(usuario -> usuario.getTelefono().equals(numTlf)).
+				findFirst().get();
+	}
+
 
 
 }

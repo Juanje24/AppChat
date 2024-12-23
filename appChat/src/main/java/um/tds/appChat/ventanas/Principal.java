@@ -1,21 +1,19 @@
 package um.tds.appChat.ventanas;
 
 import java.awt.EventQueue;
-import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import java.awt.BorderLayout;
 import javax.swing.JPanel;
 
-import um.tds.appChat.dominio.Contacto;
-import um.tds.appChat.dominio.ContactoIndividual;
-import um.tds.appChat.dominio.Usuario;
+
 
 import javax.swing.JComboBox;
 import javax.swing.JButton;
 
 public class Principal extends JFrame {
 
+	private static final long serialVersionUID = 1L;
 	private JFrame frame;
 	private PanelContactos panelContactos;
 

@@ -7,6 +7,8 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.SwingConstants;
 import javax.swing.JPanel;
@@ -15,6 +17,9 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
+
+import um.tds.appChat.singletons.AppChat;
+
 import java.awt.FlowLayout;
 import javax.swing.JButton;
 import javax.swing.JPasswordField;
@@ -129,21 +134,21 @@ public class Inicio extends JFrame{
 		panelCentro.add(panel_3);
 		GridBagLayout gbl_panel_3 = new GridBagLayout();
 		gbl_panel_3.columnWidths = new int[]{20, 100, 0, 50, 0};
-		gbl_panel_3.rowHeights = new int[]{0, 50, 0};
+		gbl_panel_3.rowHeights = new int[]{0, 50, 0, 0};
 		gbl_panel_3.columnWeights = new double[]{0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE};
-		gbl_panel_3.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
+		gbl_panel_3.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
 		panel_3.setLayout(gbl_panel_3);
 		
 		lblContrasea = new JLabel("Contraseña: ");
 		GridBagConstraints gbc_lblContrasea = new GridBagConstraints();
-		gbc_lblContrasea.insets = new Insets(0, 0, 0, 5);
+		gbc_lblContrasea.insets = new Insets(0, 0, 5, 5);
 		gbc_lblContrasea.gridx = 1;
 		gbc_lblContrasea.gridy = 1;
 		panel_3.add(lblContrasea, gbc_lblContrasea);
 		
 		passwordField = new JPasswordField();
 		GridBagConstraints gbc_passwordField = new GridBagConstraints();
-		gbc_passwordField.insets = new Insets(0, 0, 0, 5);
+		gbc_passwordField.insets = new Insets(0, 0, 5, 5);
 		gbc_passwordField.fill = GridBagConstraints.BOTH;
 		gbc_passwordField.gridx = 2;
 		gbc_passwordField.gridy = 1;
@@ -171,14 +176,19 @@ public class Inicio extends JFrame{
 		});
 		panelSur.add(btnCancelar);
 		
-		btnAceptar = new JButton("Aceptar");
+		btnAceptar = new JButton("Iniciar sesión");
 		panelSur.add(btnAceptar);
 		btnAceptar.addActionListener(e ->{
 			System.out.println(textField.getText()); 
 			System.out.println(passwordField.getPassword()); //Pedir al controlador que compruebe si el usuario existe
-			new Principal().mostrar();
-			this.setVisible(false);
-			this.dispose();
+			if (AppChat.INSTANCE.login(textField.getText(), new String(passwordField.getPassword()))) {
+				new Principal().mostrar();
+				this.setVisible(false);
+				this.dispose();
+			}
+			else {
+				JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos", "Warning", JOptionPane.WARNING_MESSAGE);
+			}
 		});
 	}
 

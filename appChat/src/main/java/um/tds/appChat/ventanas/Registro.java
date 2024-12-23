@@ -5,6 +5,7 @@ import java.awt.GridBagLayout;
 import java.awt.Image;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 import java.awt.GridBagConstraints;
 import javax.swing.JPasswordField;
@@ -38,8 +39,6 @@ public class Registro extends JDialog {
 	private String path;
 	private File archivoImagen;
 
-
-
 	/**
 	 * Create the application.
 	 */
@@ -61,9 +60,9 @@ public class Registro extends JDialog {
 		
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{177, 300, 98, 188, 43, 0};
-		gridBagLayout.rowHeights = new int[]{15, 40, 40, 40,40, 40, 150, 40, 20};
+		gridBagLayout.rowHeights = new int[]{15, 40, 40, 40,40, 40, 150, 40, 0, 20};
 		gridBagLayout.columnWeights = new double[]{0.0, 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		this.getContentPane().setLayout(gridBagLayout);
 		
 		JLabel lblNombre = new JLabel("Nombre: ");
@@ -222,22 +221,20 @@ public class Registro extends JDialog {
 		JButton btnRegistrar = new JButton("Registrar");
 		btnRegistrar.addActionListener(e -> {
 			if (!passwordCheck(passwordField.getPassword(), passwordField_1.getPassword())) {
-                System.err.println("Las contraseñas no coinciden");
+				JOptionPane.showMessageDialog(this, "Las contraseñas no coinciden", "Error", JOptionPane.ERROR_MESSAGE);
                 }
+			else if(campoNombre.getText().isEmpty() || campoApellidos.getText().isEmpty() || campoMovil.getText().isEmpty() || passwordField.getPassword().length==0 || dateChooser.getDate()==null || textArea.getText().isEmpty() || path==null) {
+				JOptionPane.showMessageDialog(this, "Por favor, rellene todos los campos", "Error", JOptionPane.ERROR_MESSAGE);
+			}
 			else {
-				AppChat.INSTANCE.registrarUsuario(campoNombre.getText(), campoApellidos.getText(), new String(passwordField.getPassword()), dateChooser.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), path ,textArea.getText());
-				System.out.println("Nombre: "+campoNombre.getText());
-				System.out.println("Apellidos: "+campoApellidos.getText());
-				System.out.println("Movil: "+campoMovil.getText());
-				System.out.print("Contraseña: ");
-				System.out.println(passwordField.getPassword());
-				System.out.println("Fecha: "+dateChooser.getDate().toString());
-				System.out.println("Saludo: "+textArea.getText());
-				System.out.println("Foto: "+path);
+				AppChat.INSTANCE.registrarUsuario(campoNombre.getText(), campoApellidos.getText(), new String(passwordField.getPassword()), dateChooser.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), campoMovil.getText(), path ,textArea.getText());
+				this.setVisible(false);
+			    this.dispose();
+			    ventanaLogin.mostrar();
 			}
 		});
 		GridBagConstraints gbc_btnRegistrar = new GridBagConstraints();
-		gbc_btnRegistrar.insets = new Insets(0, 0, 0, 5);
+		gbc_btnRegistrar.insets = new Insets(0, 0, 5, 5);
 		gbc_btnRegistrar.gridx = 1;
 		gbc_btnRegistrar.gridy = 7;
 		this.getContentPane().add(btnRegistrar, gbc_btnRegistrar);
@@ -251,10 +248,12 @@ public class Registro extends JDialog {
 		    ventanaLogin.mostrar();
 		});
 		GridBagConstraints gbc_btnCancelar = new GridBagConstraints();
-		gbc_btnCancelar.insets = new Insets(0, 0, 0, 5);
+		gbc_btnCancelar.insets = new Insets(0, 0, 5, 5);
 		gbc_btnCancelar.gridx = 3;
 		gbc_btnCancelar.gridy = 7;
 		this.getContentPane().add(btnCancelar, gbc_btnCancelar);
+		
+		
 	}
 
 	public boolean passwordCheck(char[] password, char[] password2) {

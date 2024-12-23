@@ -1,7 +1,6 @@
 package um.tds.appChat.ventanas;
 import java.awt.BorderLayout;
 import java.awt.Image;
-import java.awt.Insets;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
@@ -18,11 +17,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.GridBagConstraints;
 
 import javax.swing.Box;
 import javax.swing.ImageIcon;
@@ -30,7 +26,6 @@ import javax.swing.ImageIcon;
 import java.awt.SystemColor;
 import javax.swing.border.TitledBorder;
 import java.awt.FlowLayout;
-import javax.swing.BoxLayout;
 
 public class PanelArrastraImagen extends JDialog {
 
@@ -45,6 +40,7 @@ public class PanelArrastraImagen extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
+	@SuppressWarnings("serial")
 	public PanelArrastraImagen(JFrame owner) {
 		super(owner, "Agregar fotos", true);
 		this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -73,7 +69,8 @@ public class PanelArrastraImagen extends JDialog {
 			public synchronized void drop(DropTargetDropEvent evt) {
 		        try {
 		            evt.acceptDrop(DnDConstants.ACTION_COPY);
-		            List<File> droppedFiles = (List<File>) evt.getTransferable().
+		            @SuppressWarnings("unchecked")
+					List<File> droppedFiles = (List<File>) evt.getTransferable().
 		            		getTransferData(DataFlavor.javaFileListFlavor);
 		            
 		            if (!droppedFiles.isEmpty()) {
@@ -107,7 +104,14 @@ public class PanelArrastraImagen extends JDialog {
         btnCancelar = new JButton("Cancelar");
 
         // Acción del botón Aceptar
-        btnAceptar.addActionListener(ev -> dispose());
+        btnAceptar.addActionListener(ev -> {
+        	if(archivosSubidos.isEmpty()) {
+        		JOptionPane.showMessageDialog(this, "Suba una imagen", "Error", JOptionPane.ERROR_MESSAGE);
+        	}
+        	else {
+        	dispose();
+        	}
+        });
 
         // Acción del botón Cancelar
         btnCancelar.addActionListener(ev -> {
