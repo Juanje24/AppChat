@@ -6,25 +6,25 @@ import um.tds.appChat.persistencia.InterfacesDAO.*;
 public class FactoriaDAO_TDS extends FactoriaDAO {
 
 	@Override
-	public UsuarioDAO crearUsuarioDAO() {
+	public UsuarioDAO getUsuarioDAO() {
 
 		return UsuarioDAO_TDS.getUnicaInstancia();
 	}
 
 	@Override
-	public ContactoIndividualDAO crearContactoIndividualDAO() {
+	public ContactoIndividualDAO getContactoIndividualDAO() {
 	
 		return ContactoIndividualDAO_TDS.getUnicaInstancia();
 	}
 
 	@Override
-	public GrupoDAO crearGrupoDAO() {
+	public GrupoDAO getGrupoDAO() {
 
 		return GrupoDAO_TDS.getUnicaInstancia();
 	}
 
 	@Override
-	public MensajeDAO crearMensajeDAO() {
+	public MensajeDAO getMensajeDAO() {
 
 		return MensajeDAO_TDS.getUnicaInstancia();
 	}

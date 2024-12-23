@@ -30,6 +30,52 @@ public class UsuarioDAO_TDS implements UsuarioDAO {
 		servicioPersistencia = FactoriaServicioPersistencia.getInstance().getServicioPersistencia();
 	}
 	
+	public static UsuarioDAO_TDS getUnicaInstancia() {
+		if (unicaInstancia == null) {
+			return new UsuarioDAO_TDS();
+		} else {return unicaInstancia;}
+	}
+	
+	
+	
+	private String obtenerIDsContactos(List<Contacto> contactos) {
+		String corte = "";
+		for (Contacto contacto : contactos) {
+			corte += contacto.getId() + " ";
+		}
+		return corte.trim();
+	}
+	
+	private List<Contacto> obtenerContactosDesdeIDs(String idsContactos){
+		List<Contacto> contactos = new LinkedList<Contacto>();
+		StringTokenizer strTok = new StringTokenizer(idsContactos, " ");
+		while ( strTok.hasMoreElements()) { //problema con esto dado que no se que tipo de contacto es
+			int id = Integer.parseInt((String) strTok.nextElement());
+			Entidad eContacto = servicioPersistencia.recuperarEntidad(id);
+	        String tipo = eContacto.getNombre();
+	        if ("Grupo".equals(tipo)) {
+	           
+	            FactoriaDAO.getFactoriaDAO().getGrupoDAO().recuperarGrupoPorId(id).ifPresent(contactos::add);
+	        } else if ("ContactoIndividual".equals(tipo)) {
+	            
+	            FactoriaDAO.getFactoriaDAO().getContactoIndividualDAO().recuperarContactoIndividualPorId(id).ifPresent(contactos::add);
+	        }
+		}
+		return contactos;
+	}
+	
+	private Usuario entidadToUsuario(Entidad e) {
+		
+	    // Recuperar las propiedades de la entidad
+	    Map<String, String> p = e.getPropiedades().stream()
+	            .collect(Collectors.toMap(Propiedad::getNombre, Propiedad::getValor));
+	    
+	    Usuario usuario = new Usuario(p.get("name"), p.get("apellido"), p.get("telefono"), p.get("contraseña"),
+	    		LocalDate.parse(p.get("birthday"), DateTimeFormatter.ofPattern("yyyy-MM-dd")), p.get("saludo"), p.get("urlImagen"));
+	    usuario.setId(e.getId());
+	    return usuario;
+	}
+	
 	@Override
 	public void registrarUsuario(Usuario usuario) {
 		Entidad eUsuario = null;
@@ -70,6 +116,8 @@ public class UsuarioDAO_TDS implements UsuarioDAO {
 	public void borrarUsuario(Usuario usuario) {
 		Entidad eUsuario = servicioPersistencia.recuperarEntidad(usuario.getId());
 		servicioPersistencia.borrarEntidad(eUsuario);
+		
+		servicioPersistencia.borrarEntidad(eUsurio);
 		
 	}
 
