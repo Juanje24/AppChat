@@ -8,6 +8,15 @@ import um.tds.appChat.persistencia.InterfacesDAO.MensajeDAO;
 
 
 public class MensajeDAO_TDS implements MensajeDAO {
+	
+	private static MensajeDAO_TDS unicaInstancia;
+	
+	public static MensajeDAO_TDS getUnicaInstancia() {
+		if (unicaInstancia == null) {
+			return new MensajeDAO_TDS();
+		} else {return unicaInstancia;}
+	}
+	
 	@Override
 	public Mensaje registrarMensaje(Mensaje mensaje) {
 		// TODO Auto-generated method stub

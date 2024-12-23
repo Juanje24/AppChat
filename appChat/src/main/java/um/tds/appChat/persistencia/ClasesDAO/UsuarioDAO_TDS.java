@@ -1,6 +1,8 @@
 package um.tds.appChat.persistencia.ClasesDAO;
 
 import um.tds.appChat.dominio.Contacto;
+import um.tds.appChat.dominio.ContactoIndividual;
+import um.tds.appChat.dominio.Grupo;
 import um.tds.appChat.dominio.Usuario;
 import um.tds.appChat.persistencia.InterfacesDAO.UsuarioDAO;
 import tds.driver.FactoriaServicioPersistencia;
@@ -10,15 +12,20 @@ import beans.Propiedad;
 import um.tds.appChat.persistencia.FactoriaDAO;
 import um.tds.appChat.persistencia.UtilsUsuarioDAO;
 
-
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.StringTokenizer;
+import java.util.stream.Collectors;
 
 
 public class UsuarioDAO_TDS implements UsuarioDAO {
@@ -28,6 +35,14 @@ public class UsuarioDAO_TDS implements UsuarioDAO {
 	public UsuarioDAO_TDS() {
 		servicioPersistencia = FactoriaServicioPersistencia.getInstance().getServicioPersistencia();
 	}
+	
+	public static UsuarioDAO_TDS getUnicaInstancia() {
+		if (unicaInstancia == null) {
+			return new UsuarioDAO_TDS();
+		} else {return unicaInstancia;}
+	}
+	
+	
 	
 	private String obtenerIDsContactos(List<Contacto> contactos) {
 		String corte = "";
@@ -40,9 +55,31 @@ public class UsuarioDAO_TDS implements UsuarioDAO {
 	private List<Contacto> obtenerContactosDesdeIDs(String idsContactos){
 		List<Contacto> contactos = new LinkedList<Contacto>();
 		StringTokenizer strTok = new StringTokenizer(idsContactos, " ");
-		while ( strTok.hasMoreElements()) {
-			contactos.add(FactoriaDAO.getFactoriaDAO().)
+		while ( strTok.hasMoreElements()) { //problema con esto dado que no se que tipo de contacto es
+			int id = Integer.parseInt((String) strTok.nextElement());
+			Entidad eContacto = servicioPersistencia.recuperarEntidad(id);
+	        String tipo = eContacto.getNombre();
+	        if ("Grupo".equals(tipo)) {
+	           
+	            FactoriaDAO.getFactoriaDAO().getGrupoDAO().recuperarGrupoPorId(id).ifPresent(contactos::add);
+	        } else if ("ContactoIndividual".equals(tipo)) {
+	            
+	            FactoriaDAO.getFactoriaDAO().getContactoIndividualDAO().recuperarContactoIndividualPorId(id).ifPresent(contactos::add);
+	        }
 		}
+		return contactos;
+	}
+	
+	private Usuario entidadToUsuario(Entidad e) {
+		
+	    // Recuperar las propiedades de la entidad
+	    Map<String, String> p = e.getPropiedades().stream()
+	            .collect(Collectors.toMap(Propiedad::getNombre, Propiedad::getValor));
+	    
+	    Usuario usuario = new Usuario(p.get("name"), p.get("apellido"), p.get("telefono"), p.get("contraseña"),
+	    		LocalDate.parse(p.get("birthday"), DateTimeFormatter.ofPattern("yyyy-MM-dd")), p.get("saludo"), p.get("urlImagen"));
+	    usuario.setId(e.getId());
+	    return usuario;
 	}
 	
 	@Override
@@ -78,7 +115,15 @@ public class UsuarioDAO_TDS implements UsuarioDAO {
 	public void borrarUsuario(Usuario usuario) {
 		Entidad eUsurio;
 		eUsurio = servicioPersistencia.recuperarEntidad(usuario.getId());
-		FactoriaDAO.getFactoriaDAO().
+		for (Contacto contacto : usuario.getContactos()) {
+			if(contacto instanceof Grupo) {
+				FactoriaDAO.getFactoriaDAO().getGrupoDAO().borrarGrupo((Grupo) contacto);
+			} else {
+				FactoriaDAO.getFactoriaDAO().getContactoIndividualDAO().borrarContactoIndividual((ContactoIndividual) contacto);
+			}
+		}
+		
+		servicioPersistencia.borrarEntidad(eUsurio);
 		
 	}
 
@@ -113,14 +158,22 @@ public class UsuarioDAO_TDS implements UsuarioDAO {
 
 	@Override
 	public Optional<Usuario> recuperarUsuarioPorId(int id) {
-		// TODO Auto-generated method stub
-		return Optional.empty();
+		Entidad eUsuario = servicioPersistencia.recuperarEntidad(id);
+		Usuario usuario = entidadToUsuario(servicioPersistencia.recuperarEntidad(id));
+		List<Contacto> contactos;
+		contactos = obtenerContactosDesdeIDs(servicioPersistencia.recuperarPropiedadEntidad(eUsuario, "contactos"));
+		for (Contacto c : contactos)	usuario.addContacto(c);
+		return Optional.of(usuario);
 	}
 
 	@Override
 	public List<Usuario> recuperarTodosUsuarios() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Entidad> entidades = servicioPersistencia.recuperarEntidades("Usuario");
+		List<Usuario> usuarios = new LinkedList<Usuario>();
+		for(Entidad eUsuario : entidades) {
+			recuperarUsuarioPorId(eUsuario.getId()).ifPresent(usuarios::add);
+		}
+		return usuarios;
 	}
 
 	

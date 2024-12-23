@@ -8,6 +8,14 @@ import um.tds.appChat.persistencia.InterfacesDAO.ContactoIndividualDAO;
 
 public class ContactoIndividualDAO_TDS implements ContactoIndividualDAO{
 
+	private static ContactoIndividualDAO_TDS unicaInstancia;
+	
+	public static ContactoIndividualDAO_TDS getUnicaInstancia() {
+		if (unicaInstancia == null) {
+			return new ContactoIndividualDAO_TDS();
+		} else {return unicaInstancia;}
+	}
+	
 	@Override
 	public ContactoIndividual registrarContactoIndividual(ContactoIndividual ContactoIndividual) {
 		// TODO Auto-generated method stub

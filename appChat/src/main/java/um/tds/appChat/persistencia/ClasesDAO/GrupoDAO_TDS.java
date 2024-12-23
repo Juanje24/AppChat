@@ -7,6 +7,15 @@ import um.tds.appChat.dominio.Grupo;
 import um.tds.appChat.persistencia.InterfacesDAO.GrupoDAO;
 
 public class GrupoDAO_TDS implements GrupoDAO {
+	
+	private static GrupoDAO_TDS unicaInstancia;
+	
+	public static GrupoDAO_TDS getUnicaInstancia() {
+		if (unicaInstancia == null) {
+			return new GrupoDAO_TDS();
+		} else {return unicaInstancia;}
+	}
+	
 	@Override
 	public Grupo registrarGrupo(Grupo grupo) {
 		// TODO Auto-generated method stub

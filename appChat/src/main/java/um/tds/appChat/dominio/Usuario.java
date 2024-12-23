@@ -51,6 +51,10 @@ public class Usuario {
         contacto.addMessage(mensaje);
     }
     
+    public void addContacto(Contacto contacto) {
+    	contactos.add(contacto);
+    }
+    
 //    public List<Mensaje> searchMessages(MessageSearchBuilder builder) {
 //        return contactos.stream()
 //                .filter(contacto -> builder.getNombreContacto().isEmpty() || contacto.getNombre().equalsIgnoreCase(builder.getNombreContacto().get()))
