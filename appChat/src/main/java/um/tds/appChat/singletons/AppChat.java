@@ -28,10 +28,10 @@ public enum AppChat {
 		} catch (DAOException e) {
 			e.printStackTrace();
 		}
-		usuarioDAO = factoriaDAO.crearUsuarioDAO();
-		contactoIndividualDAO = factoriaDAO.crearContactoIndividualDAO();
-		grupoDAO = factoriaDAO.crearGrupoDAO();
-		mensajeDAO = factoriaDAO.crearMensajeDAO();
+		usuarioDAO = factoriaDAO.getUsuarioDAO();
+		contactoIndividualDAO = factoriaDAO.getContactoIndividualDAO();
+		grupoDAO = factoriaDAO.getGrupoDAO();
+		mensajeDAO = factoriaDAO.getMensajeDAO();
 		repositorioUsuarios = RepositorioUsuario.INSTANCE;
 	}
 	void enviarMensajeContacto(ContactoIndividual c3, String string, int i, TipoMensaje enviado) {
