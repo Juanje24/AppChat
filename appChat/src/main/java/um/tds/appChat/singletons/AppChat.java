@@ -55,8 +55,8 @@ public enum AppChat {
 	}
 
 	public boolean login(String telefono, String contrasena) {
-		List<Usuario> usuarios = usuarioDAO.recuperarTodosUsuarios();
-		repositorioUsuarios.cargarUsuarios(usuarios);
+		//List<Usuario> usuarios = usuarioDAO.recuperarTodosUsuarios(); Esto falla
+		//repositorioUsuarios.cargarUsuarios(usuarios);
 		if (repositorioUsuarios.buscarUsuarioPorMovil(telefono).isPresent()) {
 			usuarioActual = repositorioUsuarios.buscarUsuarioPorMovil(telefono).get();
 			return usuarioActual.getContraseña().equals(contrasena);

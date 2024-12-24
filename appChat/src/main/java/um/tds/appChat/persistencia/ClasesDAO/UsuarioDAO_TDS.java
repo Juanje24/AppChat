@@ -128,7 +128,7 @@ public class UsuarioDAO_TDS implements UsuarioDAO {
 
 	@Override
 	public List<Usuario> recuperarTodosUsuarios() {
-		List<Entidad> eUsuarios = servicioPersistencia.recuperarEntidades("Usuario");
+		List<Entidad> eUsuarios = servicioPersistencia.recuperarEntidades("Usuario"); //Falla
 		System.out.println("Número de usuarios recuperados: "+eUsuarios.size());
 		List<Usuario> usuarios = new LinkedList<Usuario>();
 		for (Entidad eUsuario : eUsuarios) {
@@ -155,7 +155,7 @@ public class UsuarioDAO_TDS implements UsuarioDAO {
 		GrupoDAO_TDS adaptadorG = new GrupoDAO_TDS();
 		while (strTok.hasMoreTokens()) {
 			int id = Integer.valueOf((String) strTok.nextElement());
-			if (id<=2000) {
+			if (id<=20000) {
 				listaContactos.add(adaptadorG.recuperarGrupoPorId(id));
 				
 			}
