@@ -56,7 +56,6 @@ public class UsuarioDAO_TDS implements UsuarioDAO {
 						new Propiedad("urlImagen", usuario.getUrlImagen()),
 		                new Propiedad("contactos", obtenerCodigosContactos(usuario.getContactos())))));
 	   eUsuario = servicioPersistencia.registrarEntidad(eUsuario);
-	   //Falla en la siguiente línea
 		if (eUsuario.getId() != usuario.getId()) {
 			System.err.println("Id de usuario: "+usuario.getId()+ " Id de entidad: "+eUsuario.getId());
 		}
@@ -128,7 +127,7 @@ public class UsuarioDAO_TDS implements UsuarioDAO {
 
 	@Override
 	public List<Usuario> recuperarTodosUsuarios() {
-		List<Entidad> eUsuarios = servicioPersistencia.recuperarEntidades("Usuario"); //Falla
+		ArrayList<Entidad> eUsuarios = servicioPersistencia.recuperarEntidades(); 
 		System.out.println("Número de usuarios recuperados: "+eUsuarios.size());
 		List<Usuario> usuarios = new LinkedList<Usuario>();
 		for (Entidad eUsuario : eUsuarios) {

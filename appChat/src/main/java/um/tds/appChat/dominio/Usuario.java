@@ -36,7 +36,7 @@ public class Usuario {
     
     public Usuario(String nombre, String apellido, String telefono, String contraseña, LocalDate birthday, String saludo, String urlImagen){
         this.nombre = nombre;
-        this.id = new Random().nextInt();
+        this.id = new Random().nextInt(40000);
         this.apellido = apellido;
         this.telefono = telefono;
         this.contraseña = contraseña;
@@ -51,17 +51,10 @@ public class Usuario {
     //CONSTRUCTORES
     
     
-    public Usuario(String nombre, String apellido, String telefono, String contraseña, LocalDate birthday, String saludo){ //sin imagen, con fecha
-        this(nombre, apellido, telefono, contraseña, birthday, saludo, null);
+    public Usuario(String nombre, String apellido, String telefono, String contraseña, LocalDate birthday){ //campos obligatorios
+        this(nombre, apellido, telefono, contraseña, birthday, "", "");
     }
 
-    public Usuario(String nombre, String apellido, String telefono, String contraseña, String saludo){ //sin imagen y sin fecha
-        this(nombre, apellido, telefono, contraseña, null, saludo, null);
-    }
-
-    public Usuario(String nombre, String apellido, String telefono, String contraseña, String saludo, String urlImagen){ //con imagen, sin fecha
-        this(nombre, apellido, telefono, contraseña, null, saludo, urlImagen);
-    }
     
     //FUNCIONALIDAD
     
