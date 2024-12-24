@@ -10,6 +10,7 @@ public abstract class Contacto {
     private int id;
     private String nombre;
     private List<Mensaje> mensajes;
+    private String urlImagen;
     
     // CONSTRUCTORES
     
@@ -69,6 +70,15 @@ public abstract class Contacto {
 	public void setMensajes(List<Mensaje> mensajes) {
 		this.mensajes = new LinkedList<Mensaje>(mensajes);
 	}
+
+	public String getUrlImagen() {
+		return urlImagen;
+	}
+
+	public void setUrlImagen(String urlImagen) {
+		this.urlImagen = urlImagen;
+	}
+
 
 
 

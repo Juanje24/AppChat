@@ -152,6 +152,12 @@ public class Usuario {
 	public void addContacto(Contacto contacto) {
         this.contactos.add(contacto);
     }
+
+
+	public ContactoIndividual getContactoIndividual(String telefono) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 
 

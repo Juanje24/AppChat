@@ -52,7 +52,6 @@ public class Inicio extends JFrame{
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					System.out.println("Hey!");
 					Inicio ventana = new Inicio();
 					ventana.setVisible(true);
 				} catch (Exception e) {
@@ -180,8 +179,6 @@ public class Inicio extends JFrame{
 		btnAceptar = new JButton("Iniciar sesión");
 		panelSur.add(btnAceptar);
 		btnAceptar.addActionListener(e ->{
-			System.out.println(textField.getText()); 
-			System.out.println(passwordField.getPassword()); //Pedir al controlador que compruebe si el usuario existe
 			if (AppChat.INSTANCE.login(textField.getText(), new String(passwordField.getPassword()))) {
 				new Principal().mostrar();
 				this.setVisible(false);
