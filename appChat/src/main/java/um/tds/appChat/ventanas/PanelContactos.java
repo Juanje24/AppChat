@@ -9,6 +9,7 @@ import javax.swing.JScrollPane;
 import um.tds.appChat.dominio.Contacto;
 
 public class PanelContactos extends JPanel {
+	private static final long serialVersionUID = 1L;
 	private JList<Contacto> listaContactos;
 	
 	public PanelContactos() {

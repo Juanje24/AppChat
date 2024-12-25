@@ -178,16 +178,17 @@ public class Inicio extends JFrame{
 		
 		btnAceptar = new JButton("Iniciar sesión");
 		panelSur.add(btnAceptar);
-		btnAceptar.addActionListener(e ->{
-			if (AppChat.INSTANCE.login(textField.getText(), new String(passwordField.getPassword()))) {
-				new Principal().mostrar();
-				this.setVisible(false);
-				this.dispose();
-			}
-			else {
-				JOptionPane.showMessageDialog(this, "Teléfono o contraseña incorrectos", "Warning", JOptionPane.WARNING_MESSAGE);
-			}
-		});
+		btnAceptar.addActionListener(e -> iniciarSesion());
+		passwordField.addActionListener(e -> iniciarSesion());
+	}
+	private void iniciarSesion() {
+	    if (AppChat.INSTANCE.login(textField.getText(), new String(passwordField.getPassword()))) {
+	        new Principal().mostrar();
+	        this.setVisible(false);
+	        this.dispose();
+	    } else {
+	        JOptionPane.showMessageDialog(this, "Teléfono o contraseña incorrectos", "Warning", JOptionPane.WARNING_MESSAGE);
+	    }
 	}
 
 }

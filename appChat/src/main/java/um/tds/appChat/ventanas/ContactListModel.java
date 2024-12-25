@@ -6,6 +6,7 @@ import java.util.List;
 import um.tds.appChat.dominio.Contacto;
 
 public class ContactListModel extends AbstractListModel<Contacto> {
+	private static final long serialVersionUID = 1L;
 	private List<Contacto> contactos;
 
     public ContactListModel(List<Contacto> contactos) {

@@ -127,7 +127,7 @@ public class UsuarioDAO_TDS implements UsuarioDAO {
 
 	@Override
 	public List<Usuario> recuperarTodosUsuarios() {
-		ArrayList<Entidad> eUsuarios = servicioPersistencia.recuperarEntidades(); 
+		ArrayList<Entidad> eUsuarios = servicioPersistencia.recuperarEntidades("Usuario"); 
 		System.out.println("Número de usuarios recuperados: "+eUsuarios.size());
 		List<Usuario> usuarios = new LinkedList<Usuario>();
 		for (Entidad eUsuario : eUsuarios) {
