@@ -142,14 +142,27 @@ public class Usuario {
 		this.contactos = new LinkedList<Contacto>(contactos);
 	}
 
-	public void addContacto(Contacto contacto) {
-        this.contactos.add(contacto);
+	public void addContactoIndividual(String nombre,Usuario usuario) {
+        ContactoIndividual contacto = new ContactoIndividual(nombre, usuario);
+		this.contactos.add(contacto);
     }
 
 
 	public ContactoIndividual getContactoIndividual(String telefono) {
-		// TODO Auto-generated method stub
-		return null;
+		for (Contacto c: contactos) {
+			if (c instanceof ContactoIndividual) {
+				if (((ContactoIndividual) c).getUsuario().getTelefono().equals(telefono)) {
+					return (ContactoIndividual) c;
+				}
+			}
+		}
+        return null;
+	}
+
+
+	public void addContacto(Contacto c) {
+		this.contactos.add(c);
+		
 	}
 	
 

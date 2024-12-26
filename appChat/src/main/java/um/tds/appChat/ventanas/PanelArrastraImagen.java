@@ -25,6 +25,9 @@ import javax.swing.ImageIcon;
 
 import java.awt.SystemColor;
 import javax.swing.border.TitledBorder;
+
+import um.tds.appChat.utils.RoundButtonUI;
+
 import java.awt.FlowLayout;
 
 public class PanelArrastraImagen extends JDialog {
@@ -119,9 +122,7 @@ public class PanelArrastraImagen extends JDialog {
                 dispose();
         });        	
         JButton botonElegir = new JButton("Seleccionar de tu ordenador");      
-     
-        botonElegir.setForeground(Color.WHITE);
-        botonElegir.setBackground(SystemColor.textHighlight);
+        botonElegir.setUI(new RoundButtonUI(Color.WHITE, SystemColor.textHighlight));
         botonElegir.addActionListener(ev -> {
         	JFileChooser chooser = new JFileChooser();
         	if (chooser.showOpenDialog(this)==JFileChooser.APPROVE_OPTION) {
@@ -134,10 +135,8 @@ public class PanelArrastraImagen extends JDialog {
         });
         panelBotones.add(botonElegir);
         panelBotones.add(Box.createRigidArea(new Dimension(150,10)));
-        btnAceptar.setBackground(new Color(166,255,184));
-        btnAceptar.setForeground(SystemColor.textHighlight);
-        btnCancelar.setBackground(new Color(255,100,100));
-        btnCancelar.setForeground(SystemColor.textHighlight);
+        btnAceptar.setUI(new RoundButtonUI(SystemColor.textHighlight,new Color(166,255,184)));
+        btnCancelar.setUI(new RoundButtonUI(SystemColor.textHighlight,new Color(255,100,100)));
         panelBotones.add(btnAceptar);
         panelBotones.add(btnCancelar);
         getContentPane().add(panelBotones, BorderLayout.SOUTH);

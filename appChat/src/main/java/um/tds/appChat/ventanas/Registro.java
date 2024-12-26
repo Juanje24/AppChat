@@ -21,6 +21,8 @@ import javax.swing.JFrame;
 import com.toedter.calendar.JDateChooser;
 
 import um.tds.appChat.singletons.AppChat;
+import um.tds.appChat.utils.RoundButtonUI;
+
 import java.io.File;
 import java.time.ZoneId;
 import java.util.List;
@@ -195,22 +197,24 @@ public class Registro extends JDialog {
 		
 		
 		JButton btnSubirFoto = new JButton("Subir foto");
+		btnSubirFoto.setUI(new RoundButtonUI());
 		btnSubirFoto.addActionListener(e-> {
 				PanelArrastraImagen panelArrastraImagen = new PanelArrastraImagen(ventanaLogin);
 				List<File> imagenes = panelArrastraImagen.showDialog();
-				if (imagenes != null && !imagenes.isEmpty()) {
+				if (imagenes != null && !imagenes.isEmpty() && imagenes.get(0) != null) {
 					archivoImagen = imagenes.get(0);
 					//path = Utils.getRutaResourceFromFile(archivoImagen);
-					}
+					
 //					ImageIcon iconoImagen = new ImageIcon(getClass().getResource(path));
 					path = archivoImagen.getAbsolutePath();
-				    ImageIcon iconoImagen = new ImageIcon(archivoImagen.getAbsolutePath());
+				    ImageIcon iconoImagen = new ImageIcon(path);
 					Image imagenEscalada = iconoImagen.getImage().
 					getScaledInstance(100, 100, Image.SCALE_SMOOTH);
 					lblSubirFoto.setIcon(new ImageIcon(imagenEscalada));
 					lblSubirFoto.setText("");
 					panelArrastraImagen.setVisible(false);
 					panelArrastraImagen.dispose();
+				}
 		});
 		GridBagConstraints gbc_btnSubirFoto = new GridBagConstraints();
 		gbc_btnSubirFoto.insets = new Insets(0, 0, 5, 5);
@@ -219,6 +223,7 @@ public class Registro extends JDialog {
 		this.getContentPane().add(btnSubirFoto, gbc_btnSubirFoto);
 		
 		JButton btnRegistrar = new JButton("Registrar");
+		btnRegistrar.setUI(new RoundButtonUI());
 		btnRegistrar.addActionListener(e -> {
 			if (!passwordCheck(passwordField.getPassword(), passwordField_1.getPassword())) {
 				JOptionPane.showMessageDialog(this, "Las contraseñas no coinciden", "Error", JOptionPane.ERROR_MESSAGE);
@@ -246,8 +251,8 @@ public class Registro extends JDialog {
 		this.getContentPane().add(btnRegistrar, gbc_btnRegistrar);
 		
 		JButton btnCancelar = new JButton("Cancelar");
-		btnCancelar.setBackground(new Color(255,100,100));
-        btnCancelar.setForeground(SystemColor.textHighlight);
+		btnCancelar.setUI(new RoundButtonUI(SystemColor.textHighlight,new Color(255,100,100)));
+        
 		btnCancelar.addActionListener( e -> {
 		    this.setVisible(false);
 		    this.dispose();

@@ -3,12 +3,11 @@ package um.tds.appChat.dominio;
 import java.util.Random;
 
 public class ContactoIndividual extends Contacto{
-
-    public ContactoIndividual(String nombre) {
-		super(nombre,(new Random().nextInt()  + 20001));
-		// TODO Auto-generated constructor stub
-	}
 	private Usuario usuario;
+    public ContactoIndividual(String nombre, Usuario u) {
+		super(nombre,(new Random().nextInt()  + 20001), u.getUrlImagen());
+		this.usuario = u;
+	}
     
 	public Usuario getUsuario() {
 		return usuario;

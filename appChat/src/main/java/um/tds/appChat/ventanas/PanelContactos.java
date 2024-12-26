@@ -1,6 +1,7 @@
 package um.tds.appChat.ventanas;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -26,5 +27,9 @@ public class PanelContactos extends JPanel {
 
 	public void removeContact(Contacto contacto) {
 		((ContactListModel) listaContactos.getModel()).removeContact(contacto);
+	}
+
+	public void addContacts(List<Contacto> contactos) {
+		((ContactListModel) listaContactos.getModel()).addContacts(contactos);
 	}
 }

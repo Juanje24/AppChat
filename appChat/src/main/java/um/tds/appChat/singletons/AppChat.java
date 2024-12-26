@@ -39,9 +39,14 @@ public enum AppChat {
 		
 	}
 
-	ContactoIndividual agregarContacto(String string, String string2) {
-		// TODO Auto-generated method stub
-		return null;
+	public ContactoIndividual agregarContacto(String nombre, String tlf) {
+		if (repositorioUsuarios.buscarUsuarioPorMovil(tlf).isPresent()) {
+			usuarioActual.addContactoIndividual(nombre,repositorioUsuarios.buscarUsuarioPorMovil(tlf).get());
+			return usuarioActual.getContactoIndividual(tlf);
+		}
+		else{
+			return null;
+		}
 	}
 
 	public boolean registrarUsuario(String nombre, String apellidos, String contrasena, LocalDate fechaNacimiento, String numTlf, String foto, String saludo) {

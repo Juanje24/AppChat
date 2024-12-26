@@ -19,11 +19,13 @@ import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
 import um.tds.appChat.singletons.AppChat;
+import um.tds.appChat.utils.RoundButtonUI;
 
 import java.awt.FlowLayout;
 import javax.swing.JButton;
 import javax.swing.JPasswordField;
 import java.awt.Panel;
+import java.awt.SystemColor;
 import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.GridBagConstraints;
@@ -89,7 +91,7 @@ public class Inicio extends JFrame{
 		
 		panelNorte = new JPanel();
 		this.getContentPane().add(panelNorte, BorderLayout.NORTH);
-		ImageIcon icon = new ImageIcon(getClass().getResource("/logo.png")); 
+		ImageIcon icon = new ImageIcon(getClass().getResource("/iconos/logo.png")); 
 		Image iconoEscalado = icon.getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
 	    JLabel lblImage = new JLabel(new ImageIcon(iconoEscalado));
 	    panelNorte.add(lblImage);
@@ -160,6 +162,7 @@ public class Inicio extends JFrame{
 		panelSur.setLayout(fl_panelSur);
 		
 		btnRegistrar = new JButton("Registrar");
+		btnRegistrar.setUI(new RoundButtonUI());
 		btnRegistrar.addActionListener(e -> {
 			Registro ventanaRegistro = new Registro(this);
 			this.setVisible(false);
@@ -170,6 +173,7 @@ public class Inicio extends JFrame{
 		panelSur.add(Box.createRigidArea(new Dimension(100,10)));
 		
 		btnCancelar = new JButton("Cancelar");
+		btnCancelar.setUI(new RoundButtonUI(SystemColor.textHighlight,new Color(255,100,100)));
 		btnCancelar.addActionListener( e -> {
 		    this.setVisible(false);
 		    this.dispose();
@@ -177,6 +181,7 @@ public class Inicio extends JFrame{
 		panelSur.add(btnCancelar);
 		
 		btnAceptar = new JButton("Iniciar sesión");
+		btnAceptar.setUI(new RoundButtonUI());
 		panelSur.add(btnAceptar);
 		btnAceptar.addActionListener(e -> iniciarSesion());
 		passwordField.addActionListener(e -> iniciarSesion());

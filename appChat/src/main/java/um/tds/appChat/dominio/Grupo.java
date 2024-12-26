@@ -5,8 +5,8 @@ import java.util.Random;
 
 public class Grupo extends Contacto{
     
-    public Grupo(String nombre) {
-    	super(nombre,new Random().nextInt(20000));
+    public Grupo(String nombre, String urlImagen) {
+    	super(nombre,new Random().nextInt(20000), urlImagen);
 		// TODO Auto-generated constructor stub
 	}
 
