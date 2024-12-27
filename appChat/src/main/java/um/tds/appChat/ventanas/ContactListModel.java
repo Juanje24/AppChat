@@ -37,8 +37,9 @@ public class ContactListModel extends AbstractListModel<Contacto> {
     }
 
 	public void addContacts(List<Contacto> contactos2) {
+		if(contactos2.size()>0) {
 		contactos.addAll(contactos2);
 		fireIntervalAdded(this, contactos.size() - contactos2.size(), contactos.size() - 1);
-		
+		}
 	}
 }

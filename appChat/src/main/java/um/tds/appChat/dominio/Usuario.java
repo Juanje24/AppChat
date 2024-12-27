@@ -191,6 +191,16 @@ public class Usuario {
 		}
 		return false;
 	}
+	public List<ContactoIndividual> getContactosIndividuales() {
+
+		List<ContactoIndividual> individuales = new LinkedList<>();
+		for (Contacto c : contactos) {
+			if (c instanceof ContactoIndividual) {
+				individuales.add((ContactoIndividual) c);
+			}
+		}
+		return individuales;
+	}
 
 
 	

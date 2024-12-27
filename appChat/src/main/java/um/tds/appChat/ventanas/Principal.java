@@ -9,7 +9,6 @@ import javax.swing.*;
 
 import um.tds.appChat.utils.RoundButtonUI;
 import um.tds.appChat.dominio.ContactoIndividual;
-import um.tds.appChat.dominio.Usuario;
 import um.tds.appChat.singletons.AppChat;
 
 public class Principal extends JFrame {
@@ -45,9 +44,6 @@ public class Principal extends JFrame {
 		initialize();
 		this.setLocationRelativeTo(frame);
 	}
-	public void mostrar() {
-		this.setVisible(true);
-	}
 
 	/**
 	 * Initialize the contents of the frame.
@@ -59,6 +55,7 @@ public class Principal extends JFrame {
 		this.getContentPane().setLayout(new BorderLayout(0, 0));
 		
 		JPanel panelNorte = new JPanel();
+		panelNorte.setBackground(new Color(215, 215, 215));
 		this.getContentPane().add(panelNorte, BorderLayout.NORTH);
 		
 		
@@ -92,6 +89,16 @@ public class Principal extends JFrame {
 		});
 		panelNorte.add(añadirContacto);
 		
+		ImageIcon iconoGrupo = new ImageIcon(getClass().getResource("/iconos/addGroup.png"));
+		Image iconoGrupoEscalado = iconoGrupo.getImage().getScaledInstance(25, 25, java.awt.Image.SCALE_SMOOTH);
+		JButton añadirGrupo= new JButton(new ImageIcon(iconoGrupoEscalado));
+		añadirGrupo.setUI(new RoundButtonUI());
+		añadirGrupo.addActionListener(e->{
+			PanelGrupo crearGrupo = new PanelGrupo(this,app.getUsuarioActual().getContactosIndividuales());
+			crearGrupo.setVisible(true);
+			this.setVisible(false);
+		});
+		panelNorte.add(añadirGrupo);
 		
 	    // Crear el JPanel para el usuario
 	    JPanel panelUsuario = new JPanel();
