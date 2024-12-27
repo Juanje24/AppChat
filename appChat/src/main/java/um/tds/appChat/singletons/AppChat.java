@@ -2,12 +2,11 @@ package um.tds.appChat.singletons;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import um.tds.appChat.dominio.*;
 import um.tds.appChat.persistencia.*;
 import um.tds.appChat.persistencia.InterfacesDAO.*;
-
-
 
 
 public enum AppChat {
@@ -40,8 +39,9 @@ public enum AppChat {
 	}
 
 	public ContactoIndividual agregarContacto(String nombre, String tlf) {
-		if (repositorioUsuarios.buscarUsuarioPorMovil(tlf).isPresent()) {
-			usuarioActual.addContactoIndividual(nombre,repositorioUsuarios.buscarUsuarioPorMovil(tlf).get());
+		Optional<Usuario> contacto = repositorioUsuarios.buscarUsuarioPorMovil(tlf);
+		if (contacto.isPresent()) {
+			usuarioActual.addContactoIndividual(nombre,contacto.get());
 			return usuarioActual.getContactoIndividual(tlf);
 		}
 		else{
@@ -60,13 +60,19 @@ public enum AppChat {
 	}
 
 	public boolean login(String telefono, String contrasena) {
-		List<Usuario> usuarios = usuarioDAO.recuperarTodosUsuarios();
-		repositorioUsuarios.cargarUsuarios(usuarios);
 		if (repositorioUsuarios.buscarUsuarioPorMovil(telefono).isPresent()) {
 			usuarioActual = repositorioUsuarios.buscarUsuarioPorMovil(telefono).get();
 			return usuarioActual.getContraseña().equals(contrasena);
 		}
 		return false;
+	}
+	public void recuperarUsuarios() {
+		List<Usuario> usuarios = usuarioDAO.recuperarTodosUsuarios();
+		repositorioUsuarios.cargarUsuarios(usuarios);
+	}
+
+	public Usuario getUsuarioActual() {
+		return usuarioActual;
 	}
 	
 }

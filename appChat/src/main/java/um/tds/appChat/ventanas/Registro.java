@@ -22,6 +22,7 @@ import com.toedter.calendar.JDateChooser;
 
 import um.tds.appChat.singletons.AppChat;
 import um.tds.appChat.utils.RoundButtonUI;
+import um.tds.appChat.utils.Utils;
 
 import java.io.File;
 import java.time.ZoneId;
@@ -48,6 +49,7 @@ public class Registro extends JDialog {
 		super(ventanaLogin, "Registro - AppChat", true);
 		this.ventanaLogin=(Inicio)ventanaLogin;
 		this.setBounds(100, 100, 987, 550);
+		this.setLocationRelativeTo(ventanaLogin);
 		initialize();
 	}
 
@@ -170,7 +172,7 @@ public class Registro extends JDialog {
 		gbc_lblSubirFoto.gridy = 5;
 		this.getContentPane().add(lblSubirFoto, gbc_lblSubirFoto);
 		
-		JLabel lblSaludo = new JLabel("Saludo:");
+		JLabel lblSaludo = new JLabel("Saludo (opcional):");
 		GridBagConstraints gbc_lblSaludo = new GridBagConstraints();
 		gbc_lblSaludo.insets = new Insets(0, 0, 5, 5);
 		gbc_lblSaludo.gridx = 0;
@@ -203,11 +205,8 @@ public class Registro extends JDialog {
 				List<File> imagenes = panelArrastraImagen.showDialog();
 				if (imagenes != null && !imagenes.isEmpty() && imagenes.get(0) != null) {
 					archivoImagen = imagenes.get(0);
-					//path = Utils.getRutaResourceFromFile(archivoImagen);
-					
-//					ImageIcon iconoImagen = new ImageIcon(getClass().getResource(path));
-					path = archivoImagen.getAbsolutePath();
-				    ImageIcon iconoImagen = new ImageIcon(path);
+					path = Utils.getRutaResourceFromFile(archivoImagen);
+					ImageIcon iconoImagen = new ImageIcon(getClass().getResource(path));
 					Image imagenEscalada = iconoImagen.getImage().
 					getScaledInstance(100, 100, Image.SCALE_SMOOTH);
 					lblSubirFoto.setIcon(new ImageIcon(imagenEscalada));
@@ -228,8 +227,9 @@ public class Registro extends JDialog {
 			if (!passwordCheck(passwordField.getPassword(), passwordField_1.getPassword())) {
 				JOptionPane.showMessageDialog(this, "Las contraseñas no coinciden", "Error", JOptionPane.ERROR_MESSAGE);
                 }
-			else if(campoNombre.getText().isEmpty() || campoApellidos.getText().isEmpty() || campoMovil.getText().isEmpty() || passwordField.getPassword().length==0 || dateChooser.getDate()==null) {
-				JOptionPane.showMessageDialog(this, "Por favor, rellene los campos nombre, apellido, movil, contraseña y fecha", "Error", JOptionPane.ERROR_MESSAGE);
+			else if(campoNombre.getText().isEmpty() || campoApellidos.getText().isEmpty() || campoMovil.getText().isEmpty()
+					|| passwordField.getPassword().length==0 || dateChooser.getDate()==null  || path == null) {
+				JOptionPane.showMessageDialog(this, "Por favor, rellene los campos obligatorios", "Error", JOptionPane.ERROR_MESSAGE);
 			}
 			else {
 				if(AppChat.INSTANCE.registrarUsuario(campoNombre.getText(), campoApellidos.getText(), new String(passwordField.getPassword()),

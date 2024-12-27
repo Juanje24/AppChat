@@ -6,6 +6,7 @@ import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetDropEvent;
 import java.io.File;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -125,6 +126,7 @@ public class PanelArrastraImagen extends JDialog {
         botonElegir.setUI(new RoundButtonUI(Color.WHITE, SystemColor.textHighlight));
         botonElegir.addActionListener(ev -> {
         	JFileChooser chooser = new JFileChooser();
+        	chooser.setCurrentDirectory(new File(Paths.get("src/main/resources").toAbsolutePath().toString()));
         	if (chooser.showOpenDialog(this)==JFileChooser.APPROVE_OPTION) {
         		File currentFile = chooser.getSelectedFile();
                 archivosSubidos.add(currentFile);

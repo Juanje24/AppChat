@@ -1,7 +1,5 @@
 package um.tds.appChat.ventanas;
 
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -47,21 +45,6 @@ public class Inicio extends JFrame{
 	private JPasswordField passwordField;
 	private JPanel panelNorte;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Inicio ventana = new Inicio();
-					ventana.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the application.
@@ -188,7 +171,7 @@ public class Inicio extends JFrame{
 	}
 	private void iniciarSesion() {
 	    if (AppChat.INSTANCE.login(textField.getText(), new String(passwordField.getPassword()))) {
-	        new Principal().mostrar();
+	        new Principal(this).mostrar();
 	        this.setVisible(false);
 	        this.dispose();
 	    } else {

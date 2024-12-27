@@ -37,6 +37,11 @@ public class Principal extends JFrame {
 	public Principal() {
 		initialize();
 	}
+	
+	public Principal(JFrame frame) {
+		initialize();
+		this.setLocationRelativeTo(frame);
+	}
 	public void mostrar() {
 		frame.setVisible(true);
 	}
@@ -54,7 +59,7 @@ public class Principal extends JFrame {
 		frame.getContentPane().add(panelNorte, BorderLayout.NORTH);
 		
 		
-		panelContactos = new PanelContactos();
+		panelContactos = new PanelContactos(app.getUsuarioActual().getContactos());
 		frame.getContentPane().add(panelContactos, BorderLayout.WEST);
 		
 		
@@ -74,6 +79,8 @@ public class Principal extends JFrame {
             	if(c!=null) {
             		JOptionPane.showMessageDialog(this, "Contacto añadido correctamente", "", JOptionPane.INFORMATION_MESSAGE);
             		panelContactos.addContact(c);
+            		this.revalidate();
+            		this.repaint();
             	}
             	else {
             		JOptionPane.showMessageDialog(this, "No se ha podido añadir el contacto", "Error", JOptionPane.ERROR_MESSAGE);

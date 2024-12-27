@@ -13,12 +13,13 @@ public class PanelContactos extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JList<Contacto> listaContactos;
 	
-	public PanelContactos() {
+	public PanelContactos(List<Contacto> contactos) {
 		ContactListModel modelo = new ContactListModel(new ArrayList<Contacto>());
 		listaContactos = new JList<>(modelo);
 		listaContactos.setCellRenderer(new ContactoListCellRenderer());
 		JScrollPane scroll = new JScrollPane(listaContactos);
 		add(scroll);
+		((ContactListModel) listaContactos.getModel()).addContacts(contactos);
 	}
 
 	public void addContact(Contacto contacto) {

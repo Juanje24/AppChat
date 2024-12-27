@@ -80,7 +80,7 @@ public class RoundButtonUI extends BasicButtonUI {
         g2.setFont(b.getFont());
         FontMetrics fm = g2.getFontMetrics();
         int textX = (b.getWidth() - fm.stringWidth(b.getText())) / 2;
-        int textY = iconY + iconHeight + fm.getAscent();
+        int textY = iconY + iconHeight + fm.getAscent()+4;
         g2.setColor(textColor);
         g2.drawString(b.getText(), textX, textY);
 

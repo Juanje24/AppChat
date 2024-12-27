@@ -13,7 +13,7 @@ import javax.swing.ListCellRenderer;
 import javax.swing.border.Border;
 
 import um.tds.appChat.dominio.Contacto;
-import um.tds.appChat.dominio.ContactoIndividual;
+import um.tds.appChat.dominio.Mensaje;
 
 import java.awt.*;
 import java.io.IOException;
@@ -69,9 +69,13 @@ public class ContactoListCellRenderer extends JPanel implements ListCellRenderer
 
 		// Configuración del texto
 		lblNombre.setText(contacto.getNombre());
-		if(contacto instanceof ContactoIndividual) {
-		lblUltimoMsg.setText(contacto.getMensajes().getLast().getTexto());
-		}
+//		Mensaje ultimoMsj = contacto.getMensajes().getLast();
+//		if (ultimoMsj != null) {
+//			lblUltimoMsg.setText(ultimoMsj.getTexto());
+//		}
+		lblUltimoMsg.setText("Último mensaje");
+		
+
 
 		// Configuración de colores para selección
 		if (isSelected) {
