@@ -40,7 +40,13 @@ public enum AppChat {
 
 	public ContactoIndividual agregarContacto(String nombre, String tlf) {
 		Optional<Usuario> contacto = repositorioUsuarios.buscarUsuarioPorMovil(tlf);
-		if (contacto.isPresent()) {
+//      TODO HAY QUE IMPLEMENTAR DAO CONTACTO INDIVIDUAL PARA QUE ESTO VAYA
+//		if (contacto.isPresent() && !usuarioActual.isTlfEnContactos(tlf) ) {
+//			usuarioActual.addContactoIndividual(nombre,contacto.get());
+//			actualizarUsuario(usuarioActual); 
+//			return usuarioActual.getContactoIndividual(tlf);
+//		}
+		if (contacto.isPresent()) { //VERSION BASICA, SOLO COMPRUEBA QUE EXISTE EL CONTACTO 
 			usuarioActual.addContactoIndividual(nombre,contacto.get());
 			return usuarioActual.getContactoIndividual(tlf);
 		}
@@ -73,6 +79,16 @@ public enum AppChat {
 
 	public Usuario getUsuarioActual() {
 		return usuarioActual;
+	}
+	public void actualizarUsuario(String nombre, String apellidos, String contrasena, LocalDate fechaNacimiento, String numTlf, String foto, String saludo) {
+			Usuario usuario = repositorioUsuarios.modificarUsuario(nombre, apellidos, numTlf, contrasena, fechaNacimiento, saludo, foto);
+			//usuarioDAO.modificarUsuario(usuario);
+			usuarioActual = usuario;
+	}
+	public void actualizarUsuario(Usuario u) {
+		Usuario usuario = repositorioUsuarios.modificarUsuario(u);
+		usuarioDAO.modificarUsuario(usuario);
+		usuarioActual = usuario;
 	}
 	
 }

@@ -19,8 +19,8 @@ public class Usuario {
     private List<Contacto> contactos; //podría ser un Set
 
     
-    public Usuario( int id, String nombre,String apellido, String telefono, String contraseña, LocalDate birthday,
-    		boolean isPremium, String saludo, String urlImagen){
+    public Usuario( String nombre,String apellido, String telefono, String contraseña, LocalDate birthday,
+    		 String saludo, String urlImagen, int id, boolean isPremium, List<Contacto> contactos){
         this.nombre = nombre;
         this.id = id;
         this.apellido = apellido;
@@ -30,8 +30,21 @@ public class Usuario {
         this.saludo = saludo;
         this.urlImagen = urlImagen;
         this.premium = isPremium;
-        this.contactos = new LinkedList<Contacto>();
+        this.contactos = new LinkedList<Contacto>(contactos);
     }
+    public Usuario( String nombre,String apellido, String telefono, String contraseña, LocalDate birthday,
+   		 String saludo, String urlImagen, int id, boolean isPremium){
+       this.nombre = nombre;
+       this.id = id;
+       this.apellido = apellido;
+       this.telefono = telefono;
+       this.contraseña = contraseña;
+       this.birthday = birthday;
+       this.saludo = saludo;
+       this.urlImagen = urlImagen;
+       this.premium = isPremium;
+       this.contactos = new LinkedList<Contacto>();
+   }
     
     
     public Usuario(String nombre, String apellido, String telefono, String contraseña, LocalDate birthday, String saludo, String urlImagen){
@@ -104,7 +117,9 @@ public class Usuario {
 	public String getApellido() {
 		return apellido;
 	}
-
+	public void setApellido(String apellido) {
+		this.apellido = apellido;
+	}
 	public String getContraseña() {
 		return contraseña;
 	}
@@ -135,12 +150,13 @@ public class Usuario {
 
 
 	public List<Contacto> getContactos() {
-		return contactos;
+		return new LinkedList<Contacto>(contactos);
 	}
 	
-	public void setContactos(LinkedList<Contacto> contactos) {
+	public void setContactos(List<Contacto> contactos) {
 		this.contactos = new LinkedList<Contacto>(contactos);
 	}
+
 
 	public void addContactoIndividual(String nombre,Usuario usuario) {
         ContactoIndividual contacto = new ContactoIndividual(nombre, usuario);
@@ -164,6 +180,19 @@ public class Usuario {
 		this.contactos.add(c);
 		
 	}
+
+	public boolean isTlfEnContactos(String tlf) {
+		for (Contacto c : contactos) {
+			if (c instanceof ContactoIndividual) {
+				if (((ContactoIndividual) c).getUsuario().getTelefono().equals(tlf)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+
 	
 
 

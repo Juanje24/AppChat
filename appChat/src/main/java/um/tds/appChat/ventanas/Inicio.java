@@ -62,9 +62,7 @@ public class Inicio extends JFrame{
 	 * Initialize the contents of the frame.
 	 * @return 
 	 */
-	public void mostrar() {
-		this.setVisible(true);
-	}
+
 	private void initialize() {
 		
 		this.setTitle("Login - AppChat");

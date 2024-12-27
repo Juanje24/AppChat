@@ -20,6 +20,7 @@ import javax.swing.JFrame;
 
 import com.toedter.calendar.JDateChooser;
 
+import um.tds.appChat.dominio.Usuario;
 import um.tds.appChat.singletons.AppChat;
 import um.tds.appChat.utils.RoundButtonUI;
 import um.tds.appChat.utils.Utils;
@@ -33,7 +34,7 @@ import javax.swing.JTextArea;
 public class Registro extends JDialog {
 
 	private static final long serialVersionUID = 1L;
-	private Inicio ventanaLogin;
+	private JFrame ventanaPadre;
 	private JPasswordField passwordField;
 	private JPasswordField passwordField_1;
 	private JTextField campoMovil;
@@ -41,15 +42,26 @@ public class Registro extends JDialog {
 	private JTextField campoNombre;
 	private String path;
 	private File archivoImagen;
+	private Usuario u=null;
 
 	/**
 	 * Create the application.
 	 */
-	public Registro(JFrame ventanaLogin) {
-		super(ventanaLogin, "Registro - AppChat", true);
-		this.ventanaLogin=(Inicio)ventanaLogin;
+	public Registro(JFrame padre, Usuario u) {
+		super(padre, "Modifica tu usuario", true);
+		this.ventanaPadre=padre;
 		this.setBounds(100, 100, 987, 550);
-		this.setLocationRelativeTo(ventanaLogin);
+		this.setLocationRelativeTo(padre);
+		this.u=u;
+		initialize();
+		
+	}
+
+	public Registro(JFrame padre) {
+		super(padre, "Registro - AppChat", true);
+		this.ventanaPadre=padre;
+		this.setBounds(100, 100, 987, 550);
+		this.setLocationRelativeTo(padre);
 		initialize();
 	}
 
@@ -201,7 +213,7 @@ public class Registro extends JDialog {
 		JButton btnSubirFoto = new JButton("Subir foto");
 		btnSubirFoto.setUI(new RoundButtonUI());
 		btnSubirFoto.addActionListener(e-> {
-				PanelArrastraImagen panelArrastraImagen = new PanelArrastraImagen(ventanaLogin);
+				PanelArrastraImagen panelArrastraImagen = new PanelArrastraImagen(ventanaPadre);
 				List<File> imagenes = panelArrastraImagen.showDialog();
 				if (imagenes != null && !imagenes.isEmpty() && imagenes.get(0) != null) {
 					archivoImagen = imagenes.get(0);
@@ -220,35 +232,79 @@ public class Registro extends JDialog {
 		gbc_btnSubirFoto.gridx = 3;
 		gbc_btnSubirFoto.gridy = 6;
 		this.getContentPane().add(btnSubirFoto, gbc_btnSubirFoto);
-		
-		JButton btnRegistrar = new JButton("Registrar");
-		btnRegistrar.setUI(new RoundButtonUI());
-		btnRegistrar.addActionListener(e -> {
-			if (!passwordCheck(passwordField.getPassword(), passwordField_1.getPassword())) {
-				JOptionPane.showMessageDialog(this, "Las contraseñas no coinciden", "Error", JOptionPane.ERROR_MESSAGE);
-                }
-			else if(campoNombre.getText().isEmpty() || campoApellidos.getText().isEmpty() || campoMovil.getText().isEmpty()
-					|| passwordField.getPassword().length==0 || dateChooser.getDate()==null  || path == null) {
-				JOptionPane.showMessageDialog(this, "Por favor, rellene los campos obligatorios", "Error", JOptionPane.ERROR_MESSAGE);
-			}
-			else {
-				if(AppChat.INSTANCE.registrarUsuario(campoNombre.getText(), campoApellidos.getText(), new String(passwordField.getPassword()),
-						dateChooser.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), campoMovil.getText(), path ,textArea.getText())) {
-					JOptionPane.showMessageDialog(this, "Usuario registrado correctamente", "Registro", JOptionPane.INFORMATION_MESSAGE);
-					this.setVisible(false);
-				    this.dispose();
-				    ventanaLogin.mostrar();
+		if(u==null) {
+			JButton btnRegistrar = new JButton("Registrar");
+			btnRegistrar.setUI(new RoundButtonUI());
+			btnRegistrar.addActionListener(e -> {
+				if (!passwordCheck(passwordField.getPassword(), passwordField_1.getPassword())) {
+					JOptionPane.showMessageDialog(this, "Las contraseñas no coinciden", "Error", JOptionPane.ERROR_MESSAGE);
+	                }
+				else if(campoNombre.getText().isEmpty() || campoApellidos.getText().isEmpty() || campoMovil.getText().isEmpty()
+						|| passwordField.getPassword().length==0 || dateChooser.getDate()==null  || path == null) {
+					JOptionPane.showMessageDialog(this, "Por favor, rellene los campos obligatorios", "Error", JOptionPane.ERROR_MESSAGE);
 				}
 				else {
-					JOptionPane.showMessageDialog(this, "El teléfono ya está registrado", "Error", JOptionPane.ERROR_MESSAGE);
+					if(AppChat.INSTANCE.registrarUsuario(campoNombre.getText(), campoApellidos.getText(), new String(passwordField.getPassword()),
+							dateChooser.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), campoMovil.getText(), path ,textArea.getText())) {
+						JOptionPane.showMessageDialog(this, "Usuario registrado correctamente", "Registro", JOptionPane.INFORMATION_MESSAGE);
+						this.setVisible(false);
+					    this.dispose();
+					    ventanaPadre.setVisible(true);
+					}
+					else {
+						JOptionPane.showMessageDialog(this, "El teléfono ya está registrado", "Error", JOptionPane.ERROR_MESSAGE);
+					}
 				}
-			}
-		});
-		GridBagConstraints gbc_btnRegistrar = new GridBagConstraints();
-		gbc_btnRegistrar.insets = new Insets(0, 0, 5, 5);
-		gbc_btnRegistrar.gridx = 1;
-		gbc_btnRegistrar.gridy = 7;
-		this.getContentPane().add(btnRegistrar, gbc_btnRegistrar);
+			});
+			GridBagConstraints gbc_btnRegistrar = new GridBagConstraints();
+			gbc_btnRegistrar.insets = new Insets(0, 0, 5, 5);
+			gbc_btnRegistrar.gridx = 1;
+			gbc_btnRegistrar.gridy = 7;
+			this.getContentPane().add(btnRegistrar, gbc_btnRegistrar);
+		}
+		else {
+			campoNombre.setText(u.getNombre());
+			campoApellidos.setText(u.getApellido());
+			campoMovil.setText(u.getTelefono());
+			textArea.setText(u.getSaludo());
+			dateChooser.setDate(java.sql.Date.valueOf(u.getBirthday()));
+			path = u.getUrlImagen();
+			ImageIcon iconoImagen = new ImageIcon(getClass().getResource(path));
+			Image imagenEscalada = iconoImagen.getImage();
+			Image imagenEscalada2 = imagenEscalada.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+			lblSubirFoto.setIcon(new ImageIcon(imagenEscalada2));
+			lblSubirFoto.setText("");
+			
+			
+			JButton btnRegistrar = new JButton("Modificar");
+			btnRegistrar.setUI(new RoundButtonUI());
+			btnRegistrar.addActionListener(e -> {
+				if (!passwordCheck(passwordField.getPassword(), passwordField_1.getPassword())) {
+					JOptionPane.showMessageDialog(this, "Las contraseñas no coinciden", "Error", JOptionPane.ERROR_MESSAGE);
+	                }
+				else if(campoNombre.getText().isEmpty() || campoApellidos.getText().isEmpty() || campoMovil.getText().isEmpty()
+						|| passwordField.getPassword().length==0 || dateChooser.getDate()==null  || path == null) {
+					JOptionPane.showMessageDialog(this, "Por favor, rellene los campos obligatorios", "Error", JOptionPane.ERROR_MESSAGE);
+				}
+				else {
+					AppChat.INSTANCE.actualizarUsuario(campoNombre.getText(), campoApellidos.getText(), new String(passwordField.getPassword()),
+							dateChooser.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), campoMovil.getText(), path ,textArea.getText());
+					JOptionPane.showMessageDialog(this, "Usuario modificado correctamente", "Registro", JOptionPane.INFORMATION_MESSAGE);
+					this.setVisible(false);
+				    this.dispose();
+				    ventanaPadre.setVisible(true);
+				    ventanaPadre.revalidate();
+				    ventanaPadre.repaint();
+				    ventanaPadre.validate();
+				}
+			});
+			GridBagConstraints gbc_btnRegistrar = new GridBagConstraints();
+			gbc_btnRegistrar.insets = new Insets(0, 0, 5, 5);
+			gbc_btnRegistrar.gridx = 1;
+			gbc_btnRegistrar.gridy = 7;
+			this.getContentPane().add(btnRegistrar, gbc_btnRegistrar);
+			
+		}
 		
 		JButton btnCancelar = new JButton("Cancelar");
 		btnCancelar.setUI(new RoundButtonUI(SystemColor.textHighlight,new Color(255,100,100)));
@@ -256,7 +312,7 @@ public class Registro extends JDialog {
 		btnCancelar.addActionListener( e -> {
 		    this.setVisible(false);
 		    this.dispose();
-		    ventanaLogin.mostrar();
+		    ventanaPadre.setVisible(true);
 		});
 		GridBagConstraints gbc_btnCancelar = new GridBagConstraints();
 		gbc_btnCancelar.insets = new Insets(0, 0, 5, 5);
@@ -264,7 +320,9 @@ public class Registro extends JDialog {
 		gbc_btnCancelar.gridy = 7;
 		this.getContentPane().add(btnCancelar, gbc_btnCancelar);
 		
-		
+		if(u!=null) {
+			
+		}
 	}
 
 	public boolean passwordCheck(char[] password, char[] password2) {

@@ -29,6 +29,24 @@ public enum RepositorioUsuario {
         }        
     }
 
+	public Usuario modificarUsuario(String name, String lastName, String telefono, String password, LocalDate birthday,
+			String saludo, String urlImagen) {
+			Usuario usuario = buscarUsuarioPorMovil(telefono).get();
+			
+			Usuario usuarioModificado = new Usuario(name, lastName, telefono, password, birthday, saludo, urlImagen, usuario.getId(), usuario.isPremium(), usuario.getContactos());
+			usuarios.remove(usuario);
+			usuarios.add(usuarioModificado);
+			return usuarioModificado;
+	
+	}
+	public Usuario modificarUsuario(Usuario u) {
+			Usuario usuario = buscarUsuarioPorMovil(u.getTelefono()).get();
+			usuarios.remove(usuario);
+			usuarios.add(u);
+			return u;
+	
+	}
+ 
 	public void cargarUsuarios(Collection<Usuario> usuarios) {
 		this.usuarios.addAll(usuarios);
 	}

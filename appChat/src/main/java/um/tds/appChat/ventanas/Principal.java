@@ -1,17 +1,20 @@
 package um.tds.appChat.ventanas;
 
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
 import javax.swing.*;
 
 
 import um.tds.appChat.utils.RoundButtonUI;
 import um.tds.appChat.dominio.ContactoIndividual;
+import um.tds.appChat.dominio.Usuario;
 import um.tds.appChat.singletons.AppChat;
 
 public class Principal extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	private JFrame frame;
 	private PanelContactos panelContactos;
 	private AppChat app = AppChat.INSTANCE;
 
@@ -23,7 +26,7 @@ public class Principal extends JFrame {
 			public void run() {
 				try {
 					Principal window = new Principal();
-					window.frame.setVisible(true);
+					window.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -43,28 +46,28 @@ public class Principal extends JFrame {
 		this.setLocationRelativeTo(frame);
 	}
 	public void mostrar() {
-		frame.setVisible(true);
+		this.setVisible(true);
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frame = new JFrame();
-		frame.setBounds(100, 100, 1280, 720);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(new BorderLayout(0, 0));
+		
+		this.setBounds(100, 100, 1280, 720);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.getContentPane().setLayout(new BorderLayout(0, 0));
 		
 		JPanel panelNorte = new JPanel();
-		frame.getContentPane().add(panelNorte, BorderLayout.NORTH);
+		this.getContentPane().add(panelNorte, BorderLayout.NORTH);
 		
 		
 		panelContactos = new PanelContactos(app.getUsuarioActual().getContactos());
-		frame.getContentPane().add(panelContactos, BorderLayout.WEST);
+		this.getContentPane().add(panelContactos, BorderLayout.WEST);
 		
 		
 		JPanel panelCentro = new JPanel();
-		frame.getContentPane().add(panelCentro, BorderLayout.CENTER);
+		this.getContentPane().add(panelCentro, BorderLayout.CENTER);
 		
 		
 		ImageIcon icono = new ImageIcon(getClass().getResource("/iconos/addContact.png"));
@@ -73,7 +76,7 @@ public class Principal extends JFrame {
 		añadirContacto.setUI(new RoundButtonUI());
 		añadirContacto.addActionListener(e -> {
 			PanelAñadirContacto panel = new PanelAñadirContacto();
-            int result = JOptionPane.showConfirmDialog(frame, panel, "Panel Añadir Contacto", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+            int result = JOptionPane.showConfirmDialog(this, panel, "Panel Añadir Contacto", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
             if (result == JOptionPane.OK_OPTION) {
             	ContactoIndividual c= app.agregarContacto(panel.getNombreContacto(), panel.getTelefonoContacto());
             	if(c!=null) {
@@ -90,15 +93,42 @@ public class Principal extends JFrame {
 		panelNorte.add(añadirContacto);
 		
 		
+	    // Crear el JPanel para el usuario
+	    JPanel panelUsuario = new JPanel();
+	    panelUsuario.setLayout(new FlowLayout(FlowLayout.LEFT));
+
+	    // Añadir nombre del usuario
+	    JLabel nombreUsuario = new JLabel(app.getUsuarioActual().getNombre());
+	    panelUsuario.add(nombreUsuario);
+	    
+	    // Añadir foto del usuario
+	    JLabel fotoUsuario = new JLabel();
+	    ImageIcon iconoUsuario = new ImageIcon(getClass().getResource(app.getUsuarioActual().getUrlImagen()));
+	    Image imagenEscalada = iconoUsuario.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+	    fotoUsuario.setIcon(new ImageIcon(imagenEscalada));
+	    panelUsuario.add(fotoUsuario);
+	    
+	    panelUsuario.setBorder(BorderFactory.createLineBorder(new Color(20,20,20), 2));
+	   
+
+	    // Añadir MouseListener para abrir el panel de edición
+	    JFrame frame = this;
+	    panelUsuario.addMouseListener(new MouseAdapter() {
+	        @Override
+	        public void mouseClicked(MouseEvent e) {
+	        	Registro ventanaRegistro = new Registro(frame,app.getUsuarioActual());
+				frame.setVisible(false);
+				ventanaRegistro.mostrar();
+				nombreUsuario.setText(app.getUsuarioActual().getNombre());
+				ImageIcon iconoUsuario = new ImageIcon(getClass().getResource(app.getUsuarioActual().getUrlImagen()));
+				Image imagenEscalada = iconoUsuario.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+				fotoUsuario.setIcon(new ImageIcon(imagenEscalada));
+				
+	        }
+	    });
+
+	    panelNorte.add(panelUsuario);
 		
-		
-		JComboBox<String> comboBox = new JComboBox<>();
-		comboBox.addItem("Prueba");
-		comboBox.addItem("Prueba2");
-		panelCentro.add(comboBox);
-		
-		JButton btnChatear = new JButton("Chatear");
-		panelCentro.add(btnChatear);
 		
 	}
 	
@@ -165,5 +195,6 @@ public class Principal extends JFrame {
 			return textField2.getText();
 		}
     }
+  
 	
 }

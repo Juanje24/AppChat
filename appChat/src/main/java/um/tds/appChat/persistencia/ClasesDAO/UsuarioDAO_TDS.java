@@ -116,7 +116,7 @@ public class UsuarioDAO_TDS implements UsuarioDAO {
 		String saludo = servicioPersistencia.recuperarPropiedadEntidad(eUsuario, "saludo");
 		String urlImagen = servicioPersistencia.recuperarPropiedadEntidad(eUsuario, "urlImagen");
 		
-		Usuario usuario = new Usuario(id, nombre,apellido, telefono, contraseña,  birthday,premium, saludo, urlImagen);
+		Usuario usuario = new Usuario( nombre,apellido, telefono, contraseña,  birthday, saludo, urlImagen, id,premium);
 		PoolDAO.getUnicaInstancia().addObjeto(id, usuario);
 		List<Contacto> contactos = obtenerContactosDesdeCodigos(servicioPersistencia.recuperarPropiedadEntidad(eUsuario, "contactos"));
 		for (Contacto c : contactos) {
