@@ -41,7 +41,6 @@ public class Registro extends JDialog {
 	private JTextField campoApellidos;
 	private JTextField campoNombre;
 	private String path;
-	private File archivoImagen;
 	private Usuario u=null;
 
 	/**
@@ -216,8 +215,7 @@ public class Registro extends JDialog {
 				PanelArrastraImagen panelArrastraImagen = new PanelArrastraImagen(ventanaPadre);
 				List<File> imagenes = panelArrastraImagen.showDialog();
 				if (imagenes != null && !imagenes.isEmpty() && imagenes.get(0) != null) {
-					archivoImagen = imagenes.get(0);
-					path = Utils.getRutaResourceFromFile(archivoImagen);
+					path = Utils.getRutaResourceFromFile(imagenes.get(0));
 					ImageIcon iconoImagen = new ImageIcon(getClass().getResource(path));
 					Image imagenEscalada = iconoImagen.getImage().
 					getScaledInstance(100, 100, Image.SCALE_SMOOTH);

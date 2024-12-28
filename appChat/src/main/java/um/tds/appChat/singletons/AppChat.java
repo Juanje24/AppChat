@@ -90,5 +90,12 @@ public enum AppChat {
 		usuarioDAO.modificarUsuario(usuario);
 		usuarioActual = usuario;
 	}
+
+	public Grupo crearGrupo(String nombre, List<ContactoIndividual> contactosGrupo, String foto) {
+		Grupo g=usuarioActual.addGrupo(nombre, contactosGrupo,foto);
+		//grupoDAO.registrarGrupo(g);
+		
+		return g;
+	}
 	
 }

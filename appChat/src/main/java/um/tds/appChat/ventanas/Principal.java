@@ -8,6 +8,7 @@ import javax.swing.*;
 
 
 import um.tds.appChat.utils.RoundButtonUI;
+import um.tds.appChat.dominio.Contacto;
 import um.tds.appChat.dominio.ContactoIndividual;
 import um.tds.appChat.singletons.AppChat;
 
@@ -17,21 +18,6 @@ public class Principal extends JFrame {
 	private PanelContactos panelContactos;
 	private AppChat app = AppChat.INSTANCE;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Principal window = new Principal();
-					window.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the application.
@@ -49,7 +35,7 @@ public class Principal extends JFrame {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		
+		this.setTitle("AppChat");
 		this.setBounds(100, 100, 1280, 720);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.getContentPane().setLayout(new BorderLayout(0, 0));
@@ -78,9 +64,7 @@ public class Principal extends JFrame {
             	ContactoIndividual c= app.agregarContacto(panel.getNombreContacto(), panel.getTelefonoContacto());
             	if(c!=null) {
             		JOptionPane.showMessageDialog(this, "Contacto añadido correctamente", "", JOptionPane.INFORMATION_MESSAGE);
-            		panelContactos.addContact(c);
-            		this.revalidate();
-            		this.repaint();
+            		añadirContacto(c);
             	}
             	else {
             		JOptionPane.showMessageDialog(this, "No se ha podido añadir el contacto", "Error", JOptionPane.ERROR_MESSAGE);
@@ -138,7 +122,14 @@ public class Principal extends JFrame {
 		
 		
 	}
-	
+	public void añadirContacto(Contacto c) {
+		panelContactos.addContact(c);
+		this.setVisible(true);
+		this.revalidate();
+		this.repaint();
+		this.validate();
+		
+	}
 	
 	 // Clase interna para el panel con dos campos de texto
     private class PanelAñadirContacto extends JPanel {

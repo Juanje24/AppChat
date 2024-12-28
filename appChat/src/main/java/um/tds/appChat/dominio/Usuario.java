@@ -163,6 +163,12 @@ public class Usuario {
 		this.contactos.add(contacto);
     }
 
+	public Grupo addGrupo(String nombre, List<ContactoIndividual> contactosGrupo, String foto) {
+		Grupo g = new Grupo(nombre, contactosGrupo, foto);
+		this.contactos.add(g);
+		return g;
+	}
+
 
 	public ContactoIndividual getContactoIndividual(String telefono) {
 		for (Contacto c: contactos) {
@@ -175,11 +181,6 @@ public class Usuario {
         return null;
 	}
 
-
-	public void addContacto(Contacto c) {
-		this.contactos.add(c);
-		
-	}
 
 	public boolean isTlfEnContactos(String tlf) {
 		for (Contacto c : contactos) {
@@ -200,6 +201,10 @@ public class Usuario {
 			}
 		}
 		return individuales;
+	}
+	public void addContacto(Contacto c) {
+		this.contactos.add(c);
+		
 	}
 
 
