@@ -33,7 +33,7 @@ public enum AppChat {
 		mensajeDAO = factoriaDAO.getMensajeDAO();
 		repositorioUsuarios = RepositorioUsuario.INSTANCE;
 	}
-	void enviarMensajeContacto(ContactoIndividual c3, String string, int i, TipoMensaje enviado) {
+	void enviarMensajeContacto(ContactoIndividual c3, String string, int i, int enviado) {
 		// TODO Auto-generated method stub
 		
 	}

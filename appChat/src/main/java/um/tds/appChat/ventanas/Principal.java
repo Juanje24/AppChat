@@ -5,7 +5,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.*;
-
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import um.tds.appChat.utils.RoundButtonUI;
 import um.tds.appChat.dominio.Contacto;
@@ -17,7 +18,8 @@ public class Principal extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private PanelContactos panelContactos;
 	private AppChat app = AppChat.INSTANCE;
-
+	private Contacto contactoSeleccionado;
+	private JPanel panelCentro;
 
 	/**
 	 * Create the application.
@@ -35,6 +37,7 @@ public class Principal extends JFrame {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		JFrame frame = this;
 		this.setTitle("AppChat");
 		this.setBounds(100, 100, 1280, 720);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -44,13 +47,27 @@ public class Principal extends JFrame {
 		panelNorte.setBackground(new Color(215, 215, 215));
 		this.getContentPane().add(panelNorte, BorderLayout.NORTH);
 		
+		panelCentro = new PanelChat(app.getUsuarioActual().getNombre());
+		this.getContentPane().add(panelCentro, BorderLayout.CENTER);
 		
 		panelContactos = new PanelContactos(app.getUsuarioActual().getContactos());
 		this.getContentPane().add(panelContactos, BorderLayout.WEST);
+		panelContactos.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting()) {
+                   contactoSeleccionado = panelContactos.getContactoSeleccionado();
+                    if (contactoSeleccionado != null) {
+                        System.out.println("Contacto seleccionado: " + contactoSeleccionado.getNombre());
+                        ((PanelChat) panelCentro).setContacto(contactoSeleccionado);
+                        frame.revalidate();
+                        frame.repaint();
+                    }
+                }
+            }
+        });
 		
 		
-		JPanel panelCentro = new JPanel();
-		this.getContentPane().add(panelCentro, BorderLayout.CENTER);
 		
 		
 		ImageIcon icono = new ImageIcon(getClass().getResource("/iconos/addContact.png"));
@@ -103,7 +120,7 @@ public class Principal extends JFrame {
 	   
 
 	    // Añadir MouseListener para abrir el panel de edición
-	    JFrame frame = this;
+	    
 	    panelUsuario.addMouseListener(new MouseAdapter() {
 	        @Override
 	        public void mouseClicked(MouseEvent e) {

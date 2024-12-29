@@ -2,6 +2,7 @@ package um.tds.appChat.dominio;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import tds.BubbleText;
 
 public class Mensaje {
     
@@ -9,20 +10,16 @@ public class Mensaje {
     private String texto;
     private String emisor; //telefono
     private String receptor; //telefono
-    private TipoMensaje tipo;
+    private int tipo;
     private LocalDateTime fecha;
 
-    public Mensaje (String texto, String emisor, String receptor, String tipo){
+    public Mensaje (String texto, String emisor, String receptor, int tipo){
     	
         this.texto = texto;
         this.emisor = emisor;
         this.receptor = receptor;
-        if (tipo.equals("ENVIADO")) {
-			this.tipo = TipoMensaje.ENVIADO;
-		} else if (tipo.equals("RECIBIDO")) {
-			this.tipo = TipoMensaje.RECIBIDO;
-    	}
-        this.fecha = LocalDateTime.now(); //se tiene que modificar para que se atrape el momento exacto
+        this.tipo = tipo;
+        this.fecha = LocalDateTime.now(); 
 
     }
 
@@ -75,11 +72,11 @@ public class Mensaje {
 		this.receptor = receptor;
 	}
 
-	public TipoMensaje getTipo() {
+	public int getTipo() {
 		return tipo;
 	}
 
-	public void setTipo(TipoMensaje tipo) {
+	public void setTipo(int tipo) {
 		this.tipo = tipo;
 	}
 

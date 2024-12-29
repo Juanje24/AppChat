@@ -21,11 +21,7 @@ public abstract class Contacto {
     }
     
     // FUNCIONALIDAD
-    
-    public void addMessage(Mensaje mensaje) {
-    	this.mensajes.add(mensaje);
-    }
-    
+   
     public List<Mensaje> searchMessages(MessageSearchBuilder builder) { //revisar para cuando se usa en los grupos
         return mensajes.stream()
                 .filter(mensaje -> builder.getText().isEmpty() || mensaje.getTexto().contains(builder.getText().get()))
@@ -71,6 +67,10 @@ public abstract class Contacto {
 		this.mensajes = new LinkedList<Mensaje>(mensajes);
 	}
 
+	public void addMensaje(String texto, String emisor, int tipo) {
+		Mensaje mensaje = new Mensaje(texto, emisor, getTelefonoPropio(), tipo);
+		this.mensajes.add(mensaje);
+	}
 	public String getUrlImagen() {
 		return urlImagen;
 	}
@@ -78,6 +78,7 @@ public abstract class Contacto {
 	public void setUrlImagen(String urlImagen) {
 		this.urlImagen = urlImagen;
 	}
+	protected abstract String getTelefonoPropio();
 
 
 

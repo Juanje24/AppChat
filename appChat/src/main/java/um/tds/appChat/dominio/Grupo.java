@@ -25,7 +25,9 @@ public class Grupo extends Contacto{
 	public void addContacto(ContactoIndividual contacto) {
         this.contactos.add(contacto);
     }
-
+	public String getTelefonoPropio() {
+		return "";
+	}
 
 
     

@@ -5,6 +5,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
+import tds.BubbleText;
+
 public class Usuario {
     
     private int id;
@@ -71,10 +73,6 @@ public class Usuario {
     
     //FUNCIONALIDAD
     
-    
-    public void sendMessage(Mensaje mensaje, Contacto contacto){ //
-        contacto.addMessage(mensaje);
-    }
     
     
 //    public List<Mensaje> searchMessages(MessageSearchBuilder builder) {
@@ -206,7 +204,13 @@ public class Usuario {
 		this.contactos.add(c);
 		
 	}
-
+	public void sendMensaje(String texto, Contacto c) {
+		for (Contacto contacto : contactos) {
+			if (contacto.equals(c)) {
+				contacto.addMensaje(texto, telefono, BubbleText.SENT);
+			}
+		}
+	}
 
 	
 

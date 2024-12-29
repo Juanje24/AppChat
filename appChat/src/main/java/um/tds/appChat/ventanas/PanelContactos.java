@@ -6,6 +6,7 @@ import java.util.List;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.event.ListSelectionListener;
 
 import um.tds.appChat.dominio.Contacto;
 
@@ -32,5 +33,11 @@ public class PanelContactos extends JPanel {
 
 	public void addContacts(List<Contacto> contactos) {
 		((ContactListModel) listaContactos.getModel()).addContacts(contactos);
+	}
+	public void addListSelectionListener(ListSelectionListener listener) {
+        listaContactos.addListSelectionListener(listener);
+    }
+	public Contacto getContactoSeleccionado() {
+		return listaContactos.getSelectedValue();
 	}
 }
