@@ -1,8 +1,8 @@
 package um.tds.appChat.dominio;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import tds.BubbleText;
 
 public class Mensaje {
     
@@ -11,7 +11,7 @@ public class Mensaje {
     private String emisor; //telefono
     private String receptor; //telefono
     private int tipo;
-    private LocalDateTime fecha;
+    private LocalDate fecha;
 
     public Mensaje (String texto, String emisor, String receptor, int tipo){
     	
@@ -19,7 +19,7 @@ public class Mensaje {
         this.emisor = emisor;
         this.receptor = receptor;
         this.tipo = tipo;
-        this.fecha = LocalDateTime.now(); 
+        this.fecha = LocalDate.now(); 
 
     }
 
@@ -80,11 +80,11 @@ public class Mensaje {
 		this.tipo = tipo;
 	}
 
-	public LocalDateTime getFecha() {
+	public LocalDate getFecha() {
 		return fecha;
 	}
 
-	public void setFecha(LocalDateTime fecha) {
+	public void setFecha(LocalDate fecha) {
 		this.fecha = fecha;
 	}
 

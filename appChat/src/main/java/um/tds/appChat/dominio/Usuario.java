@@ -35,9 +35,9 @@ public class Usuario {
         this.contactos = new LinkedList<Contacto>(contactos);
     }
     public Usuario( String nombre,String apellido, String telefono, String contraseña, LocalDate birthday,
-   		 String saludo, String urlImagen, int id, boolean isPremium){
+   		 String saludo, String urlImagen, boolean isPremium){
        this.nombre = nombre;
-       this.id = id;
+       //this.id = id;
        this.apellido = apellido;
        this.telefono = telefono;
        this.contraseña = contraseña;
@@ -51,7 +51,7 @@ public class Usuario {
     
     public Usuario(String nombre, String apellido, String telefono, String contraseña, LocalDate birthday, String saludo, String urlImagen){
         this.nombre = nombre;
-        this.id = new Random().nextInt(40000);
+        //this.id = new Random().nextInt(40000);
         this.apellido = apellido;
         this.telefono = telefono;
         this.contraseña = contraseña;

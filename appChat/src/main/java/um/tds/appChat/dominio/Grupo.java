@@ -2,14 +2,13 @@ package um.tds.appChat.dominio;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class Grupo extends Contacto{
     
 	private List<ContactoIndividual> contactos;
 	
     public Grupo(String nombre, List<ContactoIndividual> contactos, String urlImagen) {
-    	super(nombre,new Random().nextInt(20000), urlImagen);
+    	super(nombre, urlImagen);
     	this.setContactos(new ArrayList<ContactoIndividual>(contactos));
 		// TODO Auto-generated constructor stub
 	}

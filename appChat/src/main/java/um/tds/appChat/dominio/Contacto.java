@@ -13,10 +13,9 @@ public abstract class Contacto {
     
     // CONSTRUCTORES
     
-    public Contacto(String nombre,int id, String urlImagen) {
+    public Contacto(String nombre, String urlImagen) {
     	this.nombre = nombre;
     	this.mensajes = new LinkedList<Mensaje>();
-    	this.id = id;
     	this.urlImagen = urlImagen;
     }
     

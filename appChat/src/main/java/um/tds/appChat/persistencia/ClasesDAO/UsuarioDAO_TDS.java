@@ -1,6 +1,7 @@
 package um.tds.appChat.persistencia.ClasesDAO;
 
 import um.tds.appChat.dominio.*;
+import um.tds.appChat.persistencia.FactoriaDAO;
 import um.tds.appChat.persistencia.InterfacesDAO.*;
 import tds.driver.FactoriaServicioPersistencia;
 import tds.driver.ServicioPersistencia;
@@ -107,6 +108,7 @@ public class UsuarioDAO_TDS implements UsuarioDAO {
 		}
 		//Si no, se recupera de la base de datos
 		Entidad eUsuario = servicioPersistencia.recuperarEntidad(id);
+		if (eUsuario == null) return null;
 		String nombre = servicioPersistencia.recuperarPropiedadEntidad(eUsuario, "nombre");
 		String apellido = servicioPersistencia.recuperarPropiedadEntidad(eUsuario, "apellido");
 		String contraseña = servicioPersistencia.recuperarPropiedadEntidad(eUsuario, "contraseña");
@@ -116,12 +118,10 @@ public class UsuarioDAO_TDS implements UsuarioDAO {
 		String saludo = servicioPersistencia.recuperarPropiedadEntidad(eUsuario, "saludo");
 		String urlImagen = servicioPersistencia.recuperarPropiedadEntidad(eUsuario, "urlImagen");
 		
-		Usuario usuario = new Usuario( nombre,apellido, telefono, contraseña,  birthday, saludo, urlImagen, id,premium);
+		Usuario usuario = new Usuario( nombre,apellido, telefono, contraseña,  birthday, saludo, urlImagen,premium);
 		PoolDAO.getUnicaInstancia().addObjeto(id, usuario);
-		List<Contacto> contactos = obtenerContactosDesdeCodigos(servicioPersistencia.recuperarPropiedadEntidad(eUsuario, "contactos"));
-		for (Contacto c : contactos) {
-			usuario.addContacto(c);
-		}
+		List<Contacto> contactos = obtenerContactosDesdeIDs(servicioPersistencia.recuperarPropiedadEntidad(eUsuario, "contactos"));
+		usuario.setContactos(contactos);
 		return usuario;
 	}
 
@@ -146,23 +146,41 @@ public class UsuarioDAO_TDS implements UsuarioDAO {
 		return aux.trim();
 	}
 
-	private List<Contacto> obtenerContactosDesdeCodigos(String contactos) {
-
-		List<Contacto> listaContactos = new LinkedList<Contacto>();
-		StringTokenizer strTok = new StringTokenizer(contactos, " ");
-		ContactoIndividualDAO_TDS adaptadorC = new ContactoIndividualDAO_TDS();
-		GrupoDAO_TDS adaptadorG = new GrupoDAO_TDS();
-		while (strTok.hasMoreTokens()) {
-			int id = Integer.valueOf((String) strTok.nextElement());
-			if (id<=20000) {
-				listaContactos.add(adaptadorG.recuperarGrupoPorId(id));
-				
-			}
-			else {
-				listaContactos.add(adaptadorC.recuperarContactoIndividualPorId(id));
-			}
+//	private List<Contacto> obtenerContactosDesdeCodigos(String contactos) {
+//
+//		List<Contacto> listaContactos = new LinkedList<Contacto>();
+//		StringTokenizer strTok = new StringTokenizer(contactos, " ");
+//		ContactoIndividualDAO_TDS adaptadorC = new ContactoIndividualDAO_TDS();
+//		GrupoDAO_TDS adaptadorG = new GrupoDAO_TDS();
+//		while (strTok.hasMoreTokens()) {
+//			int id = Integer.valueOf((String) strTok.nextElement());
+//			if (id<=20000) { // Esto está mal, no se puede hacer así
+//				listaContactos.add(adaptadorG.recuperarGrupoPorId(id));
+//				
+//			}
+//			else {
+//				listaContactos.add(adaptadorC.recuperarContactoIndividualPorId(id));
+//			}
+//		}
+//		return listaContactos;
+//	}
+	
+	private List<Contacto> obtenerContactosDesdeIDs(String idsContactos){
+		List<Contacto> contactos = new LinkedList<Contacto>();
+		StringTokenizer strTok = new StringTokenizer(idsContactos, " ");
+		while ( strTok.hasMoreElements()) { //problema con esto dado que no se que tipo de contacto es
+			int id = Integer.parseInt((String) strTok.nextElement());
+			Entidad eContacto = servicioPersistencia.recuperarEntidad(id);
+	        String tipo = eContacto.getNombre();
+	        if ("Grupo".equals(tipo)) {
+	            contactos.add(FactoriaDAO.getFactoriaDAO().getGrupoDAO().recuperarGrupoPorId(Integer.valueOf((String)strTok.nextElement())));
+	        	FactoriaDAO.getFactoriaDAO().getGrupoDAO().recuperarGrupoPorId(id).addContacto(null);
+	        } else if ("ContactoIndividual".equals(tipo)) {
+	        	contactos.add(FactoriaDAO.getFactoriaDAO().getContactoIndividualDAO().recuperarContactoIndividualPorId(Integer.valueOf((String)strTok.nextElement())));
+	            
+	        }
 		}
-		return listaContactos;
+		return contactos;
 	}
 
 }

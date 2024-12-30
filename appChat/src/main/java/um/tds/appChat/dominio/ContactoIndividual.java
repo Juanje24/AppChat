@@ -1,12 +1,12 @@
 package um.tds.appChat.dominio;
 
-import java.util.Random;
 
 public class ContactoIndividual extends Contacto{
 	private String apellidos;
 	private Usuario usuario;
+	
     public ContactoIndividual(String nombre, Usuario u) {
-		super(nombre,(new Random().nextInt()  + 20001), u.getUrlImagen());
+		super(nombre, u.getUrlImagen());
 		this.usuario = u;
 		this.apellidos="";
 	}
@@ -21,6 +21,11 @@ public class ContactoIndividual extends Contacto{
 	public String getApellidos() {
 		return apellidos;
 	}
+	
+	public void setApellidos(String apellidos) {
+		this.apellidos = apellidos;
+	}
+	
     public String getTelefonoPropio() {
     	return usuario.getTelefono();
     }
