@@ -45,7 +45,6 @@ public class UsuarioDAO_TDS implements UsuarioDAO {
 		//registrar Contactos,grupos y mensajes
 		eUsuario = new Entidad();
 		eUsuario.setNombre("Usuario");
-		eUsuario.setId(usuario.getId());
 		eUsuario.setPropiedades(new ArrayList<Propiedad>(
 				Arrays.asList(new Propiedad("nombre", usuario.getNombre()),
 						new Propiedad("apellido", usuario.getApellido()),
@@ -56,14 +55,10 @@ public class UsuarioDAO_TDS implements UsuarioDAO {
 						new Propiedad("saludo", usuario.getSaludo()),
 						new Propiedad("urlImagen", usuario.getUrlImagen()),
 		                new Propiedad("contactos", obtenerCodigosContactos(usuario.getContactos())))));
+						System.out.println("lista ids contactos: "+obtenerCodigosContactos(usuario.getContactos()));
 	   eUsuario = servicioPersistencia.registrarEntidad(eUsuario);
-		if (eUsuario.getId() != usuario.getId()) {
-			System.err.println("Id de usuario: "+usuario.getId()+ " Id de entidad: "+eUsuario.getId());
-		}
-		else {
-			System.out.println("Usuario registrado correctamente con id: " + usuario.getId());
-		}
-		
+	   usuario.setId(eUsuario.getId());
+	   System.out.println("Registrado usuario con id: "+usuario.getId()); 
 	}
 
 	@Override
@@ -95,6 +90,7 @@ public class UsuarioDAO_TDS implements UsuarioDAO {
 				prop.setValor(usuario.getUrlImagen());
 			} else if (prop.getNombre().equals("contactos")) {
 				prop.setValor(obtenerCodigosContactos(usuario.getContactos()));
+				System.out.println("lista ids contactos modificada: "+obtenerCodigosContactos(usuario.getContactos()));
 			}
 			servicioPersistencia.modificarPropiedad(prop);
 		}
@@ -103,8 +99,8 @@ public class UsuarioDAO_TDS implements UsuarioDAO {
 	@Override
 	public Usuario recuperarUsuarioPorId(int id) {
 		//Si el objeto está en el pool, se devuelve
-		if (PoolDAO.getUnicaInstancia().contiene(id)) {
-			return (Usuario) PoolDAO.getUnicaInstancia().getObjeto(id);
+		if (PoolDAO.getUnicaInstancia(1).contiene(id)) {
+			return (Usuario) PoolDAO.getUnicaInstancia(1).getObjeto(id);
 		}
 		//Si no, se recupera de la base de datos
 		Entidad eUsuario = servicioPersistencia.recuperarEntidad(id);
@@ -119,8 +115,10 @@ public class UsuarioDAO_TDS implements UsuarioDAO {
 		String urlImagen = servicioPersistencia.recuperarPropiedadEntidad(eUsuario, "urlImagen");
 		
 		Usuario usuario = new Usuario( nombre,apellido, telefono, contraseña,  birthday, saludo, urlImagen,premium);
-		PoolDAO.getUnicaInstancia().addObjeto(id, usuario);
+		PoolDAO.getUnicaInstancia(1).addObjeto(id, usuario);
+		System.out.println("lista ids contactos recuperada: "+servicioPersistencia.recuperarPropiedadEntidad(eUsuario, "contactos"));
 		List<Contacto> contactos = obtenerContactosDesdeIDs(servicioPersistencia.recuperarPropiedadEntidad(eUsuario, "contactos"));
+		
 		usuario.setContactos(contactos);
 		return usuario;
 	}
@@ -173,10 +171,11 @@ public class UsuarioDAO_TDS implements UsuarioDAO {
 			Entidad eContacto = servicioPersistencia.recuperarEntidad(id);
 	        String tipo = eContacto.getNombre();
 	        if ("Grupo".equals(tipo)) {
-	            contactos.add(FactoriaDAO.getFactoriaDAO().getGrupoDAO().recuperarGrupoPorId(Integer.valueOf((String)strTok.nextElement())));
+	            contactos.add(FactoriaDAO.getFactoriaDAO().getGrupoDAO().recuperarGrupoPorId(id));
 	        	FactoriaDAO.getFactoriaDAO().getGrupoDAO().recuperarGrupoPorId(id).addContacto(null);
 	        } else if ("ContactoIndividual".equals(tipo)) {
-	        	contactos.add(FactoriaDAO.getFactoriaDAO().getContactoIndividualDAO().recuperarContactoIndividualPorId(Integer.valueOf((String)strTok.nextElement())));
+	        	System.out.println("PATATA id contacto individual: "+id);
+	        	contactos.add(FactoriaDAO.getFactoriaDAO().getContactoIndividualDAO().recuperarContactoIndividualPorId(id));
 	            
 	        }
 		}

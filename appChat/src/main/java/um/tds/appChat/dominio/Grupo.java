@@ -27,6 +27,9 @@ public class Grupo extends Contacto{
 	public String getTelefonoPropio() {
 		return "";
 	}
+	public String getSaludo() {
+		return "";
+	}
 
 
     

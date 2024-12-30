@@ -1,5 +1,7 @@
 package um.tds.appChat.persistencia.ClasesDAO;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -8,7 +10,9 @@ import java.util.StringTokenizer;
 
 import beans.Entidad;
 import beans.Propiedad;
+import tds.driver.FactoriaServicioPersistencia;
 import tds.driver.ServicioPersistencia;
+import um.tds.appChat.dominio.Contacto;
 import um.tds.appChat.dominio.ContactoIndividual;
 import um.tds.appChat.dominio.Mensaje;
 import um.tds.appChat.dominio.Usuario;
@@ -27,6 +31,10 @@ public class ContactoIndividualDAO_TDS implements ContactoIndividualDAO{
 	
 	public static ContactoIndividualDAO_TDS getUnicaInstancia() { // patron singleton
 		return unicaInstancia;
+	}
+
+	public ContactoIndividualDAO_TDS() {
+		servicioPersistencia = FactoriaServicioPersistencia.getInstance().getServicioPersistencia();
 	}
 	
 	//METODOS PRIVADOS
@@ -67,7 +75,7 @@ public class ContactoIndividualDAO_TDS implements ContactoIndividualDAO{
 	
 	private Entidad IndividualToEntidad(ContactoIndividual individual) {
 		Entidad eIndividual = new Entidad();
-		eIndividual.setNombre("Individual");
+		eIndividual.setNombre("ContactoIndividual");
 		eIndividual.setPropiedades(new ArrayList<Propiedad>(
 				Arrays.asList(new Propiedad(NOMBRE, individual.getNombre()),
 						new Propiedad(APELLIDOS, individual.getApellidos()),
@@ -89,7 +97,9 @@ public class ContactoIndividualDAO_TDS implements ContactoIndividualDAO{
 		if(eIndividual!=null) {
 			return;
 		}
-		servicioPersistencia.registrarEntidad(IndividualToEntidad(contactoIndividual)) ;
+		eIndividual = servicioPersistencia.registrarEntidad(IndividualToEntidad(contactoIndividual)) ;
+		contactoIndividual.setId(eIndividual.getId());
+		System.out.println("Registrado contacto individual con id: "+contactoIndividual.getId());
 	}
 
 	@Override
@@ -119,9 +129,17 @@ public class ContactoIndividualDAO_TDS implements ContactoIndividualDAO{
 
 	@Override
 	public ContactoIndividual recuperarContactoIndividualPorId(int id) {
-		Entidad eIndividual = servicioPersistencia.recuperarEntidad(id);
-		if(eIndividual==null) return null;
-		return entidadToIndividual(eIndividual);
+		
+				//Si el objeto está en el pool, se devuelve
+				if (PoolDAO.getUnicaInstancia(2).contiene(id)) {
+					return (ContactoIndividual) PoolDAO.getUnicaInstancia(2).getObjeto(id);
+				}
+				//Si no, se recupera de la base de datos
+				Entidad eIndividual = servicioPersistencia.recuperarEntidad(id);
+                if(eIndividual==null) return null;
+                ContactoIndividual c = entidadToIndividual(eIndividual);
+                PoolDAO.getUnicaInstancia(2).addObjeto(id, c);
+                return c;
 	}
 
 	@Override

@@ -40,14 +40,10 @@ public enum AppChat {
 
 	public ContactoIndividual agregarContacto(String nombre, String tlf) {
 		Optional<Usuario> contacto = repositorioUsuarios.buscarUsuarioPorMovil(tlf);
-//      TODO HAY QUE IMPLEMENTAR DAO CONTACTO INDIVIDUAL PARA QUE ESTO VAYA
-//		if (contacto.isPresent() && !usuarioActual.isTlfEnContactos(tlf) ) {
-//			usuarioActual.addContactoIndividual(nombre,contacto.get());
-//			actualizarUsuario(usuarioActual); 
-//			return usuarioActual.getContactoIndividual(tlf);
-//		}
-		if (contacto.isPresent()) { //VERSION BASICA, SOLO COMPRUEBA QUE EXISTE EL CONTACTO 
+		if (contacto.isPresent() && !usuarioActual.isTlfEnContactos(tlf) ) {
 			usuarioActual.addContactoIndividual(nombre,contacto.get());
+			contactoIndividualDAO.registrarContactoIndividual(usuarioActual.getContactoIndividual(tlf));
+			usuarioDAO.modificarUsuario(usuarioActual);
 			return usuarioActual.getContactoIndividual(tlf);
 		}
 		else{
@@ -82,20 +78,21 @@ public enum AppChat {
 	}
 	public void actualizarUsuario(String nombre, String apellidos, String contrasena, LocalDate fechaNacimiento, String numTlf, String foto, String saludo) {
 			Usuario usuario = repositorioUsuarios.modificarUsuario(nombre, apellidos, numTlf, contrasena, fechaNacimiento, saludo, foto);
-			//usuarioDAO.modificarUsuario(usuario);
+			usuarioDAO.modificarUsuario(usuario);
 			usuarioActual = usuario;
 	}
-	public void actualizarUsuario(Usuario u) {
-		Usuario usuario = repositorioUsuarios.modificarUsuario(u);
-		usuarioDAO.modificarUsuario(usuario);
-		usuarioActual = usuario;
-	}
+	
 
 	public Grupo crearGrupo(String nombre, List<ContactoIndividual> contactosGrupo, String foto) {
 		Grupo g=usuarioActual.addGrupo(nombre, contactosGrupo,foto);
 		//grupoDAO.registrarGrupo(g);
 		
 		return g;
+	}
+	public void actualizarNombreContacto(Contacto contacto, String nuevoNombre) {
+		usuarioActual.modificarNombreContacto(contacto, nuevoNombre);
+		contactoIndividualDAO.modificarContactoIndividual((ContactoIndividual) contacto);
+		
 	}
 	
 }

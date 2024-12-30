@@ -96,6 +96,7 @@ public class Usuario {
     
     //GETTERS Y SETTERS
 
+	
 	public int getId() {
 		return id;
 	}
@@ -210,6 +211,14 @@ public class Usuario {
 				contacto.addMensaje(texto, telefono, BubbleText.SENT);
 			}
 		}
+	}
+	public void modificarNombreContacto(Contacto contacto, String nuevoNombre) {
+		for (Contacto c : contactos) {
+			if (c.equals(contacto)) {
+				c.setNombre(nuevoNombre);
+			}
+		}
+		
 	}
 
 	

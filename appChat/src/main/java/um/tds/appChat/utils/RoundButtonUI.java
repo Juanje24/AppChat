@@ -100,4 +100,9 @@ public class RoundButtonUI extends BasicButtonUI {
         }
         return new Dimension(width, height);
     }
+    
+    
+    public static Color getRojoCancelar() {
+    	        return new Color(255,100,100);
+    }
 }

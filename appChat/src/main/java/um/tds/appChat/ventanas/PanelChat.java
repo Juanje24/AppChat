@@ -7,6 +7,7 @@ import java.util.List;
 import tds.BubbleText;
 import um.tds.appChat.dominio.Contacto;
 import um.tds.appChat.dominio.Mensaje;
+import um.tds.appChat.singletons.AppChat;
 import um.tds.appChat.utils.RoundButtonUI;
 
 public class PanelChat extends JPanel {
@@ -65,7 +66,7 @@ public class PanelChat extends JPanel {
     
 	private void initialize(Contacto contacto) {
         setLayout(new BorderLayout());
-
+        JPanel panel = this;
         // Parte superior: Foto, nombre y botón de tres puntos
         JPanel panelSuperior = new JPanel(new GridLayout(1,3,0,10));
         JLabel fotoUsuario = new JLabel();
@@ -77,13 +78,55 @@ public class PanelChat extends JPanel {
         JButton botonOpciones = new JButton("⋮");
         botonOpciones.setUI(new RoundButtonUI());
         
-        botonOpciones.addActionListener(e->{
-			JPopupMenu menu = new JPopupMenu();
-			JMenuItem item1 = new JMenuItem("Cambiar nombre");
-			JMenuItem item3 = new JMenuItem("Eliminar");
-			menu.add(item1);
-			menu.add(item3);
-			menu.show(botonOpciones, 0, botonOpciones.getHeight());
+        botonOpciones.addActionListener(e -> {
+            JPopupMenu menu = new JPopupMenu();
+
+            // Opción "Cambiar nombre"
+            JMenuItem itemCambiarNombre = new JMenuItem("Cambiar nombre");
+            itemCambiarNombre.addActionListener(ev -> {
+                String nuevoNombre = JOptionPane.showInputDialog(
+                    this,
+                    "Introduce el nuevo nombre para el contacto:",
+                    "Cambiar nombre",
+                    JOptionPane.PLAIN_MESSAGE
+                );
+
+                if (nuevoNombre != null && !nuevoNombre.trim().isEmpty()) {
+                    nombreReceptor = nuevoNombre.trim();
+                    AppChat.INSTANCE.actualizarNombreContacto(contacto, nuevoNombre);
+                    etiquetaNombre.setText(nuevoNombre);
+                    SwingUtilities.getWindowAncestor(this).revalidate();
+                    SwingUtilities.getWindowAncestor(this).repaint();
+                    panel.revalidate();
+                    panel.repaint(); 
+                    
+                }
+            });
+
+            // Opción "Eliminar"
+            JMenuItem itemEliminar = new JMenuItem("Eliminar");
+            itemEliminar.addActionListener(ev -> {
+                int confirmacion = JOptionPane.showConfirmDialog(
+                    this,
+                    "¿Estás seguro de que quieres eliminar este contacto?",
+                    "Confirmar eliminación",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.WARNING_MESSAGE
+                );
+
+                if (confirmacion == JOptionPane.YES_OPTION) {
+                    // Lógica para eliminar el contacto
+                    System.out.println("Contacto eliminado: " + nombreReceptor);
+                    // Puedes implementar aquí la lógica para actualizar la lista de contactos.
+                }
+            });
+
+            // Añade las opciones al menú
+            menu.add(itemCambiarNombre);
+            menu.add(itemEliminar);
+
+            // Muestra el menú contextual
+            menu.show(botonOpciones, 0, botonOpciones.getHeight());
         });
         
         panelSuperior.add(fotoUsuario);

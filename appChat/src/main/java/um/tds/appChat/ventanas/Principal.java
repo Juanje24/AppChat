@@ -7,6 +7,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableCellRenderer;
 
 import um.tds.appChat.utils.RoundButtonUI;
 import um.tds.appChat.dominio.Contacto;
@@ -100,6 +101,20 @@ public class Principal extends JFrame {
 			this.setVisible(false);
 		});
 		panelNorte.add(añadirGrupo);
+		
+		
+		JButton verContactos = new JButton("Ver contactos");
+		verContactos.setSize(new Dimension(100, 50));
+		verContactos.setUI(new RoundButtonUI());
+		verContactos.addActionListener(e -> {
+		    PanelVerContactos panelVerContactos = new PanelVerContactos(app.getUsuarioActual().getContactos());
+		    JDialog dialog = new JDialog(frame, "Tus contactos", true);
+		    dialog.getContentPane().add(panelVerContactos);
+		    dialog.setSize(700, 400);
+		    dialog.setLocationRelativeTo(frame);
+		    dialog.setVisible(true);
+		});
+		panelNorte.add(verContactos);
 		
 	    // Crear el JPanel para el usuario
 	    JPanel panelUsuario = new JPanel();
@@ -209,6 +224,62 @@ public class Principal extends JFrame {
 		public String getTelefonoContacto() {
 			return textField2.getText();
 		}
+    }
+    
+ // Clase interna para el panel de ver todos los contactos
+    private class PanelVerContactos extends JPanel {
+        private static final long serialVersionUID = 1L;
+
+        public PanelVerContactos(java.util.List<Contacto> contactos) {
+        	JPanel panel = this;
+            setLayout(new BorderLayout());
+            // Column names for the JTable
+            String[] columnNames = {"Foto", "Nombre", "Teléfono", "Saludo"};
+
+            // Data for the JTable
+            Object[][] data = new Object[contactos.size()][4];
+            for (int i = 0; i < contactos.size(); i++) {
+                Contacto contacto = contactos.get(i);
+                data[i][0] = new ImageIcon(new ImageIcon(getClass().getResource(contacto.getUrlImagen())).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
+                data[i][1] = contacto.getNombre();
+                data[i][2] = contacto.getTelefonoPropio();
+                data[i][3] = contacto.getSaludo();
+            }
+
+            // Create the JTable with the data and column names
+            JTable table = new JTable(data, columnNames) {
+                private static final long serialVersionUID = 1L;
+
+				// Override the method to display images in the first column
+                @Override
+                public Class<?> getColumnClass(int column) {
+                    if (column == 0) {
+                        return ImageIcon.class;
+                    }
+                    return String.class;
+                }
+            };
+            table.setRowHeight(50); // Ajustar la altura de las filas
+
+            // Centrar el texto en las columnas de nombre, teléfono y saludo
+            DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+            centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+            table.getColumnModel().getColumn(1).setCellRenderer(centerRenderer); // Centrar la columna de nombre
+            table.getColumnModel().getColumn(2).setCellRenderer(centerRenderer); // Centrar la columna de teléfono
+            table.getColumnModel().getColumn(3).setCellRenderer(centerRenderer); // Centrar la columna de saludo
+            // Add the JTable to a JScrollPane
+            JScrollPane scrollPane = new JScrollPane(table);
+            add(scrollPane, BorderLayout.CENTER);
+            JPanel panelSur = new JPanel();
+            panelSur.setLayout(new FlowLayout(FlowLayout.RIGHT));
+            JButton botonCerrar = new JButton("Cerrar");
+            botonCerrar.setUI(new RoundButtonUI(SystemColor.textHighlight, RoundButtonUI.getRojoCancelar()));
+			botonCerrar.addActionListener(e -> {
+				SwingUtilities.getWindowAncestor(panel).dispose();
+			});
+			panelSur.add(botonCerrar);
+			add(panelSur, BorderLayout.SOUTH);
+        }
     }
   
 	

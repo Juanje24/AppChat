@@ -77,7 +77,9 @@ public abstract class Contacto {
 	public void setUrlImagen(String urlImagen) {
 		this.urlImagen = urlImagen;
 	}
-	protected abstract String getTelefonoPropio();
+	public abstract String getTelefonoPropio();
+
+	public abstract String getSaludo();
 
 
 

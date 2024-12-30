@@ -29,6 +29,9 @@ public class ContactoIndividual extends Contacto{
     public String getTelefonoPropio() {
     	return usuario.getTelefono();
     }
+    public String getSaludo() {
+    	return usuario.getSaludo();
+    }
     
     
 }

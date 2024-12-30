@@ -4,16 +4,16 @@ import java.util.Hashtable;
 
 
 public class PoolDAO {
-	private static PoolDAO unicaInstancia;
+	private static PoolDAO[] unicaInstancia = new PoolDAO[4];
 	private Hashtable<Integer, Object> pool;
 
 	private PoolDAO() {
 		pool = new Hashtable<Integer, Object>();
 	}
 
-	public static PoolDAO getUnicaInstancia() {
-		if (unicaInstancia == null) unicaInstancia = new PoolDAO();
-		return unicaInstancia;
+	public static PoolDAO getUnicaInstancia(int tipo) {
+		if (unicaInstancia[tipo] == null) unicaInstancia[tipo] = new PoolDAO();
+		return unicaInstancia[tipo];
 		
 	}
 	
