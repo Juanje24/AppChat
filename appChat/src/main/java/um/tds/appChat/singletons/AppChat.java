@@ -34,7 +34,11 @@ public enum AppChat {
 		repositorioUsuarios = RepositorioUsuario.INSTANCE;
 	}
 	public void enviarMensajeContacto(Contacto c3, String string, int emoji, int enviado) {
-		// TODO Auto-generated method stub
+		mensajeDAO.registrarMensaje(usuarioActual.sendMensaje( string, emoji, c3));
+		contactoIndividualDAO.modificarContactoIndividual((ContactoIndividual) c3);
+		//Falta la parte inversa, buscar en el usuario asociado a c3 el contacto con tlf=usuarioActual.getTlf() y añadir el mensaje
+		
+		
 		
 	}
 

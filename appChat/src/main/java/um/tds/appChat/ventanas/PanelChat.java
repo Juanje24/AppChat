@@ -6,6 +6,8 @@ import javax.swing.event.DocumentListener;
 
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
@@ -160,6 +162,7 @@ public class PanelChat extends JPanel {
 		}
         add(scrollPane, BorderLayout.CENTER);
 
+        
         // Parte inferior: Campo para escribir mensajes y botones
         JPanel panelInferior = new JPanel(new BorderLayout());
      // Configuración de la área de texto
@@ -173,6 +176,24 @@ public class PanelChat extends JPanel {
         public void insertUpdate(DocumentEvent e) { ajustarTamañoAreaTexto(); }
         public void removeUpdate(DocumentEvent e) { ajustarTamañoAreaTexto(); }
         public void changedUpdate(DocumentEvent e) { ajustarTamañoAreaTexto(); }
+        });
+        areaTexto.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    e.consume(); // Evita que se inserte un salto de línea
+                    String texto = getTextoMensaje();
+        			if (!texto.trim().isEmpty()) {
+        				if (contacto != null) {
+        					AppChat.INSTANCE.enviarMensajeContacto(contacto, texto, emoji, BubbleText.SENT);
+        					panelMensajes.add(new BubbleText(panelMensajes, texto, Color.GREEN, nombreEmisor, BubbleText.SENT));
+        					panelMensajes.revalidate();
+        					panelMensajes.repaint();
+        					limpiarCampoMensaje();
+        				}
+        			}
+                }
+            }
         });
         
         
@@ -270,7 +291,9 @@ public class PanelChat extends JPanel {
 	        // Crear la tabla de emojis
 	        String[] columnNames = {""};
 	        JTable emojiTable = new JTable(emojiData, columnNames) {
-	            @Override
+	            private static final long serialVersionUID = 1L;
+
+				@Override
 	            public Class<?> getColumnClass(int column) {
 	                return ImageIcon.class;
 	            }

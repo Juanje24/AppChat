@@ -3,7 +3,6 @@ package um.tds.appChat.dominio;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 
 import tds.BubbleText;
 
@@ -205,12 +204,13 @@ public class Usuario {
 		this.contactos.add(c);
 		
 	}
-	public void sendMensaje(String texto,int emoji, Contacto c) {
+	public Mensaje sendMensaje(String texto,int emoji, Contacto c) {
 		for (Contacto contacto : contactos) {
 			if (contacto.equals(c)) {
-				contacto.addMensaje(texto,emoji, telefono, BubbleText.SENT);
+				return contacto.addMensaje(texto,emoji, telefono, BubbleText.SENT);
 			}
 		}
+		return null;
 	}
 	public void modificarNombreContacto(Contacto contacto, String nuevoNombre) {
 		for (Contacto c : contactos) {

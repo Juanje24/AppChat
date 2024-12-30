@@ -96,8 +96,8 @@ public class UsuarioDAO_TDS implements UsuarioDAO {
 	@Override
 	public Usuario recuperarUsuarioPorId(int id) {
 		//Si el objeto está en el pool, se devuelve
-		if (PoolDAO.getUnicaInstancia(1).contiene(id)) {
-			return (Usuario) PoolDAO.getUnicaInstancia(1).getObjeto(id);
+		if (PoolDAO.getUnicaInstancia(0).contiene(id)) {
+			return (Usuario) PoolDAO.getUnicaInstancia(0).getObjeto(id);
 		}
 		//Si no, se recupera de la base de datos
 		Entidad eUsuario = servicioPersistencia.recuperarEntidad(id);
@@ -112,7 +112,7 @@ public class UsuarioDAO_TDS implements UsuarioDAO {
 		String urlImagen = servicioPersistencia.recuperarPropiedadEntidad(eUsuario, "urlImagen");
 		
 		Usuario usuario = new Usuario( nombre,apellido, telefono, contraseña,  birthday, saludo, urlImagen,premium);
-		PoolDAO.getUnicaInstancia(1).addObjeto(id, usuario);
+		PoolDAO.getUnicaInstancia(0).addObjeto(id, usuario);
 		List<Contacto> contactos = obtenerContactosDesdeIDs(servicioPersistencia.recuperarPropiedadEntidad(eUsuario, "contactos"));
 		usuario.setId(id);
 		usuario.setContactos(contactos);

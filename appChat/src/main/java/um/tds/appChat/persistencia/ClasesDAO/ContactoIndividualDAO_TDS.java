@@ -1,7 +1,6 @@
 package um.tds.appChat.persistencia.ClasesDAO;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -12,7 +11,6 @@ import beans.Entidad;
 import beans.Propiedad;
 import tds.driver.FactoriaServicioPersistencia;
 import tds.driver.ServicioPersistencia;
-import um.tds.appChat.dominio.Contacto;
 import um.tds.appChat.dominio.ContactoIndividual;
 import um.tds.appChat.dominio.Mensaje;
 import um.tds.appChat.dominio.Usuario;
@@ -133,14 +131,14 @@ public class ContactoIndividualDAO_TDS implements ContactoIndividualDAO{
 	public ContactoIndividual recuperarContactoIndividualPorId(int id) {
 		
 				//Si el objeto está en el pool, se devuelve
-				if (PoolDAO.getUnicaInstancia(2).contiene(id)) {
-					return (ContactoIndividual) PoolDAO.getUnicaInstancia(2).getObjeto(id);
+				if (PoolDAO.getUnicaInstancia(1).contiene(id)) {
+					return (ContactoIndividual) PoolDAO.getUnicaInstancia(1).getObjeto(id);
 				}
 				//Si no, se recupera de la base de datos
 				Entidad eIndividual = servicioPersistencia.recuperarEntidad(id);
                 if(eIndividual==null) return null;
                 ContactoIndividual c = entidadToIndividual(eIndividual);
-                PoolDAO.getUnicaInstancia(2).addObjeto(id, c);
+                PoolDAO.getUnicaInstancia(1).addObjeto(id, c);
                 return c;
 	}
 

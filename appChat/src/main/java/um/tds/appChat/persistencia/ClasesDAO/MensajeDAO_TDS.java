@@ -1,6 +1,6 @@
 package um.tds.appChat.persistencia.ClasesDAO;
 
-import java.text.ParseException;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -40,7 +40,7 @@ public class MensajeDAO_TDS implements MensajeDAO {
 	
 	//MÉTODOS PRIVADOS
 	
-	private Mensaje entidadToMensaje(Entidad eMensaje) throws ParseException {
+	private Mensaje entidadToMensaje(Entidad eMensaje){
 		
 		String texto = servicioPersistencia.recuperarPropiedadEntidad(eMensaje, TEXTO);
 		LocalDate fecha = LocalDate.parse(servicioPersistencia.recuperarPropiedadEntidad(eMensaje, FECHA), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
@@ -82,7 +82,9 @@ public class MensajeDAO_TDS implements MensajeDAO {
 		if(eMensaje!=null) {
 			return;
 		}
-		servicioPersistencia.registrarEntidad(mensajeToEntidad(mensaje)) ;
+		eMensaje=servicioPersistencia.registrarEntidad(mensajeToEntidad(mensaje));
+		mensaje.setId(eMensaje.getId());
+		
 	}
 
 	@Override
@@ -118,14 +120,18 @@ public class MensajeDAO_TDS implements MensajeDAO {
 
 	@Override
 	public Mensaje recuperarMensajePorId(int id) {
-		Entidad eMensaje = servicioPersistencia.recuperarEntidad(id);
-		if(eMensaje==null) return null;
-		try {
-			return entidadToMensaje(eMensaje);
-		} catch (ParseException e) {
-			e.printStackTrace();
+
+		//Si el objeto está en el pool, se devuelve
+		if (PoolDAO.getUnicaInstancia(3).contiene(id)) {
+			return (Mensaje) PoolDAO.getUnicaInstancia(3).getObjeto(id);
 		}
-		return null;
+		//Si no, se recupera de la base de datos
+		Entidad eMensaje = servicioPersistencia.recuperarEntidad(id);
+        if(eMensaje==null) return null;
+        Mensaje m = entidadToMensaje(eMensaje);
+		
+        PoolDAO.getUnicaInstancia(3).addObjeto(id, m);
+        return m;
 	}
 
 	@Override
