@@ -8,14 +8,16 @@ public class Mensaje {
     
     private int id;
     private String texto;
+    private int emoji;
     private String emisor; //telefono
     private String receptor; //telefono
     private int tipo;
     private LocalDate fecha;
 
-    public Mensaje (String texto, String emisor, String receptor, int tipo){
+    public Mensaje (String texto, int emoji, String emisor, String receptor, int tipo){
     	
         this.texto = texto;
+        this.emoji = emoji;
         this.emisor = emisor;
         this.receptor = receptor;
         this.tipo = tipo;
@@ -54,6 +56,14 @@ public class Mensaje {
 
 	public void setTexto(String texto) {
 		this.texto = texto;
+	}
+
+	public int getEmoji() {
+		return emoji;
+	}
+
+	public int setEmoji(int emoji) {
+		return this.emoji = emoji;
 	}
 
 	public String getEmisor() {

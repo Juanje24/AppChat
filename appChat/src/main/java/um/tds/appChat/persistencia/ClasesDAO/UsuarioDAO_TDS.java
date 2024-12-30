@@ -55,10 +55,8 @@ public class UsuarioDAO_TDS implements UsuarioDAO {
 						new Propiedad("saludo", usuario.getSaludo()),
 						new Propiedad("urlImagen", usuario.getUrlImagen()),
 		                new Propiedad("contactos", obtenerCodigosContactos(usuario.getContactos())))));
-						System.out.println("lista ids contactos: "+obtenerCodigosContactos(usuario.getContactos()));
 	   eUsuario = servicioPersistencia.registrarEntidad(eUsuario);
 	   usuario.setId(eUsuario.getId());
-	   System.out.println("Registrado usuario con id: "+usuario.getId()); 
 	}
 
 	@Override
@@ -90,7 +88,6 @@ public class UsuarioDAO_TDS implements UsuarioDAO {
 				prop.setValor(usuario.getUrlImagen());
 			} else if (prop.getNombre().equals("contactos")) {
 				prop.setValor(obtenerCodigosContactos(usuario.getContactos()));
-				System.out.println("lista ids contactos modificada: "+obtenerCodigosContactos(usuario.getContactos()));
 			}
 			servicioPersistencia.modificarPropiedad(prop);
 		}
@@ -116,7 +113,6 @@ public class UsuarioDAO_TDS implements UsuarioDAO {
 		
 		Usuario usuario = new Usuario( nombre,apellido, telefono, contraseña,  birthday, saludo, urlImagen,premium);
 		PoolDAO.getUnicaInstancia(1).addObjeto(id, usuario);
-		System.out.println("lista ids contactos recuperada: "+servicioPersistencia.recuperarPropiedadEntidad(eUsuario, "contactos"));
 		List<Contacto> contactos = obtenerContactosDesdeIDs(servicioPersistencia.recuperarPropiedadEntidad(eUsuario, "contactos"));
 		usuario.setId(id);
 		usuario.setContactos(contactos);

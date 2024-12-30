@@ -1,8 +1,13 @@
 package um.tds.appChat.ventanas;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 import tds.BubbleText;
 import um.tds.appChat.dominio.Contacto;
@@ -15,123 +20,126 @@ public class PanelChat extends JPanel {
     private List<Mensaje> mensajes;
     private String nombreEmisor;
     private String nombreReceptor;
-    private JTextField campoMensaje;
+    private JTextArea areaTexto;
     private JButton botonEmoticonos;
     private JButton botonEnviar;
+    int emoji=-1;
 
     /**
      * Create the application.
      */
-    public PanelChat(Contacto c, String nombreEmisor) {
-        this.mensajes = c.getMensajes();
-        this.nombreEmisor = nombreEmisor;
-        this.nombreReceptor = c.getNombre();
-        initialize(c);
-    }
 
     public PanelChat(String nombreEmisor) {
     	this.nombreEmisor = nombreEmisor;
-    	initialize();
+    	initialize(null);
 	}
 
-    private void initialize() {
-        setLayout(new BorderLayout());
-
-        // Parte superior: Foto, nombre y botón de tres puntos
-        JPanel panelSuperior = new JPanel(new GridLayout(1,3));
-     
-
-        add(panelSuperior, BorderLayout.NORTH);
-
-        // Parte central: Panel para mostrar los mensajes
-        JPanel panelMensajes = new JPanel();
-        panelMensajes.setLayout(new BoxLayout(panelMensajes, BoxLayout.Y_AXIS));
-        JScrollPane scrollPane = new JScrollPane(panelMensajes);
-        add(scrollPane, BorderLayout.CENTER);
-
-        // Parte inferior: Campo para escribir mensajes y botones
-        JPanel panelInferior = new JPanel(new BorderLayout());
-        campoMensaje = new JTextField();
-        botonEmoticonos = new JButton("Emoji");
-        botonEnviar = new JButton("Enviar");
-
-        panelInferior.add(botonEmoticonos, BorderLayout.WEST);
-        panelInferior.add(campoMensaje, BorderLayout.CENTER);
-        panelInferior.add(botonEnviar, BorderLayout.EAST);
-
-        add(panelInferior, BorderLayout.SOUTH);
-    }
+//    private void initialize() {
+//        setLayout(new BorderLayout());
+//
+//        // Parte superior: Foto, nombre y botón de tres puntos
+//        JPanel panelSuperior = new JPanel(new GridLayout(1,3));
+//     
+//
+//        add(panelSuperior, BorderLayout.NORTH);
+//
+//        // Parte central: Panel para mostrar los mensajes
+//        JPanel panelMensajes = new JPanel();
+//        panelMensajes.setLayout(new BoxLayout(panelMensajes, BoxLayout.Y_AXIS));
+//        JScrollPane scrollPane = new JScrollPane(panelMensajes);
+//        add(scrollPane, BorderLayout.CENTER);
+//
+//        // Parte inferior: Campo para escribir mensajes y botones
+//        JPanel panelInferior = new JPanel(new BorderLayout());
+//        // Configuración de la área de texto
+//        areaTexto = new JTextArea(1, 30); // Inicial con 1 línea
+//        areaTexto.setLineWrap(true);
+//        areaTexto.setWrapStyleWord(true);
+//        areaTexto.setFont(new Font("Arial", Font.PLAIN, 14));
+//        botonEmoticonos = new JButton("Emoji");
+//        botonEnviar = new JButton("Enviar");
+//
+//        panelInferior.add(botonEmoticonos, BorderLayout.WEST);
+//        panelInferior.add(areaTexto, BorderLayout.CENTER);
+//        panelInferior.add(botonEnviar, BorderLayout.EAST);
+//
+//        add(panelInferior, BorderLayout.SOUTH);
+//    }
     
     
     
 	private void initialize(Contacto contacto) {
         setLayout(new BorderLayout());
         JPanel panel = this;
+		
         // Parte superior: Foto, nombre y botón de tres puntos
         JPanel panelSuperior = new JPanel(new GridLayout(1,3,0,10));
-        JLabel fotoUsuario = new JLabel();
-	    ImageIcon iconoUsuario = new ImageIcon(getClass().getResource(contacto.getUrlImagen()));
-	    Image imagenEscalada = iconoUsuario.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
-	    fotoUsuario.setIcon(new ImageIcon(imagenEscalada));
-        JLabel etiquetaNombre = new JLabel(nombreReceptor);
-        etiquetaNombre.setFont(new Font("Arial", Font.BOLD, 16));
-        JButton botonOpciones = new JButton("⋮");
-        botonOpciones.setUI(new RoundButtonUI());
-        
-        botonOpciones.addActionListener(e -> {
-            JPopupMenu menu = new JPopupMenu();
+        if (contacto != null) {
 
-            // Opción "Cambiar nombre"
-            JMenuItem itemCambiarNombre = new JMenuItem("Cambiar nombre");
-            itemCambiarNombre.addActionListener(ev -> {
-                String nuevoNombre = JOptionPane.showInputDialog(
-                    this,
-                    "Introduce el nuevo nombre para el contacto:",
-                    "Cambiar nombre",
-                    JOptionPane.PLAIN_MESSAGE
-                );
-
-                if (nuevoNombre != null && !nuevoNombre.trim().isEmpty()) {
-                    nombreReceptor = nuevoNombre.trim();
-                    AppChat.INSTANCE.actualizarNombreContacto(contacto, nuevoNombre);
-                    etiquetaNombre.setText(nuevoNombre);
-                    SwingUtilities.getWindowAncestor(this).revalidate();
-                    SwingUtilities.getWindowAncestor(this).repaint();
-                    panel.revalidate();
-                    panel.repaint(); 
-                    
-                }
-            });
-
-            // Opción "Eliminar"
-            JMenuItem itemEliminar = new JMenuItem("Eliminar");
-            itemEliminar.addActionListener(ev -> {
-                int confirmacion = JOptionPane.showConfirmDialog(
-                    this,
-                    "¿Estás seguro de que quieres eliminar este contacto?",
-                    "Confirmar eliminación",
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.WARNING_MESSAGE
-                );
-
-                if (confirmacion == JOptionPane.YES_OPTION) {
-                    // Lógica para eliminar el contacto
-                    System.out.println("Contacto eliminado: " + nombreReceptor);
-                    // Puedes implementar aquí la lógica para actualizar la lista de contactos.
-                }
-            });
-
-            // Añade las opciones al menú
-            menu.add(itemCambiarNombre);
-            menu.add(itemEliminar);
-
-            // Muestra el menú contextual
-            menu.show(botonOpciones, 0, botonOpciones.getHeight());
-        });
-        
-        panelSuperior.add(fotoUsuario);
-        panelSuperior.add(etiquetaNombre);
-        panelSuperior.add(botonOpciones);
+	        JLabel fotoUsuario = new JLabel();
+		    ImageIcon iconoUsuario = new ImageIcon(getClass().getResource(contacto.getUrlImagen()));
+		    Image imagenEscalada = iconoUsuario.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+		    fotoUsuario.setIcon(new ImageIcon(imagenEscalada));
+	        JLabel etiquetaNombre = new JLabel(nombreReceptor);
+	        etiquetaNombre.setFont(new Font("Arial", Font.BOLD, 16));
+	        JButton botonOpciones = new JButton("⋮");
+	        botonOpciones.setUI(new RoundButtonUI());
+	        
+	        botonOpciones.addActionListener(e -> {
+	            JPopupMenu menu = new JPopupMenu();
+	
+	            // Opción "Cambiar nombre"
+	            JMenuItem itemCambiarNombre = new JMenuItem("Cambiar nombre");
+	            itemCambiarNombre.addActionListener(ev -> {
+	                String nuevoNombre = JOptionPane.showInputDialog(
+	                    this,
+	                    "Introduce el nuevo nombre para el contacto:",
+	                    "Cambiar nombre",
+	                    JOptionPane.PLAIN_MESSAGE
+	                );
+	
+	                if (nuevoNombre != null && !nuevoNombre.trim().isEmpty()) {
+	                    nombreReceptor = nuevoNombre.trim();
+	                    AppChat.INSTANCE.actualizarNombreContacto(contacto, nuevoNombre);
+	                    etiquetaNombre.setText(nuevoNombre);
+	                    SwingUtilities.getWindowAncestor(this).revalidate();
+	                    SwingUtilities.getWindowAncestor(this).repaint();
+	                    panel.revalidate();
+	                    panel.repaint(); 
+	                    
+	                }
+	            });
+	
+	            // Opción "Eliminar"
+	            JMenuItem itemEliminar = new JMenuItem("Eliminar");
+	            itemEliminar.addActionListener(ev -> {
+	                int confirmacion = JOptionPane.showConfirmDialog(
+	                    this,
+	                    "¿Estás seguro de que quieres eliminar este contacto?",
+	                    "Confirmar eliminación",
+	                    JOptionPane.YES_NO_OPTION,
+	                    JOptionPane.WARNING_MESSAGE
+	                );
+	
+	                if (confirmacion == JOptionPane.YES_OPTION) {
+	                    // Lógica para eliminar el contacto
+	                    System.out.println("Contacto eliminado: " + nombreReceptor);
+	                    // Puedes implementar aquí la lógica para actualizar la lista de contactos.
+	                }
+	            });
+	
+	            // Añade las opciones al menú
+	            menu.add(itemCambiarNombre);
+	            menu.add(itemEliminar);
+	
+	            // Muestra el menú contextual
+	            menu.show(botonOpciones, 0, botonOpciones.getHeight());
+	        });
+	        
+	        panelSuperior.add(fotoUsuario);
+	        panelSuperior.add(etiquetaNombre);
+	        panelSuperior.add(botonOpciones);
+        }
         panelSuperior.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
         add(panelSuperior, BorderLayout.NORTH);
 
@@ -139,6 +147,9 @@ public class PanelChat extends JPanel {
         JPanel panelMensajes = new JPanel();
         panelMensajes.setLayout(new BoxLayout(panelMensajes, BoxLayout.Y_AXIS));
         JScrollPane scrollPane = new JScrollPane(panelMensajes);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		if (contacto != null) {		
         for (Mensaje m : mensajes) {
             if (m.getTipo() == BubbleText.SENT) {
                 panelMensajes.add(new BubbleText(this, m.getTexto(), Color.GREEN, nombreEmisor, m.getTipo()));
@@ -146,29 +157,77 @@ public class PanelChat extends JPanel {
                 panelMensajes.add(new BubbleText(this, m.getTexto(), Color.LIGHT_GRAY, nombreReceptor, m.getTipo()));
             }
         }
-
+		}
         add(scrollPane, BorderLayout.CENTER);
 
         // Parte inferior: Campo para escribir mensajes y botones
         JPanel panelInferior = new JPanel(new BorderLayout());
-        campoMensaje = new JTextField();
-        botonEmoticonos = new JButton("Emoji");
-        botonEnviar = new JButton("Enviar");
+     // Configuración de la área de texto
+        areaTexto = new JTextArea(1, 30); // Inicial con 1 línea
+        areaTexto.setLineWrap(true);
+        areaTexto.setWrapStyleWord(true);
+        areaTexto.setFont(new Font("Arial", Font.PLAIN, 14));
+     // Hacer que el JTextArea crezca dinámicamente
+        areaTexto.setPreferredSize(new Dimension(300, 30));
+        areaTexto.getDocument().addDocumentListener(new DocumentListener() {
+        public void insertUpdate(DocumentEvent e) { ajustarTamañoAreaTexto(); }
+        public void removeUpdate(DocumentEvent e) { ajustarTamañoAreaTexto(); }
+        public void changedUpdate(DocumentEvent e) { ajustarTamañoAreaTexto(); }
+        });
+        
+        
+        
+        ImageIcon icono = new ImageIcon(getClass().getResource("/iconos/emoji.png"));
+		Image iconoEscalado = icono.getImage().getScaledInstance(25, 25, java.awt.Image.SCALE_SMOOTH);
+		botonEmoticonos = new JButton(new ImageIcon(iconoEscalado));
+        botonEmoticonos.setUI(new RoundButtonUI());
+        
+     // Configurar el botón de emoji
+        botonEmoticonos.addActionListener(e -> {
+            JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+            EmojiSelectorDialog emojiDialog = new EmojiSelectorDialog(parentFrame);
+            emojiDialog.setVisible(true);
+            emoji=emojiDialog.getSelectedEmoji();
+			if (emoji != -1) {
+				AppChat.INSTANCE.enviarMensajeContacto(contacto, "", emoji, BubbleText.SENT);
+				panelMensajes.add(new BubbleText(this, emoji, Color.GREEN, nombreEmisor, BubbleText.SENT, 14));
+				emoji=-1;
+			}
+        });
+        
+        
+        icono = new ImageIcon(getClass().getResource("/iconos/send.png"));
+		iconoEscalado = icono.getImage().getScaledInstance(25, 25, java.awt.Image.SCALE_SMOOTH);
+		botonEnviar = new JButton(new ImageIcon(iconoEscalado));
+        botonEnviar.setUI(new RoundButtonUI());
+        
 
         panelInferior.add(botonEmoticonos, BorderLayout.WEST);
-        panelInferior.add(campoMensaje, BorderLayout.CENTER);
+        panelInferior.add(areaTexto, BorderLayout.CENTER);
         panelInferior.add(botonEnviar, BorderLayout.EAST);
+		botonEnviar.addActionListener(e -> {
+			String texto = getTextoMensaje();
+			if (!texto.trim().isEmpty()) {
+				if (contacto != null) {
+					AppChat.INSTANCE.enviarMensajeContacto(contacto, texto, emoji, BubbleText.SENT);
+					panelMensajes.add(new BubbleText(this, texto, Color.GREEN, nombreEmisor, BubbleText.SENT));
+					panelMensajes.revalidate();
+					panelMensajes.repaint();
+					limpiarCampoMensaje();
+				}
+			}
+		});
 
         add(panelInferior, BorderLayout.SOUTH);
     }
 
     // Métodos para interactuar con el panel
     public String getTextoMensaje() {
-        return campoMensaje.getText();
+        return areaTexto.getText();
     }
 
     public void limpiarCampoMensaje() {
-        campoMensaje.setText("");
+        areaTexto.setText("");
     }
 
     public void setBotonEnviarListener(ActionListener listener) {
@@ -184,6 +243,64 @@ public class PanelChat extends JPanel {
 		this.mensajes = c.getMensajes();
 		this.removeAll();
 		initialize(c);
+	}
+	// Método para ajustar el tamaño del JTextArea dinámicamente
+	private void ajustarTamañoAreaTexto() {
+	 int lineas = areaTexto.getLineCount();
+	 int altura = 20 * lineas; // Ajusta el valor según el tamaño de fuente
+	 areaTexto.setPreferredSize(new Dimension(300, altura));
+	 areaTexto.revalidate();
+	}
+	
+	
+	private class EmojiSelectorDialog extends JDialog {
+	    private static final long serialVersionUID = 1L;
+	    private int selectedEmoji = -1;
+
+	    public EmojiSelectorDialog(JFrame parent) {
+	        super(parent, "Seleccionar Emoji", true);
+	        setLayout(new BorderLayout());
+
+	        // Crear el array de emojis
+	        Object[][] emojiData = new Object[BubbleText.MAXICONO + 1][1];
+	        for (int i = 0; i <= BubbleText.MAXICONO; i++) {
+	            emojiData[i][0] = BubbleText.getEmoji(i);
+	        }
+
+	        // Crear la tabla de emojis
+	        String[] columnNames = {""};
+	        JTable emojiTable = new JTable(emojiData, columnNames) {
+	            @Override
+	            public Class<?> getColumnClass(int column) {
+	                return ImageIcon.class;
+	            }
+	        };
+	        emojiTable.setRowHeight(50);  // Ajusta la altura de las filas para mostrar los emojis correctamente
+	        emojiTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+	        // Añadir un mouse listener para obtener el valor seleccionado
+	        emojiTable.addMouseListener(new MouseAdapter() {
+	            @Override
+	            public void mouseClicked(MouseEvent e) {
+	                int row = emojiTable.getSelectedRow();
+	                if (row != -1) {
+	                    selectedEmoji = row;
+	                    dispose();  // Cerrar el diálogo después de la selección
+	                }
+	            }
+	        });
+
+	        // Añadir la tabla a un JScrollPane
+	        JScrollPane scrollPane = new JScrollPane(emojiTable);
+	        add(scrollPane, BorderLayout.CENTER);
+
+	        setSize(300, 400);
+	        setLocationRelativeTo(parent);
+	    }
+
+	    public int getSelectedEmoji() {
+	        return selectedEmoji;
+	    }
 	}
     
 }

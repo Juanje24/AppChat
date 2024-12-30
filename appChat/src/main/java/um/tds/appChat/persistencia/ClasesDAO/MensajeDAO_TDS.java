@@ -24,6 +24,7 @@ public class MensajeDAO_TDS implements MensajeDAO {
 	private static final String EMISOR = "emisor";
 	private static final String RECEPTOR = "receptor";
 	private static final String TIPO = "tipo";
+	private static final String EMOJI = "emoji";
 	
 	
 	private ServicioPersistencia servicioPersistencia;
@@ -46,8 +47,9 @@ public class MensajeDAO_TDS implements MensajeDAO {
 		String emisor = servicioPersistencia.recuperarPropiedadEntidad(eMensaje, EMISOR);
 		String receptor = servicioPersistencia.recuperarPropiedadEntidad(eMensaje, RECEPTOR);
 		int tipo = Integer.parseInt(servicioPersistencia.recuperarPropiedadEntidad(eMensaje, TIPO));
+		int emoji = Integer.parseInt(servicioPersistencia.recuperarPropiedadEntidad(eMensaje, EMOJI));
 		
-		Mensaje mensaje = new Mensaje(texto, emisor, receptor, tipo);
+		Mensaje mensaje = new Mensaje(texto, emoji, emisor, receptor, tipo);
 		mensaje.setFecha(fecha);
 		mensaje.setId(eMensaje.getId());
 		
@@ -59,6 +61,7 @@ public class MensajeDAO_TDS implements MensajeDAO {
 		eMensaje.setNombre(MENSAJE);
 		eMensaje.setPropiedades(new ArrayList<Propiedad>(
 				Arrays.asList(new Propiedad(TEXTO, mensaje.getTexto()),
+						new Propiedad(EMOJI, String.valueOf(mensaje.getEmoji())),
 						new Propiedad(FECHA, mensaje.getFecha().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))),
 						new Propiedad(EMISOR, mensaje.getEmisor()),
 						new Propiedad(RECEPTOR, mensaje.getReceptor()),
@@ -95,6 +98,9 @@ public class MensajeDAO_TDS implements MensajeDAO {
 		for (Propiedad prop : eMensaje.getPropiedades()) {
 			if (prop.getNombre().equals(TEXTO)) {
 				prop.setValor(mensaje.getTexto());
+			}
+			else if (prop.getNombre().equals(EMOJI)) {
+				prop.setValor(String.valueOf(mensaje.getEmoji()));
 			}
 			else if (prop.getNombre().equals(FECHA)) {
 				prop.setValor(mensaje.getFecha().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));

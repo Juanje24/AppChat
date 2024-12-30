@@ -205,10 +205,10 @@ public class Usuario {
 		this.contactos.add(c);
 		
 	}
-	public void sendMensaje(String texto, Contacto c) {
+	public void sendMensaje(String texto,int emoji, Contacto c) {
 		for (Contacto contacto : contactos) {
 			if (contacto.equals(c)) {
-				contacto.addMensaje(texto, telefono, BubbleText.SENT);
+				contacto.addMensaje(texto,emoji, telefono, BubbleText.SENT);
 			}
 		}
 	}

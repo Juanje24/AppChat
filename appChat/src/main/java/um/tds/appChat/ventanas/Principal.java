@@ -1,5 +1,6 @@
 package um.tds.appChat.ventanas;
 
+import java.util.List;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -230,7 +231,7 @@ public class Principal extends JFrame {
     private class PanelVerContactos extends JPanel {
         private static final long serialVersionUID = 1L;
 
-        public PanelVerContactos(java.util.List<Contacto> contactos) {
+        public PanelVerContactos(List<Contacto> contactos) {
         	JPanel panel = this;
             setLayout(new BorderLayout());
             // Column names for the JTable
