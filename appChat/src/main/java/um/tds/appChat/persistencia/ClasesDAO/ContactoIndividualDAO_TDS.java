@@ -63,12 +63,14 @@ public class ContactoIndividualDAO_TDS implements ContactoIndividualDAO{
 		int usuario = Integer.parseInt(servicioPersistencia.recuperarPropiedadEntidad(eIndividual, USUARIO));
 		List<Mensaje> mensajes = obtenerMensajesDesdeIDs(servicioPersistencia.recuperarPropiedadEntidad(eIndividual, MENSAJES));
 		
+		
 		Usuario u = FactoriaDAO.getFactoriaDAO().getUsuarioDAO().recuperarUsuarioPorId(usuario);
 		
 		
 		ContactoIndividual individual = new ContactoIndividual(nombre, u);
 		individual.setApellidos(apellidos);
 		individual.setMensajes(mensajes);
+		individual.setId(eIndividual.getId());
 		
 		return individual;
 	}
@@ -99,7 +101,6 @@ public class ContactoIndividualDAO_TDS implements ContactoIndividualDAO{
 		}
 		eIndividual = servicioPersistencia.registrarEntidad(IndividualToEntidad(contactoIndividual)) ;
 		contactoIndividual.setId(eIndividual.getId());
-		System.out.println("Registrado contacto individual con id: "+contactoIndividual.getId());
 	}
 
 	@Override
@@ -111,6 +112,7 @@ public class ContactoIndividualDAO_TDS implements ContactoIndividualDAO{
 
 	@Override
 	public void modificarContactoIndividual(ContactoIndividual contactoIndividual) {
+		System.out.println("Modificando contacto individual con id: "+contactoIndividual.getId());
 		Entidad eIndividual = servicioPersistencia.recuperarEntidad(contactoIndividual.getId());
 		for (Propiedad prop : eIndividual.getPropiedades()) {
 			if (prop.getNombre().equals(NOMBRE)) {

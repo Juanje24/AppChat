@@ -118,7 +118,7 @@ public class UsuarioDAO_TDS implements UsuarioDAO {
 		PoolDAO.getUnicaInstancia(1).addObjeto(id, usuario);
 		System.out.println("lista ids contactos recuperada: "+servicioPersistencia.recuperarPropiedadEntidad(eUsuario, "contactos"));
 		List<Contacto> contactos = obtenerContactosDesdeIDs(servicioPersistencia.recuperarPropiedadEntidad(eUsuario, "contactos"));
-		
+		usuario.setId(id);
 		usuario.setContactos(contactos);
 		return usuario;
 	}
@@ -174,7 +174,6 @@ public class UsuarioDAO_TDS implements UsuarioDAO {
 	            contactos.add(FactoriaDAO.getFactoriaDAO().getGrupoDAO().recuperarGrupoPorId(id));
 	        	FactoriaDAO.getFactoriaDAO().getGrupoDAO().recuperarGrupoPorId(id).addContacto(null);
 	        } else if ("ContactoIndividual".equals(tipo)) {
-	        	System.out.println("PATATA id contacto individual: "+id);
 	        	contactos.add(FactoriaDAO.getFactoriaDAO().getContactoIndividualDAO().recuperarContactoIndividualPorId(id));
 	            
 	        }
