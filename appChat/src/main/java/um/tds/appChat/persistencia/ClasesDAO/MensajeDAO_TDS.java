@@ -5,8 +5,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import beans.Entidad;
 import beans.Propiedad;
@@ -139,13 +139,9 @@ public class MensajeDAO_TDS implements MensajeDAO {
 
 	@Override
 	public List<Mensaje> recuperarTodosMensajes() {
-		List<Entidad> entidades = servicioPersistencia.recuperarEntidades(MENSAJE);
-		
-		List<Mensaje> mensajes = new LinkedList<Mensaje>();
-		for (Entidad eMensaje : entidades) {
-			mensajes.add(recuperarMensajePorId(eMensaje.getId()));
-		}
-		return mensajes;
+		return servicioPersistencia.recuperarEntidades(MENSAJE).stream()
+				.map(e -> entidadToMensaje(e))
+				.collect(Collectors.toList());
 	}
 
 }

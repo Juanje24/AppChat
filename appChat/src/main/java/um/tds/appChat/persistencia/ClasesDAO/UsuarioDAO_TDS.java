@@ -15,6 +15,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.stream.Collectors;
 
 
 public class UsuarioDAO_TDS implements UsuarioDAO {
@@ -22,7 +23,7 @@ public class UsuarioDAO_TDS implements UsuarioDAO {
 	private static UsuarioDAO_TDS unicaInstancia = new UsuarioDAO_TDS();
 	
 	
-	public static UsuarioDAO_TDS getUnicaInstancia() { // patron singleton
+	public static UsuarioDAO_TDS getUnicaInstancia() {
 		return unicaInstancia;
 	}
 	
@@ -101,7 +102,7 @@ public class UsuarioDAO_TDS implements UsuarioDAO {
 		}
 		//Si no, se recupera de la base de datos
 		Entidad eUsuario = servicioPersistencia.recuperarEntidad(id);
-		if (eUsuario == null) return null;
+		if (eUsuario == null)	return null;
 		String nombre = servicioPersistencia.recuperarPropiedadEntidad(eUsuario, "nombre");
 		String apellido = servicioPersistencia.recuperarPropiedadEntidad(eUsuario, "apellido");
 		String contraseña = servicioPersistencia.recuperarPropiedadEntidad(eUsuario, "contraseña");
@@ -121,13 +122,9 @@ public class UsuarioDAO_TDS implements UsuarioDAO {
 
 	@Override
 	public List<Usuario> recuperarTodosUsuarios() {
-		ArrayList<Entidad> eUsuarios = servicioPersistencia.recuperarEntidades("Usuario"); 
-		System.out.println("Número de usuarios recuperados: "+eUsuarios.size());
-		List<Usuario> usuarios = new LinkedList<Usuario>();
-		for (Entidad eUsuario : eUsuarios) {
-			usuarios.add(recuperarUsuarioPorId(eUsuario.getId()));
-		}
-		return usuarios;
+		return servicioPersistencia.recuperarEntidades("Usuario").stream()
+				.map(eUsuario -> recuperarUsuarioPorId(eUsuario.getId()))
+				.collect(Collectors.toList());
 	}
 
 	

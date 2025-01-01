@@ -49,7 +49,7 @@ public class Principal extends JFrame {
 		panelNorte.setBackground(new Color(215, 215, 215));
 		this.getContentPane().add(panelNorte, BorderLayout.NORTH);
 		
-		panelCentro = new PanelChat(app.getUsuarioActual().getNombre());
+		panelCentro = new PanelChat();
 		this.getContentPane().add(panelCentro, BorderLayout.CENTER);
 		
 		panelContactos = new PanelContactos(app.getUsuarioActual().getContactos());

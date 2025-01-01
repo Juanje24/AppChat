@@ -2,6 +2,7 @@ package um.tds.appChat.ventanas;
 
 
 import java.net.URL;
+import java.util.NoSuchElementException;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -12,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;
 import javax.swing.border.Border;
 
+import tds.BubbleText;
 import um.tds.appChat.dominio.Contacto;
 import um.tds.appChat.dominio.Mensaje;
 
@@ -69,14 +71,24 @@ public class ContactoListCellRenderer extends JPanel implements ListCellRenderer
 
 		// Configuración del texto
 		lblNombre.setText(contacto.getNombre());
-//		Mensaje ultimoMsj = contacto.getMensajes().getLast();
-//		if (ultimoMsj != null) {
-//			lblUltimoMsg.setText(ultimoMsj.getTexto());
-//		}
-		lblUltimoMsg.setText("Último mensaje");
+		lblUltimoMsg.setText("");
+		lblUltimoMsg.setIcon(null);
+		try {
+			Mensaje ultMsj = contacto.getMensajes().getLast();
+			String texto = ultMsj.getTexto();
+			if (texto.equals("")) {
+				ImageIcon icono = BubbleText.getEmoji(ultMsj.getEmoji());
+				Image iconoEscalado = icono.getImage().getScaledInstance(32, 32, java.awt.Image.SCALE_SMOOTH);
+				lblUltimoMsg.setIcon(new ImageIcon(iconoEscalado));
+			} else {
+				lblUltimoMsg.setText(ultMsj.getTexto());
+				
+			}
+			
+		} catch (NoSuchElementException e) {
+			lblUltimoMsg.setText(contacto.getSaludo());
+		}
 		
-
-
 		// Configuración de colores para selección
 		if (isSelected) {
             setBackground(new Color(184, 207, 229)); // Color de fondo para selección

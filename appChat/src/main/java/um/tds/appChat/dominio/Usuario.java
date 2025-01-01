@@ -18,8 +18,10 @@ public class Usuario {
     private LocalDate birthday;
     private String saludo;
     private String urlImagen;
-    private List<Contacto> contactos; //podría ser un Set
+    private List<Contacto> contactos; 
 
+    
+    //CONSTRUCTORES
     
     public Usuario( String nombre,String apellido, String telefono, String contraseña, LocalDate birthday,
     		 String saludo, String urlImagen, int id, boolean isPremium, List<Contacto> contactos){
@@ -61,9 +63,6 @@ public class Usuario {
         this.premium = false;
         this.contactos = new LinkedList<>();
     }
-    
-    
-    //CONSTRUCTORES
     
     
     public Usuario(String nombre, String apellido, String telefono, String contraseña, LocalDate birthday){ //campos obligatorios
@@ -231,12 +230,6 @@ public class Usuario {
 		
 	}
 
-	
-
-
-//    public void sendMessage(Mensaje mensaje, Contacto contacto){
-//        contacto.
-//    }
 //
 //    public List<Mensaje> searchMessageByText (){
 //
@@ -253,14 +246,5 @@ public class Usuario {
 //    public List<Mensaje> searchMessage (String text, String number, String contactnombre){
 //        
 //    }
-
-	
-
-
-
-
-    
-
-
 
 }

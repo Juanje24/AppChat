@@ -21,7 +21,6 @@ import um.tds.appChat.utils.Utils;
 public class PanelChat extends JPanel {
     private static final long serialVersionUID = 1L;
     private List<Mensaje> mensajes;
-    private String nombreEmisor;
     private String nombreReceptor;
     private JTextArea areaTexto;
     private JButton botonEmoticonos;
@@ -32,8 +31,7 @@ public class PanelChat extends JPanel {
      * Create the application.
      */
 
-    public PanelChat(String nombreEmisor) {
-    	this.nombreEmisor = nombreEmisor;
+    public PanelChat() {
     	initialize(null);
 	}
     
@@ -120,7 +118,8 @@ public class PanelChat extends JPanel {
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		if (contacto != null) {		
 	        for (Mensaje m : mensajes) {
-	            panelMensajes.add(Utils.getBubbleFromMensaje(m, panel));
+	            panelMensajes.add(Utils.getBubbleFromMensaje(m, panelMensajes));
+	            
 	        }
 		}
         add(scrollPane, BorderLayout.CENTER);
@@ -149,9 +148,7 @@ public class PanelChat extends JPanel {
         			if (!texto.trim().isEmpty()) {
         				if (contacto != null) {
         					Mensaje msj=AppChat.INSTANCE.enviarMensajeContacto(contacto, texto, emoji);
-        					panelMensajes.add(Utils.getBubbleFromMensaje(msj, panel));
-        					panelMensajes.revalidate();
-        					panelMensajes.repaint();
+        					panelMensajes.add(Utils.getBubbleFromMensaje(msj, panelMensajes));
         					limpiarCampoMensaje();
         				}
         			}
@@ -174,7 +171,7 @@ public class PanelChat extends JPanel {
             emoji=emojiDialog.getSelectedEmoji();
 			if (emoji != -1) {
 				Mensaje msj=AppChat.INSTANCE.enviarMensajeContacto(contacto, "", emoji);
-				panelMensajes.add(Utils.getBubbleFromMensaje(msj, panel));
+				panelMensajes.add(Utils.getBubbleFromMensaje(msj, panelMensajes));
 				emoji=-1;
 			}
         });
@@ -194,9 +191,7 @@ public class PanelChat extends JPanel {
 			if (!texto.trim().isEmpty()) {
 				if (contacto != null) {
 					Mensaje msj=AppChat.INSTANCE.enviarMensajeContacto(contacto, texto, emoji);
-					panelMensajes.add(Utils.getBubbleFromMensaje(msj, panel));
-					panelMensajes.revalidate();
-					panelMensajes.repaint();
+					panelMensajes.add(Utils.getBubbleFromMensaje(msj, panelMensajes));
 					limpiarCampoMensaje();
 				}
 			}

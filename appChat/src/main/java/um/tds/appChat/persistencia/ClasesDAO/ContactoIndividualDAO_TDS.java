@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.stream.Collectors;
 
 import beans.Entidad;
 import beans.Propiedad;
@@ -106,7 +107,6 @@ public class ContactoIndividualDAO_TDS implements ContactoIndividualDAO{
 
 	@Override
 	public void modificarContactoIndividual(ContactoIndividual contactoIndividual) {
-		System.out.println("Modificando contacto individual con id: "+contactoIndividual.getId());
 		Entidad eIndividual = servicioPersistencia.recuperarEntidad(contactoIndividual.getId());
 		for (Propiedad prop : eIndividual.getPropiedades()) {
 			if (prop.getNombre().equals(NOMBRE)) {
@@ -138,13 +138,9 @@ public class ContactoIndividualDAO_TDS implements ContactoIndividualDAO{
 
 	@Override
 	public List<ContactoIndividual> recuperarTodosContactoIndividuales() {
-		List<Entidad> entidades = servicioPersistencia.recuperarEntidades("Individual");
-		
-		List<ContactoIndividual> cIndividuales = new LinkedList<ContactoIndividual>();
-		for (Entidad eIndividual : entidades) {
-			cIndividuales.add(recuperarContactoIndividualPorId(eIndividual.getId()));
-		}
-		return cIndividuales;
+		return servicioPersistencia.recuperarEntidades("ContactoIndividual").stream()
+				.map(e->entidadToIndividual(e))
+				.collect(Collectors.toList());
 	}
 
 }

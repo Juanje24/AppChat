@@ -2,7 +2,7 @@ package um.tds.appChat.singletons;
 
 
 import java.time.LocalDate;
-import java.util.LinkedList;
+
 
 import um.tds.appChat.dominio.ContactoIndividual;
 
@@ -10,6 +10,7 @@ import um.tds.appChat.dominio.ContactoIndividual;
 public class CargarAppChat {
 	
 
+	@SuppressWarnings("unused")
 	public static void cargarDatos() {
 		AppChat appChat = AppChat.INSTANCE;
 		appChat.recuperarUsuarios();
