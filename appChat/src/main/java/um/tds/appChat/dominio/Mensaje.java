@@ -1,7 +1,6 @@
 package um.tds.appChat.dominio;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Arrays;
 
 public class Mensaje {
@@ -9,17 +8,19 @@ public class Mensaje {
     private int id;
     private String texto;
     private int emoji;
-    private String emisor; //telefono
-    private String receptor; //telefono
+    private String tlfEmisor; //telefono
+    private String tlfReceptor; //telefono
+    private String nombreEmisor;
     private int tipo;
     private LocalDate fecha;
 
-    public Mensaje (String texto, int emoji, String emisor, String receptor, int tipo){
+    public Mensaje (String texto, int emoji, String emisor, String receptor, String nombreEmisor,int tipo){
     	
         this.texto = texto;
         this.emoji = emoji;
-        this.emisor = emisor;
-        this.receptor = receptor;
+        this.tlfEmisor = emisor;
+        this.tlfReceptor = receptor;
+        this.nombreEmisor = nombreEmisor;
         this.tipo = tipo;
         this.fecha = LocalDate.now(); 
 
@@ -67,19 +68,27 @@ public class Mensaje {
 	}
 
 	public String getEmisor() {
-		return emisor;
+		return tlfEmisor;
 	}
 
 	public void setEmisor(String emisor) {
-		this.emisor = emisor;
+		this.tlfEmisor = emisor;
 	}
 
 	public String getReceptor() {
-		return receptor;
+		return tlfReceptor;
 	}
 
 	public void setReceptor(String receptor) {
-		this.receptor = receptor;
+		this.tlfReceptor = receptor;
+	}
+
+	public String getNombreEmisor() {
+		return nombreEmisor;
+	}
+
+	public void setNombreEmisor(String nombreEmisor) {
+        this.nombreEmisor = nombreEmisor;
 	}
 
 	public int getTipo() {

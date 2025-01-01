@@ -60,7 +60,6 @@ public class Principal extends JFrame {
                 if (!e.getValueIsAdjusting()) {
                    contactoSeleccionado = panelContactos.getContactoSeleccionado();
                     if (contactoSeleccionado != null) {
-                        System.out.println("Contacto seleccionado: " + contactoSeleccionado.getNombre());
                         ((PanelChat) panelCentro).setContacto(contactoSeleccionado);
                         frame.revalidate();
                         frame.repaint();
@@ -68,8 +67,6 @@ public class Principal extends JFrame {
                 }
             }
         });
-		
-		
 		
 		
 		ImageIcon icono = new ImageIcon(getClass().getResource("/iconos/addContact.png"));

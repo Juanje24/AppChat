@@ -66,8 +66,8 @@ public abstract class Contacto {
 		this.mensajes = new LinkedList<Mensaje>(mensajes);
 	}
 
-	public Mensaje addMensaje(String texto, int emoji, String emisor, int tipo) {
-		Mensaje mensaje = new Mensaje(texto, emoji, emisor, getTelefonoPropio(), tipo);
+	public Mensaje addMensaje(String texto, int emoji, String tlfEmisor,String nombreEmisor, int tipo) {
+		Mensaje mensaje = new Mensaje(texto, emoji, tlfEmisor, getTelefonoPropio(),nombreEmisor, tipo);
 		this.mensajes.add(mensaje);
 		return mensaje;
 	}

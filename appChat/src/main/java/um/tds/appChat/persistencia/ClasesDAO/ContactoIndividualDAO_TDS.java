@@ -21,7 +21,6 @@ public class ContactoIndividualDAO_TDS implements ContactoIndividualDAO{
 	
 	private static final String NOMBRE = "nombre";
 	private static final String MENSAJES = "mensajes";
-	private static final String APELLIDOS = "apellidos";
 	private static final String USUARIO = "usuario";
 	
 	private ServicioPersistencia servicioPersistencia;
@@ -57,7 +56,6 @@ public class ContactoIndividualDAO_TDS implements ContactoIndividualDAO{
 	private ContactoIndividual entidadToIndividual(Entidad eIndividual) {
 		
 		String nombre = servicioPersistencia.recuperarPropiedadEntidad(eIndividual, NOMBRE);
-		String apellidos = servicioPersistencia.recuperarPropiedadEntidad(eIndividual, APELLIDOS);
 		int usuario = Integer.parseInt(servicioPersistencia.recuperarPropiedadEntidad(eIndividual, USUARIO));
 		List<Mensaje> mensajes = obtenerMensajesDesdeIDs(servicioPersistencia.recuperarPropiedadEntidad(eIndividual, MENSAJES));
 		
@@ -66,7 +64,6 @@ public class ContactoIndividualDAO_TDS implements ContactoIndividualDAO{
 		
 		
 		ContactoIndividual individual = new ContactoIndividual(nombre, u);
-		individual.setApellidos(apellidos);
 		individual.setMensajes(mensajes);
 		individual.setId(eIndividual.getId());
 		
@@ -78,7 +75,6 @@ public class ContactoIndividualDAO_TDS implements ContactoIndividualDAO{
 		eIndividual.setNombre("ContactoIndividual");
 		eIndividual.setPropiedades(new ArrayList<Propiedad>(
 				Arrays.asList(new Propiedad(NOMBRE, individual.getNombre()),
-						new Propiedad(APELLIDOS, individual.getApellidos()),
 						new Propiedad(USUARIO, String.valueOf(individual.getUsuario().getId())),
 						new Propiedad(MENSAJES, obtenerIDsMensajes(individual.getMensajes())))));
 		return eIndividual;
@@ -116,9 +112,7 @@ public class ContactoIndividualDAO_TDS implements ContactoIndividualDAO{
 			if (prop.getNombre().equals(NOMBRE)) {
 				prop.setValor(contactoIndividual.getNombre());
 			}
-			else if (prop.getNombre().equals(APELLIDOS)) {
-				prop.setValor(contactoIndividual.getApellidos());
-			} else if (prop.getNombre().equals(USUARIO)) {
+			else if (prop.getNombre().equals(USUARIO)) {
 				prop.setValor(String.valueOf(contactoIndividual.getUsuario().getId()));
 			} else if (prop.getNombre().equals(MENSAJES)) {
 				prop.setValor(obtenerIDsMensajes(contactoIndividual.getMensajes()));

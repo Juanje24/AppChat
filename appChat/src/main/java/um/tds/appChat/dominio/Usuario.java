@@ -3,6 +3,7 @@ package um.tds.appChat.dominio;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 import tds.BubbleText;
 
@@ -168,15 +169,16 @@ public class Usuario {
 	}
 
 
-	public ContactoIndividual getContactoIndividual(String telefono) {
+	public Optional<ContactoIndividual> getContactoIndividual(String telefono) {
+		Optional<ContactoIndividual> contacto = Optional.empty();
 		for (Contacto c: contactos) {
 			if (c instanceof ContactoIndividual) {
 				if (((ContactoIndividual) c).getUsuario().getTelefono().equals(telefono)) {
-					return (ContactoIndividual) c;
+					contacto = Optional.of((ContactoIndividual) c);
 				}
 			}
 		}
-        return null;
+		return contacto;
 	}
 
 
@@ -207,7 +209,15 @@ public class Usuario {
 	public Mensaje sendMensaje(String texto,int emoji, Contacto c) {
 		for (Contacto contacto : contactos) {
 			if (contacto.equals(c)) {
-				return contacto.addMensaje(texto,emoji, telefono, BubbleText.SENT);
+				return contacto.addMensaje(texto,emoji, telefono,nombre, BubbleText.SENT);
+			}
+		}
+		return null;
+	}
+	public Mensaje recibeMensaje(String texto, int emoji,String tlfEmisor, String nombreEmisor, Contacto c) {
+		for (Contacto contacto : contactos) {
+			if (contacto.equals(c)) {
+				return contacto.addMensaje(texto, emoji, tlfEmisor, nombreEmisor, BubbleText.RECEIVED);
 			}
 		}
 		return null;

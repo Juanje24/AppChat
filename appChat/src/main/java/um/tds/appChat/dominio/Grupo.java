@@ -25,7 +25,11 @@ public class Grupo extends Contacto{
         this.contactos.add(contacto);
     }
 	public String getTelefonoPropio() {
-		return "";
+		String aux = "";
+		for (ContactoIndividual c : contactos) {
+			aux += c.getTelefonoPropio() + " ";
+		}
+		return aux.trim();
 	}
 	public String getSaludo() {
 		return "";

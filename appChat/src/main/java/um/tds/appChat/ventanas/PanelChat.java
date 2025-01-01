@@ -16,6 +16,7 @@ import um.tds.appChat.dominio.Contacto;
 import um.tds.appChat.dominio.Mensaje;
 import um.tds.appChat.singletons.AppChat;
 import um.tds.appChat.utils.RoundButtonUI;
+import um.tds.appChat.utils.Utils;
 
 public class PanelChat extends JPanel {
     private static final long serialVersionUID = 1L;
@@ -35,45 +36,11 @@ public class PanelChat extends JPanel {
     	this.nombreEmisor = nombreEmisor;
     	initialize(null);
 	}
-
-//    private void initialize() {
-//        setLayout(new BorderLayout());
-//
-//        // Parte superior: Foto, nombre y botón de tres puntos
-//        JPanel panelSuperior = new JPanel(new GridLayout(1,3));
-//     
-//
-//        add(panelSuperior, BorderLayout.NORTH);
-//
-//        // Parte central: Panel para mostrar los mensajes
-//        JPanel panelMensajes = new JPanel();
-//        panelMensajes.setLayout(new BoxLayout(panelMensajes, BoxLayout.Y_AXIS));
-//        JScrollPane scrollPane = new JScrollPane(panelMensajes);
-//        add(scrollPane, BorderLayout.CENTER);
-//
-//        // Parte inferior: Campo para escribir mensajes y botones
-//        JPanel panelInferior = new JPanel(new BorderLayout());
-//        // Configuración de la área de texto
-//        areaTexto = new JTextArea(1, 30); // Inicial con 1 línea
-//        areaTexto.setLineWrap(true);
-//        areaTexto.setWrapStyleWord(true);
-//        areaTexto.setFont(new Font("Arial", Font.PLAIN, 14));
-//        botonEmoticonos = new JButton("Emoji");
-//        botonEnviar = new JButton("Enviar");
-//
-//        panelInferior.add(botonEmoticonos, BorderLayout.WEST);
-//        panelInferior.add(areaTexto, BorderLayout.CENTER);
-//        panelInferior.add(botonEnviar, BorderLayout.EAST);
-//
-//        add(panelInferior, BorderLayout.SOUTH);
-//    }
-    
-    
     
 	private void initialize(Contacto contacto) {
         setLayout(new BorderLayout());
         JPanel panel = this;
-		
+		this.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         // Parte superior: Foto, nombre y botón de tres puntos
         JPanel panelSuperior = new JPanel(new GridLayout(1,3,0,10));
         if (contacto != null) {
@@ -152,13 +119,9 @@ public class PanelChat extends JPanel {
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		if (contacto != null) {		
-        for (Mensaje m : mensajes) {
-            if (m.getTipo() == BubbleText.SENT) {
-                panelMensajes.add(new BubbleText(this, m.getTexto(), Color.GREEN, nombreEmisor, m.getTipo()));
-            } else {
-                panelMensajes.add(new BubbleText(this, m.getTexto(), Color.LIGHT_GRAY, nombreReceptor, m.getTipo()));
-            }
-        }
+	        for (Mensaje m : mensajes) {
+	            panelMensajes.add(Utils.getBubbleFromMensaje(m, panel));
+	        }
 		}
         add(scrollPane, BorderLayout.CENTER);
 
@@ -185,8 +148,8 @@ public class PanelChat extends JPanel {
                     String texto = getTextoMensaje();
         			if (!texto.trim().isEmpty()) {
         				if (contacto != null) {
-        					AppChat.INSTANCE.enviarMensajeContacto(contacto, texto, emoji, BubbleText.SENT);
-        					panelMensajes.add(new BubbleText(panelMensajes, texto, Color.GREEN, nombreEmisor, BubbleText.SENT));
+        					Mensaje msj=AppChat.INSTANCE.enviarMensajeContacto(contacto, texto, emoji);
+        					panelMensajes.add(Utils.getBubbleFromMensaje(msj, panel));
         					panelMensajes.revalidate();
         					panelMensajes.repaint();
         					limpiarCampoMensaje();
@@ -210,8 +173,8 @@ public class PanelChat extends JPanel {
             emojiDialog.setVisible(true);
             emoji=emojiDialog.getSelectedEmoji();
 			if (emoji != -1) {
-				AppChat.INSTANCE.enviarMensajeContacto(contacto, "", emoji, BubbleText.SENT);
-				panelMensajes.add(new BubbleText(this, emoji, Color.GREEN, nombreEmisor, BubbleText.SENT, 14));
+				Mensaje msj=AppChat.INSTANCE.enviarMensajeContacto(contacto, "", emoji);
+				panelMensajes.add(Utils.getBubbleFromMensaje(msj, panel));
 				emoji=-1;
 			}
         });
@@ -230,8 +193,8 @@ public class PanelChat extends JPanel {
 			String texto = getTextoMensaje();
 			if (!texto.trim().isEmpty()) {
 				if (contacto != null) {
-					AppChat.INSTANCE.enviarMensajeContacto(contacto, texto, emoji, BubbleText.SENT);
-					panelMensajes.add(new BubbleText(this, texto, Color.GREEN, nombreEmisor, BubbleText.SENT));
+					Mensaje msj=AppChat.INSTANCE.enviarMensajeContacto(contacto, texto, emoji);
+					panelMensajes.add(Utils.getBubbleFromMensaje(msj, panel));
 					panelMensajes.revalidate();
 					panelMensajes.repaint();
 					limpiarCampoMensaje();

@@ -140,24 +140,6 @@ public class UsuarioDAO_TDS implements UsuarioDAO {
 		return aux.trim();
 	}
 
-//	private List<Contacto> obtenerContactosDesdeCodigos(String contactos) {
-//
-//		List<Contacto> listaContactos = new LinkedList<Contacto>();
-//		StringTokenizer strTok = new StringTokenizer(contactos, " ");
-//		ContactoIndividualDAO_TDS adaptadorC = new ContactoIndividualDAO_TDS();
-//		GrupoDAO_TDS adaptadorG = new GrupoDAO_TDS();
-//		while (strTok.hasMoreTokens()) {
-//			int id = Integer.valueOf((String) strTok.nextElement());
-//			if (id<=20000) { // Esto está mal, no se puede hacer así
-//				listaContactos.add(adaptadorG.recuperarGrupoPorId(id));
-//				
-//			}
-//			else {
-//				listaContactos.add(adaptadorC.recuperarContactoIndividualPorId(id));
-//			}
-//		}
-//		return listaContactos;
-//	}
 	
 	private List<Contacto> obtenerContactosDesdeIDs(String idsContactos){
 		List<Contacto> contactos = new LinkedList<Contacto>();

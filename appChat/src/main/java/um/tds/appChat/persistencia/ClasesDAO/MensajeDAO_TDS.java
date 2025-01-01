@@ -21,8 +21,9 @@ public class MensajeDAO_TDS implements MensajeDAO {
 	private static final String MENSAJE = "Mensaje";
 	private static final String TEXTO = "texto";
 	private static final String FECHA = "fechaNacimiento";
-	private static final String EMISOR = "emisor";
-	private static final String RECEPTOR = "receptor";
+	private static final String EMISOR = "tlfEmisor";
+	private static final String RECEPTOR = "tlfReceptor";
+	private static final String NOMBRE_EMISOR = "nombreEmisor";
 	private static final String TIPO = "tipo";
 	private static final String EMOJI = "emoji";
 	
@@ -46,10 +47,11 @@ public class MensajeDAO_TDS implements MensajeDAO {
 		LocalDate fecha = LocalDate.parse(servicioPersistencia.recuperarPropiedadEntidad(eMensaje, FECHA), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 		String emisor = servicioPersistencia.recuperarPropiedadEntidad(eMensaje, EMISOR);
 		String receptor = servicioPersistencia.recuperarPropiedadEntidad(eMensaje, RECEPTOR);
+		String nombreEmisor = servicioPersistencia.recuperarPropiedadEntidad(eMensaje, NOMBRE_EMISOR);
 		int tipo = Integer.parseInt(servicioPersistencia.recuperarPropiedadEntidad(eMensaje, TIPO));
 		int emoji = Integer.parseInt(servicioPersistencia.recuperarPropiedadEntidad(eMensaje, EMOJI));
 		
-		Mensaje mensaje = new Mensaje(texto, emoji, emisor, receptor, tipo);
+		Mensaje mensaje = new Mensaje(texto, emoji, emisor, receptor,nombreEmisor, tipo);
 		mensaje.setFecha(fecha);
 		mensaje.setId(eMensaje.getId());
 		
@@ -65,6 +67,7 @@ public class MensajeDAO_TDS implements MensajeDAO {
 						new Propiedad(FECHA, mensaje.getFecha().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))),
 						new Propiedad(EMISOR, mensaje.getEmisor()),
 						new Propiedad(RECEPTOR, mensaje.getReceptor()),
+						new Propiedad(NOMBRE_EMISOR, mensaje.getNombreEmisor()),
 						new Propiedad(TIPO, String.valueOf(mensaje.getTipo())))));
 		return eMensaje;
 	}

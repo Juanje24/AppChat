@@ -3,6 +3,7 @@ package um.tds.appChat.singletons;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.StringTokenizer;
 
 import um.tds.appChat.dominio.*;
 import um.tds.appChat.persistencia.*;
@@ -33,22 +34,43 @@ public enum AppChat {
 		mensajeDAO = factoriaDAO.getMensajeDAO();
 		repositorioUsuarios = RepositorioUsuario.INSTANCE;
 	}
-	public void enviarMensajeContacto(Contacto c3, String string, int emoji, int enviado) {
-		mensajeDAO.registrarMensaje(usuarioActual.sendMensaje( string, emoji, c3));
+	public Mensaje enviarMensajeContacto(Contacto c3, String string, int emoji) {
+		Mensaje msj = usuarioActual.sendMensaje( string, emoji, c3);
+		mensajeDAO.registrarMensaje(msj);
 		contactoIndividualDAO.modificarContactoIndividual((ContactoIndividual) c3);
 		//Falta la parte inversa, buscar en el usuario asociado a c3 el contacto con tlf=usuarioActual.getTlf() y añadir el mensaje
-		
-		
-		
-	}
+		StringTokenizer strTok = new StringTokenizer(c3.getTelefonoPropio(), " ");
+		while ( strTok.hasMoreElements()) { 
+			String tlf = (String) strTok.nextElement();
+			Usuario uReceptor = repositorioUsuarios.buscarUsuarioPorMovil(tlf).get();
+			Optional<ContactoIndividual> cEmisor = uReceptor.getContactoIndividual(usuarioActual.getTelefono());
+			if (cEmisor.isPresent()) {
+				Mensaje msjRecv= uReceptor.recibeMensaje(string, emoji,usuarioActual.getTelefono(),usuarioActual.getNombre(), cEmisor.get());
+				mensajeDAO.registrarMensaje(msjRecv);
+				contactoIndividualDAO.modificarContactoIndividual(cEmisor.get());
+			}
+			else {
+				uReceptor.addContactoIndividual(usuarioActual.getTelefono(), usuarioActual);
+				ContactoIndividual c = uReceptor.getContactoIndividual(usuarioActual.getTelefono()).get();
+				contactoIndividualDAO.registrarContactoIndividual(c);
+				Mensaje msjRecv= uReceptor.recibeMensaje(string, emoji,usuarioActual.getTelefono(),usuarioActual.getNombre(), c);
+				mensajeDAO.registrarMensaje(msjRecv);
+				contactoIndividualDAO.modificarContactoIndividual(c);
+				usuarioDAO.modificarUsuario(uReceptor);
+			}
+			
+			
+		}
+		return msj;		
+}
 
 	public ContactoIndividual agregarContacto(String nombre, String tlf) {
 		Optional<Usuario> contacto = repositorioUsuarios.buscarUsuarioPorMovil(tlf);
 		if (contacto.isPresent() && !usuarioActual.isTlfEnContactos(tlf) ) {
 			usuarioActual.addContactoIndividual(nombre,contacto.get());
-			contactoIndividualDAO.registrarContactoIndividual(usuarioActual.getContactoIndividual(tlf));
+			contactoIndividualDAO.registrarContactoIndividual(usuarioActual.getContactoIndividual(tlf).get());
 			usuarioDAO.modificarUsuario(usuarioActual);
-			return usuarioActual.getContactoIndividual(tlf);
+			return usuarioActual.getContactoIndividual(tlf).get();
 		}
 		else{
 			return null;

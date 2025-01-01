@@ -195,7 +195,7 @@ public class PanelGrupo extends JFrame {
             super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
             if (value instanceof ContactoIndividual) {
                 ContactoIndividual contacto = (ContactoIndividual) value;
-                setText(contacto.getNombre() + " " + contacto.getApellidos());
+                setText(contacto.getNombre());
                 setHorizontalAlignment(SwingConstants.CENTER);
             }
             return this;
