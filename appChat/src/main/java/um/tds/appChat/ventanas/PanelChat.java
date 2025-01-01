@@ -19,26 +19,30 @@ import um.tds.appChat.utils.RoundButtonUI;
 import um.tds.appChat.utils.Utils;
 
 public class PanelChat extends JPanel {
+	private static final int ALTURA_BURBUJA = 82;
     private static final long serialVersionUID = 1L;
+    private JFrame principal;
     private List<Mensaje> mensajes;
     private String nombreReceptor;
     private JTextArea areaTexto;
     private JButton botonEmoticonos;
     private JButton botonEnviar;
     int emoji=-1;
+    private JScrollBar vertical;
+    private int altura;
 
     /**
      * Create the application.
      */
 
-    public PanelChat() {
+    public PanelChat(JFrame principal) {
+    	this.principal = principal;
     	initialize(null);
 	}
     
 	private void initialize(Contacto contacto) {
         setLayout(new BorderLayout());
         JPanel panel = this;
-		this.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         // Parte superior: Foto, nombre y botón de tres puntos
         JPanel panelSuperior = new JPanel(new GridLayout(1,3,0,10));
         if (contacto != null) {
@@ -89,9 +93,13 @@ public class PanelChat extends JPanel {
 	                );
 	
 	                if (confirmacion == JOptionPane.YES_OPTION) {
-	                    // Lógica para eliminar el contacto
-	                    System.out.println("Contacto eliminado: " + nombreReceptor);
-	                    // Puedes implementar aquí la lógica para actualizar la lista de contactos.
+						AppChat.INSTANCE.eliminarContacto(contacto);
+						((Principal) principal).eliminarContacto(contacto);
+						revalidate();
+						repaint();
+						principal.revalidate();
+						principal.repaint();
+						
 	                }
 	            });
 	
@@ -110,21 +118,27 @@ public class PanelChat extends JPanel {
         panelSuperior.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
         add(panelSuperior, BorderLayout.NORTH);
 
-        // Parte central: Panel para mostrar los mensajes
+     // Parte central: Panel para mostrar los mensajes
         JPanel panelMensajes = new JPanel();
         panelMensajes.setLayout(new BoxLayout(panelMensajes, BoxLayout.Y_AXIS));
+        panelMensajes.setPreferredSize(new Dimension(250, 1000));
         JScrollPane scrollPane = new JScrollPane(panelMensajes);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		if (contacto != null) {		
-	        for (Mensaje m : mensajes) {
-	            panelMensajes.add(Utils.getBubbleFromMensaje(m, panelMensajes));
-	            
-	        }
-		}
-        add(scrollPane, BorderLayout.CENTER);
-
         
+        if (contacto != null) {
+            for (Mensaje mensaje : mensajes) {
+                panelMensajes.add(Utils.getBubbleFromMensaje(mensaje, panel));
+            }
+        }      
+        
+        add(scrollPane, BorderLayout.CENTER);
+        altura = panelMensajes.getComponentCount() * ALTURA_BURBUJA; // Suponiendo que cada burbuja de mensaje tiene una altura de 50 píxeles
+        panelMensajes.setPreferredSize(new Dimension(panelMensajes.getWidth(), altura));
+        revalidate();
+        repaint();
+		vertical = scrollPane.getVerticalScrollBar();
+        vertical.setValue(vertical.getMaximum());
         // Parte inferior: Campo para escribir mensajes y botones
         JPanel panelInferior = new JPanel(new BorderLayout());
      // Configuración de la área de texto
@@ -148,8 +162,14 @@ public class PanelChat extends JPanel {
         			if (!texto.trim().isEmpty()) {
         				if (contacto != null) {
         					Mensaje msj=AppChat.INSTANCE.enviarMensajeContacto(contacto, texto, emoji);
-        					panelMensajes.add(Utils.getBubbleFromMensaje(msj, panelMensajes));
+        					panelMensajes.add(Utils.getBubbleFromMensaje(msj, panel));
+        					altura = panelMensajes.getComponentCount() * ALTURA_BURBUJA; // Suponiendo que cada burbuja de mensaje tiene una altura de 50 píxeles
+        					panelMensajes.setPreferredSize(new Dimension(panelMensajes.getWidth(), altura));
         					limpiarCampoMensaje();
+        					revalidate();
+        					repaint();
+        					vertical = scrollPane.getVerticalScrollBar();
+        	                vertical.setValue(vertical.getMaximum());
         				}
         			}
                 }
@@ -171,8 +191,15 @@ public class PanelChat extends JPanel {
             emoji=emojiDialog.getSelectedEmoji();
 			if (emoji != -1) {
 				Mensaje msj=AppChat.INSTANCE.enviarMensajeContacto(contacto, "", emoji);
-				panelMensajes.add(Utils.getBubbleFromMensaje(msj, panelMensajes));
+				panelMensajes.add(Utils.getBubbleFromMensaje(msj, panel));
+				altura = panelMensajes.getComponentCount() * ALTURA_BURBUJA; // Suponiendo que cada burbuja de mensaje tiene una altura de 50 píxeles
+				panelMensajes.setPreferredSize(new Dimension(panelMensajes.getWidth(), altura));
 				emoji=-1;
+				revalidate();
+				repaint();
+				vertical = scrollPane.getVerticalScrollBar();
+                vertical.setValue(vertical.getMaximum());
+                limpiarCampoMensaje();
 			}
         });
         
@@ -191,8 +218,14 @@ public class PanelChat extends JPanel {
 			if (!texto.trim().isEmpty()) {
 				if (contacto != null) {
 					Mensaje msj=AppChat.INSTANCE.enviarMensajeContacto(contacto, texto, emoji);
-					panelMensajes.add(Utils.getBubbleFromMensaje(msj, panelMensajes));
+					panelMensajes.add(Utils.getBubbleFromMensaje(msj, panel));
+					altura = panelMensajes.getComponentCount() * ALTURA_BURBUJA; // Suponiendo que cada burbuja de mensaje tiene una altura de 50 píxeles
+					panelMensajes.setPreferredSize(new Dimension(panelMensajes.getWidth(), altura));
 					limpiarCampoMensaje();
+					revalidate();
+					repaint();
+					vertical = scrollPane.getVerticalScrollBar();
+	                vertical.setValue(vertical.getMaximum());
 				}
 			}
 		});

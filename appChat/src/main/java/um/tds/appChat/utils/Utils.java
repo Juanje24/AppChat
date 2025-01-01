@@ -37,13 +37,12 @@ public class Utils {
 	    return target;
 	}
 	public static BubbleText getBubbleFromMensaje(Mensaje msj, JPanel panel) {
-		
 		if(msj.getTipo()==BubbleText.SENT) {
 			if (!msj.getTexto().equals("") && msj.getEmoji() == -1) {
 				return new BubbleText(panel,msj.getTexto(),Color.GREEN, msj.getNombreEmisor(), BubbleText.SENT);
 			}
 			else {
-				return new BubbleText(panel, msj.getEmoji(), Color.GREEN, msj.getNombreEmisor(), BubbleText.SENT, 14);
+				return new BubbleText(panel, msj.getEmoji(), Color.GREEN, msj.getNombreEmisor(), BubbleText.SENT, 9);
 			}
 		}
 		else {
@@ -51,9 +50,10 @@ public class Utils {
 				return new BubbleText(panel,msj.getTexto(),Color.LIGHT_GRAY, msj.getNombreEmisor(), BubbleText.RECEIVED);
 			}
 			else {
-				return new BubbleText(panel, msj.getEmoji(), Color.LIGHT_GRAY, msj.getNombreEmisor(), BubbleText.RECEIVED, 14);
+				return new BubbleText(panel, msj.getEmoji(), Color.LIGHT_GRAY, msj.getNombreEmisor(), BubbleText.RECEIVED, 9);
 			}
         }
+		
 		
 	}
 }

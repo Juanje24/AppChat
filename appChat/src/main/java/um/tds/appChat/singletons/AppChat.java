@@ -45,7 +45,7 @@ public enum AppChat {
 			Usuario uReceptor = repositorioUsuarios.buscarUsuarioPorMovil(tlf).get();
 			Optional<ContactoIndividual> cEmisor = uReceptor.getContactoIndividual(usuarioActual.getTelefono());
 			if (cEmisor.isPresent()) {
-				Mensaje msjRecv= uReceptor.recibeMensaje(string, emoji,usuarioActual.getTelefono(),usuarioActual.getNombre(), cEmisor.get());
+				Mensaje msjRecv= uReceptor.recibeMensaje(string, emoji,usuarioActual.getTelefono(),cEmisor.get().getNombre(), cEmisor.get());
 				mensajeDAO.registrarMensaje(msjRecv);
 				contactoIndividualDAO.modificarContactoIndividual(cEmisor.get());
 			}
@@ -53,7 +53,7 @@ public enum AppChat {
 				uReceptor.addContactoIndividual(usuarioActual.getTelefono(), usuarioActual);
 				ContactoIndividual c = uReceptor.getContactoIndividual(usuarioActual.getTelefono()).get();
 				contactoIndividualDAO.registrarContactoIndividual(c);
-				Mensaje msjRecv= uReceptor.recibeMensaje(string, emoji,usuarioActual.getTelefono(),usuarioActual.getNombre(), c);
+				Mensaje msjRecv= uReceptor.recibeMensaje(string, emoji,usuarioActual.getTelefono(),c.getNombre(), c);
 				mensajeDAO.registrarMensaje(msjRecv);
 				contactoIndividualDAO.modificarContactoIndividual(c);
 				usuarioDAO.modificarUsuario(uReceptor);
@@ -116,9 +116,23 @@ public enum AppChat {
 		return g;
 	}
 	public void actualizarNombreContacto(Contacto contacto, String nuevoNombre) {
+		contacto.modificarMensajes(nuevoNombre);
 		usuarioActual.modificarNombreContacto(contacto, nuevoNombre);
+		contacto.getMensajes().forEach(mensaje -> mensajeDAO.modificarMensaje(mensaje));
 		contactoIndividualDAO.modificarContactoIndividual((ContactoIndividual) contacto);
 		
+		
+		
+	}
+
+	public void eliminarContacto(Contacto contacto) {
+		List<Mensaje> mensajes = contacto.getMensajes();
+		usuarioActual.eliminarContacto(contacto);
+		for (Mensaje mensaje : mensajes) {
+			mensajeDAO.borrarMensaje(mensaje);
+		}
+		contactoIndividualDAO.borrarContactoIndividual((ContactoIndividual) contacto);
+		usuarioDAO.modificarUsuario(usuarioActual);
 	}
 	
 }

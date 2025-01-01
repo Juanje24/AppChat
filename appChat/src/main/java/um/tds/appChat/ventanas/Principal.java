@@ -49,7 +49,7 @@ public class Principal extends JFrame {
 		panelNorte.setBackground(new Color(215, 215, 215));
 		this.getContentPane().add(panelNorte, BorderLayout.NORTH);
 		
-		panelCentro = new PanelChat();
+		panelCentro = new PanelChat(this);
 		this.getContentPane().add(panelCentro, BorderLayout.CENTER);
 		
 		panelContactos = new PanelContactos(app.getUsuarioActual().getContactos());
@@ -74,18 +74,18 @@ public class Principal extends JFrame {
 		JButton añadirContacto = new JButton(new ImageIcon(iconoEscalado));
 		añadirContacto.setUI(new RoundButtonUI());
 		añadirContacto.addActionListener(e -> {
-			PanelAñadirContacto panel = new PanelAñadirContacto();
-            int result = JOptionPane.showConfirmDialog(this, panel, "Panel Añadir Contacto", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-            if (result == JOptionPane.OK_OPTION) {
-            	ContactoIndividual c= app.agregarContacto(panel.getNombreContacto(), panel.getTelefonoContacto());
-            	if(c!=null) {
-            		JOptionPane.showMessageDialog(this, "Contacto añadido correctamente", "", JOptionPane.INFORMATION_MESSAGE);
-            		añadirContacto(c);
-            	}
-            	else {
-            		JOptionPane.showMessageDialog(this, "No se ha podido añadir el contacto", "Error", JOptionPane.ERROR_MESSAGE);
-            	}
-            }
+			if (contactoSeleccionado != null) {
+				 if(contactoSeleccionado.getNombre().equals(contactoSeleccionado.getTelefonoPropio())) {
+					mostrarPanelAñadirContactoSinNum();
+				 }
+				 else {
+					 mostrarPanelAñadirContacto();
+				 }
+			}
+			else {
+				mostrarPanelAñadirContacto();
+			}
+			
 		});
 		panelNorte.add(añadirContacto);
 		
@@ -147,18 +147,54 @@ public class Principal extends JFrame {
 				
 	        }
 	    });
-
 	    panelNorte.add(panelUsuario);
-		
-		
 	}
 	public void añadirContacto(Contacto c) {
 		panelContactos.addContact(c);
 		this.setVisible(true);
 		this.revalidate();
 		this.repaint();
-		this.validate();
-		
+		this.validate();	
+	}
+	
+	public void eliminarContacto(Contacto c) {
+		panelContactos.removeContact(c);
+        this.setVisible(true);
+        this.revalidate();
+        this.repaint();
+        this.validate();        
+	}
+	
+	public void mostrarPanelAñadirContacto() {
+		PanelAñadirContacto panel = new PanelAñadirContacto();
+        int result = JOptionPane.showConfirmDialog(this, panel, "Panel Añadir Contacto", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        if (result == JOptionPane.OK_OPTION) {
+        	ContactoIndividual c= app.agregarContacto(panel.getNombreContacto(), panel.getTelefonoContacto());
+        	if(c!=null) {
+        		JOptionPane.showMessageDialog(this, "Contacto añadido correctamente", "", JOptionPane.INFORMATION_MESSAGE);
+        		añadirContacto(c);
+        	}
+        	else {
+        		JOptionPane.showMessageDialog(this, "No se ha podido añadir el contacto", "Error", JOptionPane.ERROR_MESSAGE);
+        	}
+        }
+	}
+	public void mostrarPanelAñadirContactoSinNum() {
+			String nuevoNombre = JOptionPane.showInputDialog(
+            this,
+            "Introduce el nuevo nombre para el contacto:",
+            "Añadir nombre",
+            JOptionPane.PLAIN_MESSAGE
+            );
+
+            if (nuevoNombre != null && !nuevoNombre.trim().isEmpty()) {
+                AppChat.INSTANCE.actualizarNombreContacto(contactoSeleccionado, nuevoNombre);
+                revalidate();
+                repaint();
+                ((PanelChat) panelCentro).setContacto(contactoSeleccionado);
+                panelCentro.revalidate();
+                panelCentro.repaint();
+            }
 	}
 	
 	 // Clase interna para el panel con dos campos de texto

@@ -4,6 +4,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import tds.BubbleText;
+
 public abstract class Contacto {
     
     private int id;
@@ -27,6 +29,13 @@ public abstract class Contacto {
                 .filter(mensaje -> builder.getNumero().isEmpty() || mensaje.getReceptor().equals(builder.getNumero().get()))
                 .filter(mensaje -> builder.getNombreContacto().isEmpty() || nombre.equalsIgnoreCase(builder.getNombreContacto().get()))
                 .collect(Collectors.toList());
+    }
+    public void modificarMensajes(String nuevoNombre) {
+    	for (Mensaje mensaje : mensajes) {
+			if(mensaje.getTipo()==BubbleText.RECEIVED) {
+				mensaje.setNombreEmisor(nuevoNombre);
+			}
+    	}
     }
     
     
@@ -78,6 +87,7 @@ public abstract class Contacto {
 	public void setUrlImagen(String urlImagen) {
 		this.urlImagen = urlImagen;
 	}
+	
 	public abstract String getTelefonoPropio();
 
 	public abstract String getSaludo();

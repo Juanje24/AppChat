@@ -113,7 +113,9 @@ public class MensajeDAO_TDS implements MensajeDAO {
 				prop.setValor(mensaje.getEmisor());
 			} else if (prop.getNombre().equals(RECEPTOR)) {
 				prop.setValor(mensaje.getReceptor());
-			} else if (prop.getNombre().equals(TIPO)) {
+			} else if (prop.getNombre().equals(NOMBRE_EMISOR)) {
+                prop.setValor(mensaje.getNombreEmisor());
+            } else if (prop.getNombre().equals(TIPO)) {
 				prop.setValor(String.valueOf(mensaje.getTipo()));
 			} 
 			servicioPersistencia.modificarPropiedad(prop);

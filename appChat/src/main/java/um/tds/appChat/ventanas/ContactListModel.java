@@ -25,7 +25,7 @@ public class ContactListModel extends AbstractListModel<Contacto> {
 
     public void addContact(Contacto contacto) {
         contactos.add(contacto);
-        fireIntervalAdded(this, contactos.size() - 3, contactos.size() - 1);
+        fireIntervalAdded(this, contactos.size() - 2, contactos.size() - 1);
     }
 
     public void removeContact(Contacto contacto) {

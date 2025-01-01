@@ -229,7 +229,10 @@ public class Usuario {
 		}
 		
 	}
-
+	public void eliminarContacto(Contacto contacto) {
+		contactos.remove(contacto);
+		
+	}
 //
 //    public List<Mensaje> searchMessageByText (){
 //
