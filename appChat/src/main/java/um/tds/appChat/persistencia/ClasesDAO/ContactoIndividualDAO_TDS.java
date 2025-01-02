@@ -88,11 +88,12 @@ public class ContactoIndividualDAO_TDS implements ContactoIndividualDAO{
 		Entidad eIndividual = null;
 		try {
 			eIndividual = servicioPersistencia.recuperarEntidad(contactoIndividual.getId());
+			
+			if (eIndividual != null) {
+		        throw new IllegalStateException("El contacto ya existe en el sistema.");
+		    }
 		} catch (NullPointerException e) {
 			eIndividual = null;
-		}
-		if(eIndividual!=null) {
-			return;
 		}
 		eIndividual = servicioPersistencia.registrarEntidad(IndividualToEntidad(contactoIndividual)) ;
 		contactoIndividual.setId(eIndividual.getId());

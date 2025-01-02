@@ -37,12 +37,14 @@ public class UsuarioDAO_TDS implements UsuarioDAO {
 		Entidad eUsuario = null;
 		try {
 			eUsuario = servicioPersistencia.recuperarEntidad(usuario.getId());
+			
+			if (eUsuario != null) {
+		        throw new IllegalStateException("El usuario ya existe en el sistema.");
+		    }
 		} catch (NullPointerException e) {
 			eUsuario = null;
 		}
-		if(eUsuario!=null) {
-			return;
-			}
+
 		//registrar Contactos,grupos y mensajes
 		eUsuario = new Entidad();
 		eUsuario.setNombre("Usuario");

@@ -79,12 +79,14 @@ public class MensajeDAO_TDS implements MensajeDAO {
 		Entidad eMensaje = null;
 		try {
 			eMensaje = servicioPersistencia.recuperarEntidad(mensaje.getId());
+			
+			if (eMensaje != null) {
+		        throw new IllegalStateException("El mensaje ya existe en el sistema.");
+		    }
 		} catch (NullPointerException e) {
 			eMensaje = null;
 		}
-		if(eMensaje!=null) {
-			return;
-		}
+
 		eMensaje=servicioPersistencia.registrarEntidad(mensajeToEntidad(mensaje));
 		mensaje.setId(eMensaje.getId());
 		
