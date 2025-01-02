@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.StringTokenizer;
+import java.util.stream.Collectors;
 
 import um.tds.appChat.dominio.*;
 import um.tds.appChat.persistencia.*;
@@ -134,5 +135,26 @@ public enum AppChat {
 		contactoIndividualDAO.borrarContactoIndividual((ContactoIndividual) contacto);
 		usuarioDAO.modificarUsuario(usuarioActual);
 	}
+	
+	public List<Mensaje> buscarMensaje(String texto, String numero, String nombreContacto) {
+		MessageSearchBuilder builder = new MessageSearchBuilder();
+		
+	    if (texto != null && !texto.isEmpty()) {
+	        builder.setText(texto);
+	    }
+	    if (numero != null && !numero.isEmpty()) {
+	        builder.setNumero(numero);
+	    }
+	    if (nombreContacto != null && !nombreContacto.isEmpty()) {
+	        builder.setNombreContacto(nombreContacto);
+	    }
+	    
+	    return usuarioActual.getContactos().stream()
+	    		.flatMap(c -> c.searchMessages(builder).stream())
+	    		.distinct()
+	    		.collect(Collectors.toList());
+	}
+	
+	
 	
 }

@@ -26,8 +26,12 @@ public abstract class Contacto {
     public List<Mensaje> searchMessages(MessageSearchBuilder builder) { //revisar para cuando se usa en los grupos
         return mensajes.stream()
                 .filter(mensaje -> builder.getText().isEmpty() || mensaje.getTexto().contains(builder.getText().get()))
-                .filter(mensaje -> builder.getNumero().isEmpty() || mensaje.getReceptor().equals(builder.getNumero().get()))
-                .filter(mensaje -> builder.getNombreContacto().isEmpty() || nombre.equalsIgnoreCase(builder.getNombreContacto().get()))
+                .filter(mensaje -> builder.getNumero().isEmpty() || 
+                		mensaje.getReceptor().equals(builder.getNumero().get()) ||
+                		mensaje.getEmisor().equals(builder.getNumero().get()))
+                .filter(mensaje -> builder.getNombreContacto().isEmpty() ||
+                		mensaje.getNombreEmisor().equalsIgnoreCase(builder.getNombreContacto().get()) ||
+                		this.getNombre().equalsIgnoreCase(builder.getNombreContacto().get()))
                 .collect(Collectors.toList());
     }
     public void modificarMensajes(String nuevoNombre) {
