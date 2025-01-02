@@ -9,6 +9,10 @@ import tds.BubbleText;
 
 public class Usuario {
     
+	private static int DESCUENTO_MENSAJES = 25;
+	private static int DESCUENTO_FECHA = 10;
+	private static int NUM_MENSAJES_DESCUENTO = 150;
+	
     private int id;
     private String nombre;
     private String apellido;
@@ -231,23 +235,10 @@ public class Usuario {
 	}
 	public void eliminarContacto(Contacto contacto) {
 		contactos.remove(contacto);
-		
 	}
-//
-//    public List<Mensaje> searchMessageByText (){
-//
-//    }
-//
-//    public List<Mensaje> searchMessageByNumber (){
-//        this.me
-//    }
-//
-//    public List<Mensaje> searchMessageByContactnombre (){
-//
-//    }
-//
-//    public List<Mensaje> searchMessage (String text, String number, String contactnombre){
-//        
-//    }
+	
+	public void convertirPremium() {
+		this.premium = true;
+	}
 
 }

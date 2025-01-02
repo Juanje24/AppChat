@@ -21,6 +21,7 @@ public enum AppChat {
 	private MensajeDAO mensajeDAO;
 	private Usuario usuarioActual;
 	private RepositorioUsuario repositorioUsuarios;
+	private GestorDescuentos gestorDescuentos;
 
 	private AppChat() {
 		try {
@@ -154,6 +155,27 @@ public enum AppChat {
 	    		.distinct()
 	    		.collect(Collectors.toList());
 	}
+	
+	//Funcionalidad premium
+	
+	public void configurarDescuentos(LocalDate inicio, LocalDate fin, int descuentoFecha, int numMensajes, int descuentoMensajes) { 
+		gestorDescuentos.agregarDescuento(new DescuentoPorFecha(inicio, fin, descuentoFecha));
+		gestorDescuentos.agregarDescuento(new DescuentoPorMensajes(numMensajes, descuentoMensajes));
+	}
+	
+	public boolean usuarioConDescuento() {
+		return gestorDescuentos.tieneDescuento(usuarioActual);
+	}
+	
+	public Optional<Descuento> getMayorDescuento() {
+		return gestorDescuentos.getMayorDescuento(usuarioActual);
+	}
+	
+	public void convertirAPremium() {
+		usuarioActual.convertirPremium();
+	}
+	
+	
 	
 	
 	
