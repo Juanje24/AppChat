@@ -9,9 +9,6 @@ import tds.BubbleText;
 
 public class Usuario {
     
-	private static int DESCUENTO_MENSAJES = 25;
-	private static int DESCUENTO_FECHA = 10;
-	private static int NUM_MENSAJES_DESCUENTO = 150;
 	
     private int id;
     private String nombre;
@@ -23,6 +20,7 @@ public class Usuario {
     private String saludo;
     private String urlImagen;
     private List<Contacto> contactos; 
+    private LocalDate fechaRegistro;
 
     
     //CONSTRUCTORES
@@ -39,6 +37,7 @@ public class Usuario {
         this.urlImagen = urlImagen;
         this.premium = isPremium;
         this.contactos = new LinkedList<Contacto>(contactos);
+        this.fechaRegistro = LocalDate.now();
     }
     public Usuario( String nombre,String apellido, String telefono, String contraseña, LocalDate birthday,
    		 String saludo, String urlImagen, boolean isPremium){
@@ -52,6 +51,7 @@ public class Usuario {
        this.urlImagen = urlImagen;
        this.premium = isPremium;
        this.contactos = new LinkedList<Contacto>();
+       this.fechaRegistro = LocalDate.now();
    }
     
     
@@ -66,6 +66,7 @@ public class Usuario {
         this.urlImagen = urlImagen;
         this.premium = false;
         this.contactos = new LinkedList<>();
+        this.fechaRegistro = LocalDate.now();
     }
     
     
@@ -159,7 +160,14 @@ public class Usuario {
 		this.contactos = new LinkedList<Contacto>(contactos);
 	}
 
+	public LocalDate getFechaRegistro() {
+		return fechaRegistro;
+	}
 
+	public void setFechaRegistro(LocalDate fechaRegistro) {
+		this.fechaRegistro = fechaRegistro;
+	}
+	
 	public void addContactoIndividual(String nombre,Usuario usuario) {
         ContactoIndividual contacto = new ContactoIndividual(nombre, usuario);
 		this.contactos.add(contacto);
@@ -236,9 +244,12 @@ public class Usuario {
 	public void eliminarContacto(Contacto contacto) {
 		contactos.remove(contacto);
 	}
-	
-	public void convertirPremium() {
-		this.premium = true;
+
+	public int getNumMensajesEntreFecha(LocalDate inicio, LocalDate fin) {
+		return contactos.stream()
+		.mapToInt(c -> c.getNumeroMensajesEntreFechas(inicio, fin))
+		.sum();
+		
 	}
 
 }

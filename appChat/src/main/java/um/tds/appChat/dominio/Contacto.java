@@ -1,5 +1,6 @@
 package um.tds.appChat.dominio;
 
+import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,13 +26,14 @@ public abstract class Contacto {
    
     public List<Mensaje> searchMessages(MessageSearchBuilder builder) { //revisar para cuando se usa en los grupos
         return mensajes.stream()
-                .filter(mensaje -> builder.getText().isEmpty() || mensaje.getTexto().contains(builder.getText().get()))
-                .filter(mensaje -> builder.getNumero().isEmpty() || 
-                		mensaje.getReceptor().equals(builder.getNumero().get()) ||
-                		mensaje.getEmisor().equals(builder.getNumero().get()))
-                .filter(mensaje -> builder.getNombreContacto().isEmpty() ||
-                		mensaje.getNombreEmisor().equalsIgnoreCase(builder.getNombreContacto().get()) ||
-                		this.getNombre().equalsIgnoreCase(builder.getNombreContacto().get()))
+//                .filter(mensaje -> builder.getText().isEmpty() || mensaje.getTexto().contains(builder.getText().get()))
+//                .filter(mensaje -> builder.getNumero().isEmpty() || 
+//                		mensaje.getReceptor().equals(builder.getNumero().get()) ||
+//                		mensaje.getEmisor().equals(builder.getNumero().get()))
+//                .filter(mensaje -> builder.getNombreContacto().isEmpty() ||
+//                		mensaje.getNombreEmisor().equalsIgnoreCase(builder.getNombreContacto().get()) ||
+//                		this.getNombre().equalsIgnoreCase(builder.getNombreContacto().get()))
+        		.filter(mensaje -> builder.filtrar(mensaje))
                 .collect(Collectors.toList());
     }
     public void modificarMensajes(String nuevoNombre) {
@@ -41,6 +43,12 @@ public abstract class Contacto {
 			}
     	}
     }
+
+	public int getNumeroMensajesEntreFechas(LocalDate inicio, LocalDate fin) {
+		return (int) mensajes.stream()
+				.filter(mensaje -> mensaje.getFecha().isAfter(inicio) && mensaje.getFecha().isBefore(fin))
+				.count();
+	}
     
     
     // GETTERS Y SETTERS

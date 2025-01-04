@@ -6,20 +6,17 @@ public class DescuentoPorFecha implements Descuento {
 	
 	public static final String NOMBRE = "Descuento por creación de cuenta entre fechas con promoción";
 	
-    private LocalDate inicio; //PODRÍAN SER ESTÁTICOS
-    private LocalDate fin;
-    private int valor;
+    private static LocalDate inicio = LocalDate.of(2025, 1, 1); //PODRÍAN SER ESTÁTICOS
+    private static LocalDate fin = LocalDate.of(2025, 1, 31);
+    private int valor = 25;
 
-    public DescuentoPorFecha(LocalDate inicio, LocalDate fin, int valor) {
-        this.inicio = inicio;
-        this.fin = fin;
-        this.valor = valor;
+    public DescuentoPorFecha() {
     }
 
     @Override
     public boolean aplicaDescuento(Usuario usuario) {
-        LocalDate hoy = LocalDate.now();
-        return !hoy.isBefore(inicio) && !hoy.isAfter(fin); // Verifica si está en el rango de fechas
+      
+        return usuario.getFechaRegistro().isAfter(inicio) && usuario.getFechaRegistro().isBefore(fin); // Verifica si está en el rango de fechas
     }
     
     @Override

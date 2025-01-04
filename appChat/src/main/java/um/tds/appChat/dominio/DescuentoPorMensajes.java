@@ -6,23 +6,18 @@ public class DescuentoPorMensajes implements Descuento {
     
 	public static final String NOMBRE = "Descuento por número de mensajes";
 	
-	private int minimoMensajes; //PODRÍAN SER ESTÁTICOS
-    private int valor;
+	private static final int MINIMO_MENSAJES=100; //PODRÍAN SER ESTÁTICOS
+    private static int valor = 10;
     
 
-    public DescuentoPorMensajes(int minimoMensajes, int valor) {
-        this.minimoMensajes = minimoMensajes;
-        this.valor = valor;
+    public DescuentoPorMensajes() {
+  
     }
 
     @Override
     public boolean aplicaDescuento(Usuario usuario) {
         LocalDate haceUnMes = LocalDate.now().minusMonths(1);
-        return usuario.getContactos().stream()
-                .flatMap(contacto -> contacto.getMensajes().stream())
-                .filter(mensaje -> mensaje.getEmisor().equals(usuario.getTelefono()))
-                .filter(mensaje -> !mensaje.getFecha().isBefore(haceUnMes))
-                .count() >= minimoMensajes; 
+        return usuario.getNumMensajesEntreFecha(haceUnMes, LocalDate.now()) >= MINIMO_MENSAJES; 
     }
     
     @Override

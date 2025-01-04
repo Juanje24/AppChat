@@ -14,21 +14,6 @@ public class Grupo extends Contacto{
     	this.setContactos(new ArrayList<ContactoIndividual>(contactos));
 		
 	}
-    
-    @Override
-    public List<Mensaje> searchMessages(MessageSearchBuilder builder) {
-        return this.getMensajes().stream()
-                .filter(mensaje -> builder.getText().isEmpty() || mensaje.getTexto().contains(builder.getText().get()))
-                .filter(mensaje -> builder.getNumero().isEmpty() || 
-                        Arrays.stream(this.getTelefonoPropio().split(" ")) // Separar teléfonos por espacio
-                                .anyMatch(tlf -> tlf.equals(builder.getNumero().get())) || // Comparar con emisor
-                        Arrays.stream(this.getTelefonoPropio().split(" ")) 
-                                .anyMatch(tlf -> tlf.equals(mensaje.getReceptor())))  // Comparar con receptor
-                .filter(mensaje -> builder.getNombreContacto().isEmpty() || 
-                        mensaje.getNombreEmisor().equalsIgnoreCase(builder.getNombreContacto().get()) ||
-                        this.getNombre().equalsIgnoreCase(builder.getNombreContacto().get()))
-                .collect(Collectors.toList());
-    }
 
 
 	public List<ContactoIndividual> getContactos() {

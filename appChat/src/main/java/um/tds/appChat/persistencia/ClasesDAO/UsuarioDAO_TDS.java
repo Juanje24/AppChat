@@ -57,7 +57,8 @@ public class UsuarioDAO_TDS implements UsuarioDAO {
 						new Propiedad("birthday", usuario.getBirthday().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))),
 						new Propiedad("saludo", usuario.getSaludo()),
 						new Propiedad("urlImagen", usuario.getUrlImagen()),
-		                new Propiedad("contactos", obtenerCodigosContactos(usuario.getContactos())))));
+		                new Propiedad("contactos", obtenerCodigosContactos(usuario.getContactos())),
+		                new Propiedad("fechaRegistro", usuario.getFechaRegistro().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))))));
 	   eUsuario = servicioPersistencia.registrarEntidad(eUsuario);
 	   usuario.setId(eUsuario.getId());
 	}
@@ -91,6 +92,8 @@ public class UsuarioDAO_TDS implements UsuarioDAO {
 				prop.setValor(usuario.getUrlImagen());
 			} else if (prop.getNombre().equals("contactos")) {
 				prop.setValor(obtenerCodigosContactos(usuario.getContactos()));
+			} else if (prop.getNombre().equals("fechaRegistro")) {
+				prop.setValor(usuario.getFechaRegistro().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 			}
 			servicioPersistencia.modificarPropiedad(prop);
 		}
@@ -113,8 +116,10 @@ public class UsuarioDAO_TDS implements UsuarioDAO {
 		LocalDate birthday = LocalDate.parse(servicioPersistencia.recuperarPropiedadEntidad(eUsuario, "birthday"), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 		String saludo = servicioPersistencia.recuperarPropiedadEntidad(eUsuario, "saludo");
 		String urlImagen = servicioPersistencia.recuperarPropiedadEntidad(eUsuario, "urlImagen");
+		LocalDate fechaRegistro = LocalDate.parse(servicioPersistencia.recuperarPropiedadEntidad(eUsuario, "fechaRegistro"), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 		
 		Usuario usuario = new Usuario( nombre,apellido, telefono, contraseña,  birthday, saludo, urlImagen,premium);
+		usuario.setFechaRegistro(fechaRegistro);
 		PoolDAO.getUnicaInstancia(0).addObjeto(id, usuario);
 		List<Contacto> contactos = obtenerContactosDesdeIDs(servicioPersistencia.recuperarPropiedadEntidad(eUsuario, "contactos"));
 		usuario.setId(id);

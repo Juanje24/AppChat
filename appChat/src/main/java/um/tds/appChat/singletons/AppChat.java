@@ -21,7 +21,7 @@ public enum AppChat {
 	private MensajeDAO mensajeDAO;
 	private Usuario usuarioActual;
 	private RepositorioUsuario repositorioUsuarios;
-	private GestorDescuentos gestorDescuentos;
+	private FactoriaDescuentos gestorDescuentos;
 
 	private AppChat() {
 		try {
@@ -39,7 +39,11 @@ public enum AppChat {
 	public Mensaje enviarMensajeContacto(Contacto c3, String string, int emoji) {
 		Mensaje msj = usuarioActual.sendMensaje( string, emoji, c3);
 		mensajeDAO.registrarMensaje(msj);
-		contactoIndividualDAO.modificarContactoIndividual((ContactoIndividual) c3);
+		if (c3 instanceof ContactoIndividual) {
+			contactoIndividualDAO.modificarContactoIndividual((ContactoIndividual) c3);
+		} else {
+			grupoDAO.modificarGrupo((Grupo) c3);
+		}
 		//Falta la parte inversa, buscar en el usuario asociado a c3 el contacto con tlf=usuarioActual.getTlf() y añadir el mensaje
 		StringTokenizer strTok = new StringTokenizer(c3.getTelefonoPropio(), " ");
 		while ( strTok.hasMoreElements()) { 
@@ -113,8 +117,7 @@ public enum AppChat {
 
 	public Grupo crearGrupo(String nombre, List<ContactoIndividual> contactosGrupo, String foto) {
 		Grupo g=usuarioActual.addGrupo(nombre, contactosGrupo,foto);
-		//grupoDAO.registrarGrupo(g);
-		
+		grupoDAO.registrarGrupo(g);
 		return g;
 	}
 	public void actualizarNombreContacto(Contacto contacto, String nuevoNombre) {
@@ -122,8 +125,6 @@ public enum AppChat {
 		usuarioActual.modificarNombreContacto(contacto, nuevoNombre);
 		contacto.getMensajes().forEach(mensaje -> mensajeDAO.modificarMensaje(mensaje));
 		contactoIndividualDAO.modificarContactoIndividual((ContactoIndividual) contacto);
-		
-		
 		
 	}
 
@@ -155,28 +156,7 @@ public enum AppChat {
 	    		.distinct()
 	    		.collect(Collectors.toList());
 	}
-	
-	//Funcionalidad premium
-	
-	public void configurarDescuentos(LocalDate inicio, LocalDate fin, int descuentoFecha, int numMensajes, int descuentoMensajes) { 
-		gestorDescuentos.agregarDescuento(new DescuentoPorFecha(inicio, fin, descuentoFecha));
-		gestorDescuentos.agregarDescuento(new DescuentoPorMensajes(numMensajes, descuentoMensajes));
-	}
-	
-	public boolean usuarioConDescuento() {
-		return gestorDescuentos.tieneDescuento(usuarioActual);
-	}
-	
-	public Optional<Descuento> getMayorDescuento() {
-		return gestorDescuentos.getMayorDescuento(usuarioActual);
-	}
-	
-	public void convertirAPremium() {
-		usuarioActual.convertirPremium();
-	}
-	
-	
-	
+		
 	
 	
 }
