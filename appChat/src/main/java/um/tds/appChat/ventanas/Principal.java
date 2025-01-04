@@ -100,6 +100,14 @@ public class Principal extends JFrame {
 		});
 		panelNorte.add(añadirGrupo);
 		
+		JButton buscarMensaje = new JButton("Búsqueda");
+		buscarMensaje.setUI(new RoundButtonUI());
+		buscarMensaje.addActionListener(e -> {
+			PanelBusqueda panelBusqueda = new PanelBusqueda();
+			panelBusqueda.setVisible(true);
+			this.setVisible(false);
+		});
+		panelNorte.add(buscarMensaje);
 		
 		JButton verContactos = new JButton("Ver contactos");
 		verContactos.setSize(new Dimension(100, 50));

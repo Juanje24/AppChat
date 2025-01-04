@@ -1,29 +1,43 @@
 package um.tds.appChat.dominio;
 
+import java.time.LocalDate;
 import java.util.Optional;
 import um.tds.appChat.singletons.RepositorioUsuario;
 
 public class MessageSearchBuilder {
-	
+	//A pesar de que no se recomienda usar Optional como atributos de clase, en este caso se ha decidido usarlo 
+	//ya que el manejo del Optional es privado a esta clase
 	private Optional<String> text = Optional.empty();
     private Optional<String> numero = Optional.empty();
     private Optional<String> nombreContacto = Optional.empty();
+    private Optional<LocalDate> fecha = Optional.empty();
 
-    public MessageSearchBuilder setText(String text) {
+	public MessageSearchBuilder() {
+	}
+	public MessageSearchBuilder(String texto, String numero, String nombreContacto, LocalDate fecha) {
+		this.text = Optional.ofNullable(texto);
+		this.numero = Optional.ofNullable(numero);
+		this.nombreContacto = Optional.ofNullable(nombreContacto);
+		this.fecha = Optional.ofNullable(fecha);
+	}
+	
+	
+    public void setText(String text) {
         this.text = Optional.ofNullable(text);
-        return this;
     }
 
-    public MessageSearchBuilder setNumero(String numero) {
+    public void setNumero(String numero) {
         this.numero = Optional.ofNullable(numero);
-        return this;
     }
 
-    public MessageSearchBuilder setNombreContacto(String nombreContacto) {
+    public void setNombreContacto(String nombreContacto) {
         this.nombreContacto = Optional.ofNullable(nombreContacto);
-        return this;
     }
 
+	public void setFecha(LocalDate fecha) {
+		this.fecha = Optional.ofNullable(fecha);
+	}
+	
     public Optional<String> getText() {
         return text;
     }
@@ -35,11 +49,16 @@ public class MessageSearchBuilder {
     public Optional<String> getNombreContacto() {
         return nombreContacto;
     }
+    public Optional<LocalDate> getFecha() {
+    	   return fecha;
+    }
+    
     public boolean filtrar(Mensaje msj) {
     	String nombreReceptor = RepositorioUsuario.INSTANCE.buscarUsuarioPorMovil(msj.getReceptor()).get().getNombre();
 		return (text.isEmpty() || msj.getTexto().contains(text.get()))
 				&& (numero.isEmpty() || msj.getReceptor().contains(numero.get()) || msj.getEmisor().equals(numero.get())) //Si es un grupo, los tlfs van separados por espacios, 
 																														  //contains nos sirve muy bien
+				&& (fecha.isEmpty() || msj.getFecha().isAfter(fecha.get()))
 				&& (nombreContacto.isEmpty() || msj.getNombreEmisor().equalsIgnoreCase(nombreContacto.get()) || nombreReceptor.equalsIgnoreCase(nombreContacto.get()));
     }
 }

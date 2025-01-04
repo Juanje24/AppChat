@@ -21,8 +21,7 @@ public enum AppChat {
 	private MensajeDAO mensajeDAO;
 	private Usuario usuarioActual;
 	private RepositorioUsuario repositorioUsuarios;
-	private FactoriaDescuentos gestorDescuentos;
-
+	
 	private AppChat() {
 		try {
 			factoriaDAO = FactoriaDAO.getInstancia(DAO_TDS);
@@ -82,6 +81,12 @@ public enum AppChat {
 			return null;
 		}
 	}
+	public Grupo crearGrupo(String nombre, List<ContactoIndividual> contactosGrupo, String foto) {
+		Grupo g=usuarioActual.addGrupo(nombre, contactosGrupo,foto);
+		grupoDAO.registrarGrupo(g);
+		usuarioDAO.modificarUsuario(usuarioActual);
+		return g;
+	}
 
 	public boolean registrarUsuario(String nombre, String apellidos, String contrasena, LocalDate fechaNacimiento, String numTlf, String foto, String saludo) {
 
@@ -115,12 +120,7 @@ public enum AppChat {
 	}
 	
 
-	public Grupo crearGrupo(String nombre, List<ContactoIndividual> contactosGrupo, String foto) {
-		Grupo g=usuarioActual.addGrupo(nombre, contactosGrupo,foto);
-		grupoDAO.registrarGrupo(g);
-		return g;
-	}
-	public void actualizarNombreContacto(Contacto contacto, String nuevoNombre) {
+		public void actualizarNombreContacto(Contacto contacto, String nuevoNombre) {
 		contacto.modificarMensajes(nuevoNombre);
 		usuarioActual.modificarNombreContacto(contacto, nuevoNombre);
 		contacto.getMensajes().forEach(mensaje -> mensajeDAO.modificarMensaje(mensaje));
@@ -138,23 +138,15 @@ public enum AppChat {
 		usuarioDAO.modificarUsuario(usuarioActual);
 	}
 	
-	public List<Mensaje> buscarMensaje(String texto, String numero, String nombreContacto) {
+	public List<Mensaje> buscarMensaje(String texto, String numero, String nombreContacto, LocalDate fecha) {
 		MessageSearchBuilder builder = new MessageSearchBuilder();
 		
-	    if (texto != null && !texto.isEmpty()) {
-	        builder.setText(texto);
-	    }
-	    if (numero != null && !numero.isEmpty()) {
-	        builder.setNumero(numero);
-	    }
-	    if (nombreContacto != null && !nombreContacto.isEmpty()) {
-	        builder.setNombreContacto(nombreContacto);
-	    }
+	    builder.setText(texto);
+	    builder.setNumero(numero);
+	    builder.setNombreContacto(nombreContacto);
+	    builder.setFecha(fecha);
 	    
-	    return usuarioActual.getContactos().stream()
-	    		.flatMap(c -> c.searchMessages(builder).stream())
-	    		.distinct()
-	    		.collect(Collectors.toList());
+	    return usuarioActual.searchMensajes(builder);
 	}
 		
 	

@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import tds.BubbleText;
 
@@ -250,6 +251,11 @@ public class Usuario {
 		.mapToInt(c -> c.getNumeroMensajesEntreFechas(inicio, fin))
 		.sum();
 		
+	}
+	public List<Mensaje> searchMensajes(MessageSearchBuilder builder){
+		return contactos.stream()
+				.flatMap(c -> c.searchMessages(builder).stream())
+				.collect(Collectors.toList());
 	}
 
 }
