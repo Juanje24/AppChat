@@ -1,6 +1,6 @@
 package um.tds.appChat.dominio;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 public class MessageSearchBuilder {
@@ -9,11 +9,11 @@ public class MessageSearchBuilder {
 	private Optional<String> text = Optional.empty();
     private Optional<String> numero = Optional.empty();
     private Optional<String> nombreContacto = Optional.empty();
-    private Optional<LocalDate> fecha = Optional.empty();
+    private Optional<LocalDateTime> fecha = Optional.empty();
 
 	public MessageSearchBuilder() {
 	}
-	public MessageSearchBuilder(String texto, String numero, String nombreContacto, LocalDate fecha) {
+	public MessageSearchBuilder(String texto, String numero, String nombreContacto, LocalDateTime fecha) {
 		this.text = Optional.ofNullable(texto);
 		this.numero = Optional.ofNullable(numero);
 		this.nombreContacto = Optional.ofNullable(nombreContacto);
@@ -33,7 +33,7 @@ public class MessageSearchBuilder {
         this.nombreContacto = Optional.ofNullable(nombreContacto);
     }
 
-	public void setFecha(LocalDate fecha) {
+	public void setFecha(LocalDateTime fecha) {
 		this.fecha = Optional.ofNullable(fecha);
 	}
 	
@@ -48,7 +48,7 @@ public class MessageSearchBuilder {
     public Optional<String> getNombreContacto() {
         return nombreContacto;
     }
-    public Optional<LocalDate> getFecha() {
+    public Optional<LocalDateTime> getFecha() {
     	   return fecha;
     }
     

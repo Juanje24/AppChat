@@ -1,5 +1,6 @@
 package um.tds.appChat.dominio;
 
+import java.time.LocalDateTime;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
@@ -246,7 +247,7 @@ public class Usuario {
 		contactos.remove(contacto);
 	}
 
-	public int getNumMensajesEntreFecha(LocalDate inicio, LocalDate fin) {
+	public int getNumMensajesEntreFecha(LocalDateTime inicio, LocalDateTime fin) {
 		return contactos.stream()
 		.mapToInt(c -> c.getNumeroMensajesEntreFechas(inicio, fin))
 		.sum();

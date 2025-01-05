@@ -1,6 +1,6 @@
 package um.tds.appChat.dominio;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,7 +37,7 @@ public abstract class Contacto {
     	}
     }
 
-	public int getNumeroMensajesEntreFechas(LocalDate inicio, LocalDate fin) {
+	public int getNumeroMensajesEntreFechas(LocalDateTime inicio, LocalDateTime fin) {
 		return (int) mensajes.stream()
 				.filter(mensaje -> mensaje.getFecha().isAfter(inicio) && mensaje.getFecha().isBefore(fin.plusDays(1)))
 				.count();

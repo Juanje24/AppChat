@@ -2,22 +2,15 @@ package um.tds.appChat.singletons;
 
 
 
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.StringTokenizer;
 import java.util.stream.Collectors;
 
-import javax.swing.JPanel;
 
-import com.itextpdf.io.image.*;
-import com.itextpdf.kernel.pdf.*;
-import com.itextpdf.layout.Document;
-import com.itextpdf.layout.element.Image;
 
 import um.tds.appChat.dominio.*;
 import um.tds.appChat.persistencia.*;
@@ -152,7 +145,7 @@ public enum AppChat {
 		usuarioDAO.modificarUsuario(usuarioActual);
 	}
 	
-	public List<Mensaje> buscarMensaje(String texto, String numero, String nombreContacto, LocalDate fecha) {
+	public List<Mensaje> buscarMensaje(String texto, String numero, String nombreContacto, LocalDateTime fecha) {
 		MessageSearchBuilder builder = new MessageSearchBuilder();
 		if (!numero.equals("")) {
 			builder.setNumero(numero);
@@ -197,55 +190,10 @@ public enum AppChat {
 	public boolean isPremium() {
 		return usuarioActual.isPremium();
 	}
-	public void exportarPDF(JPanel panelCentro, String pdfPath) throws IOException {
+	public void exportarPDF(Contacto c, String pdfPath)  {
+		ExportadorPDF exportador = new ExportadorPDF();
+		exportador.exportarPDF(c.getMensajes(), c.getNombre(), usuarioActual.getNombre(), pdfPath );
 		
-		// Crear documento PDF
-        PdfWriter writer = new PdfWriter(pdfPath);
-        PdfDocument pdf = new PdfDocument(writer);
-        Document document = new Document(pdf);
-        
-		// Crear imagen del JPanel
-        BufferedImage bufferedImage = new BufferedImage(
-                panelCentro.getWidth(), panelCentro.getHeight(), BufferedImage.TYPE_INT_RGB);
-        Graphics2D g2d = bufferedImage.createGraphics();
-        panelCentro.paint(g2d);
-        g2d.dispose();
-
-        // Definir el tamaño máximo de la imagen que cabrá en cada página (por ejemplo, 800px de altura)
-        int pageHeight = 1300;  // Ajusta este valor según el tamaño de tu página
-        int imageHeight = bufferedImage.getHeight();
-        int numberOfPages = (int) Math.ceil((double) imageHeight / pageHeight);
-
-
-        // Dividir la imagen en varias subimágenes y agregar cada una a una nueva página
-        for (int i = 0; i < numberOfPages; i++) {
-            // Calcular el rango de la subimagen para la página actual
-            int yStart = i * pageHeight;
-            int yEnd = Math.min((i + 1) * pageHeight, imageHeight);
-            BufferedImage subImage = bufferedImage.getSubimage(0, yStart, bufferedImage.getWidth(), yEnd - yStart);
-
-            // Guardar la subimagen como archivo temporal
-            File tempFile = File.createTempFile("subpanel", ".png");
-            javax.imageio.ImageIO.write(subImage, "png", tempFile);
-
-            // Cargar la imagen en iText
-            ImageData imageData = ImageDataFactory.create(tempFile.getAbsolutePath());
-            Image image = new Image(imageData);
-
-            // Añadir la imagen al PDF
-            document.add(image);
-
-            // Eliminar el archivo temporal
-            tempFile.delete();
-
-            // Si no es la última página, agrega una nueva página al PDF
-            if (i < numberOfPages - 1) {
-                pdf.addNewPage();
-            }
-        }
-
-        // Cerrar el documento PDF
-        document.close();
 
 	}
 	

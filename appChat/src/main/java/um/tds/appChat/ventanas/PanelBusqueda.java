@@ -1,7 +1,7 @@
 package um.tds.appChat.ventanas;
 
 import java.awt.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 
 import javax.swing.*;
@@ -81,10 +81,10 @@ public class PanelBusqueda extends JDialog {
         String texto = txtTexto.getText().trim();
         String numero = txtNumero.getText().trim();
         String nombreContacto = txtNombreContacto.getText().trim();
-        LocalDate fecha = null;
+        LocalDateTime fecha = null;
 
         if (dateChooser.getDate() != null) {
-            fecha = dateChooser.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            fecha = dateChooser.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
         }
 		
         // Llamada al método buscarMensaje (debes implementarlo en tu modelo)

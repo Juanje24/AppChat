@@ -1,6 +1,6 @@
 package um.tds.appChat.dominio;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class DescuentoPorMensajes implements Descuento {
     
@@ -16,8 +16,8 @@ public class DescuentoPorMensajes implements Descuento {
 
     @Override
     public boolean aplicaDescuento(Usuario usuario) {
-        LocalDate haceUnMes = LocalDate.now().minusMonths(1);
-        return usuario.getNumMensajesEntreFecha(haceUnMes, LocalDate.now()) >= MINIMO_MENSAJES; 
+        LocalDateTime haceUnMes = LocalDateTime.now().minusMonths(1);
+        return usuario.getNumMensajesEntreFecha(haceUnMes, LocalDateTime.now()) >= MINIMO_MENSAJES; 
     }
     
     @Override

@@ -1,7 +1,7 @@
 package um.tds.appChat.persistencia.ClasesDAO;
 
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,7 +45,7 @@ public class MensajeDAO_TDS implements MensajeDAO {
 	private Mensaje entidadToMensaje(Entidad eMensaje){
 		
 		String texto = servicioPersistencia.recuperarPropiedadEntidad(eMensaje, TEXTO);
-		LocalDate fecha = LocalDate.parse(servicioPersistencia.recuperarPropiedadEntidad(eMensaje, FECHA), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+		LocalDateTime fecha = LocalDateTime.parse(servicioPersistencia.recuperarPropiedadEntidad(eMensaje, FECHA), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 		String emisor = servicioPersistencia.recuperarPropiedadEntidad(eMensaje, EMISOR);
 		String receptor = servicioPersistencia.recuperarPropiedadEntidad(eMensaje, RECEPTOR);
 		String nombreEmisor = servicioPersistencia.recuperarPropiedadEntidad(eMensaje, NOMBRE_EMISOR);
@@ -66,7 +66,7 @@ public class MensajeDAO_TDS implements MensajeDAO {
 		eMensaje.setPropiedades(new ArrayList<Propiedad>(
 				Arrays.asList(new Propiedad(TEXTO, mensaje.getTexto()),
 						new Propiedad(EMOJI, String.valueOf(mensaje.getEmoji())),
-						new Propiedad(FECHA, mensaje.getFecha().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))),
+						new Propiedad(FECHA, mensaje.getFecha().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))),
 						new Propiedad(EMISOR, mensaje.getEmisor()),
 						new Propiedad(RECEPTOR, mensaje.getReceptor()),
 						new Propiedad(NOMBRE_EMISOR, mensaje.getNombreEmisor()),

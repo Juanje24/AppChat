@@ -28,9 +28,9 @@ public class PanelChat extends JPanel {
     private JButton botonEmoticonos;
     private JButton botonEnviar;
     int emoji=-1;
-    private JScrollBar vertical;
     private int altura;
     private JPanel panelMensajes;
+    private JScrollPane scrollPane;
 
     /**
      * Create the application.
@@ -123,7 +123,7 @@ public class PanelChat extends JPanel {
         panelMensajes = new JPanel();
         panelMensajes.setLayout(new BoxLayout(panelMensajes, BoxLayout.Y_AXIS));
         panelMensajes.setPreferredSize(new Dimension(250, 800));
-        JScrollPane scrollPane = new JScrollPane(panelMensajes);
+        scrollPane = new JScrollPane(panelMensajes);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         
@@ -138,8 +138,7 @@ public class PanelChat extends JPanel {
         panelMensajes.setPreferredSize(new Dimension(panelMensajes.getWidth(), altura));
         revalidate();
         repaint();
-		vertical = scrollPane.getVerticalScrollBar();
-        vertical.setValue(vertical.getMaximum());
+		bajarBarra();
         // Parte inferior: Campo para escribir mensajes y botones
         JPanel panelInferior = new JPanel(new BorderLayout());
      // Configuración de la área de texto
@@ -166,11 +165,10 @@ public class PanelChat extends JPanel {
         					panelMensajes.add(Utils.getBubbleFromMensaje(msj, panel));
         					altura = panelMensajes.getComponentCount() * ALTURA_BURBUJA; // Suponiendo que cada burbuja de mensaje tiene una altura de 50 píxeles
         					panelMensajes.setPreferredSize(new Dimension(panelMensajes.getWidth(), altura));
-        					limpiarCampoMensaje();
         					revalidate();
         					repaint();
-        					vertical = scrollPane.getVerticalScrollBar();
-        	                vertical.setValue(vertical.getMaximum());
+        					bajarBarra();
+        					limpiarCampoMensaje();
         				}
         			}
                 }
@@ -198,9 +196,9 @@ public class PanelChat extends JPanel {
 				emoji=-1;
 				revalidate();
 				repaint();
-				vertical = scrollPane.getVerticalScrollBar();
-                vertical.setValue(vertical.getMaximum());
+				bajarBarra();
                 limpiarCampoMensaje();
+                
 			}
         });
         
@@ -222,25 +220,27 @@ public class PanelChat extends JPanel {
 					panelMensajes.add(Utils.getBubbleFromMensaje(msj, panel));
 					altura = panelMensajes.getComponentCount() * ALTURA_BURBUJA; // Suponiendo que cada burbuja de mensaje tiene una altura de 50 píxeles
 					panelMensajes.setPreferredSize(new Dimension(panelMensajes.getWidth(), altura));
-					limpiarCampoMensaje();
 					revalidate();
 					repaint();
-					vertical = scrollPane.getVerticalScrollBar();
-	                vertical.setValue(vertical.getMaximum());
+					bajarBarra();
+					limpiarCampoMensaje();
+					
 				}
 			}
 		});
 
         add(panelInferior, BorderLayout.SOUTH);
     }
-	public JPanel getPanelMensajes() {
-		return panelMensajes;
-	}
+	
     // Métodos para interactuar con el panel
     public String getTextoMensaje() {
         return areaTexto.getText();
     }
-
+    public void bajarBarra() {
+        SwingUtilities.invokeLater(() -> {
+            scrollPane.getVerticalScrollBar().setValue(scrollPane.getVerticalScrollBar().getMaximum());
+        });
+    }
     public void limpiarCampoMensaje() {
         areaTexto.setText("");
     }

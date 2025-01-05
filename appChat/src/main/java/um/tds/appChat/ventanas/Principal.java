@@ -5,7 +5,6 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.io.IOException;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -255,11 +254,8 @@ public class Principal extends JFrame {
 	            String nombrePDF= JOptionPane.showInputDialog(frame, "Introduce el nombre del archivo PDF", "Exportar PDF", JOptionPane.PLAIN_MESSAGE);
 	            
 	            String pdfPath = new File(selectedDirectory, nombrePDF+".pdf").getAbsolutePath();
-	            try {
-					AppChat.INSTANCE.exportarPDF(((PanelChat)panelCentro).getPanelMensajes(), pdfPath);
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
+	          	AppChat.INSTANCE.exportarPDF(contactoSeleccionado, pdfPath);
+				
 	        }
 		    
 		});
