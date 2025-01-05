@@ -2,7 +2,6 @@ package um.tds.appChat.dominio;
 
 import java.time.LocalDate;
 import java.util.Optional;
-import um.tds.appChat.singletons.RepositorioUsuario;
 
 public class MessageSearchBuilder {
 	//A pesar de que no se recomienda usar Optional como atributos de clase, en este caso se ha decidido usarlo 
@@ -54,11 +53,10 @@ public class MessageSearchBuilder {
     }
     
     public boolean filtrar(Mensaje msj) {
-    	String nombreReceptor = RepositorioUsuario.INSTANCE.buscarUsuarioPorMovil(msj.getReceptor()).get().getNombre();
 		return (text.isEmpty() || msj.getTexto().contains(text.get()))
 				&& (numero.isEmpty() || msj.getReceptor().contains(numero.get()) || msj.getEmisor().equals(numero.get())) //Si es un grupo, los tlfs van separados por espacios, 
 																														  //contains nos sirve muy bien
-				&& (fecha.isEmpty() || msj.getFecha().isAfter(fecha.get()))
-				&& (nombreContacto.isEmpty() || msj.getNombreEmisor().equalsIgnoreCase(nombreContacto.get()) || nombreReceptor.equalsIgnoreCase(nombreContacto.get()));
+				&& (fecha.isEmpty() || msj.getFecha().isAfter(fecha.get().minusDays(1)))
+				&& (nombreContacto.isEmpty() || msj.getNombreEmisor().equalsIgnoreCase(nombreContacto.get()) || msj.getNombreReceptor().equalsIgnoreCase(nombreContacto.get()));
     }
 }

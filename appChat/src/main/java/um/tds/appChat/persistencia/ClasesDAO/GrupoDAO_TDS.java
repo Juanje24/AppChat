@@ -78,7 +78,6 @@ public class GrupoDAO_TDS implements GrupoDAO {
 		String urlImagen = servicioPersistencia.recuperarPropiedadEntidad(eGrupo, URLIMAGEN);
 		List<Mensaje> mensajes = obtenerMensajesDesdeIDs(servicioPersistencia.recuperarPropiedadEntidad(eGrupo, MENSAJES));
 		List<ContactoIndividual> contactos = obtenerContactosDesdeIDs(servicioPersistencia.recuperarPropiedadEntidad(eGrupo, CONTACTOS));
-		
 		Grupo grupo = new Grupo(nombre, contactos, urlImagen);
 		grupo.setMensajes(mensajes);
 		grupo.setId(eGrupo.getId());
@@ -149,7 +148,7 @@ public class GrupoDAO_TDS implements GrupoDAO {
 		if(eGrupo == null) return null;
 		Grupo grupo = entidadToGrupo(eGrupo);
 		PoolDAO.getUnicaInstancia(2).addObjeto(id, grupo);
-
+		
 		return grupo;
 	}
 

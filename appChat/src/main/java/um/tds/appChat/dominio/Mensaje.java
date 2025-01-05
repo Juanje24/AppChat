@@ -11,16 +11,18 @@ public class Mensaje {
     private String tlfEmisor; //telefono
     private String tlfReceptor; //telefono
     private String nombreEmisor;
+    private String nombreReceptor;
     private int tipo;
     private LocalDate fecha;
 
-    public Mensaje (String texto, int emoji, String emisor, String receptor, String nombreEmisor,int tipo){
+    public Mensaje (String texto, int emoji, String emisor, String receptor, String nombreEmisor, String nombreReceptor,  int tipo){
     	
         this.texto = texto;
         this.emoji = emoji;
         this.tlfEmisor = emisor;
         this.tlfReceptor = receptor;
         this.nombreEmisor = nombreEmisor;
+        this.nombreReceptor = nombreReceptor;
         this.tipo = tipo;
         this.fecha = LocalDate.now(); 
 
@@ -29,10 +31,7 @@ public class Mensaje {
     public boolean matchText(String text){
         return Arrays.stream(texto.split("\\s+"))
                 .anyMatch(e -> text.equalsIgnoreCase(texto));
-    }
-
-    //public boolean mathcNumber
-    
+    }   
     
     
     @Override
@@ -90,7 +89,13 @@ public class Mensaje {
 	public void setNombreEmisor(String nombreEmisor) {
         this.nombreEmisor = nombreEmisor;
 	}
+	public String getNombreReceptor() {
+		return nombreReceptor;
+	}
 
+	public void setNombreReceptor(String nombreReceptor) {
+        this.nombreReceptor = nombreReceptor;
+	}
 	public int getTipo() {
 		return tipo;
 	}

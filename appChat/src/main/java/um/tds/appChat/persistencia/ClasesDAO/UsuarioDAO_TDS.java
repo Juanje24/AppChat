@@ -154,7 +154,6 @@ public class UsuarioDAO_TDS implements UsuarioDAO {
 	        String tipo = eContacto.getNombre();
 	        if ("Grupo".equals(tipo)) {
 	            contactos.add(FactoriaDAO.getFactoriaDAO().getGrupoDAO().recuperarGrupoPorId(id));
-	        	FactoriaDAO.getFactoriaDAO().getGrupoDAO().recuperarGrupoPorId(id).addContacto(null);
 	        } else if ("ContactoIndividual".equals(tipo)) {
 	        	contactos.add(FactoriaDAO.getFactoriaDAO().getContactoIndividualDAO().recuperarContactoIndividualPorId(id));
 	            

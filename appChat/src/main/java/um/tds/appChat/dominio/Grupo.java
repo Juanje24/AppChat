@@ -1,9 +1,7 @@
 package um.tds.appChat.dominio;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Grupo extends Contacto{
     
@@ -11,10 +9,9 @@ public class Grupo extends Contacto{
 	
     public Grupo(String nombre, List<ContactoIndividual> contactos, String urlImagen) {
     	super(nombre, urlImagen);
-    	this.setContactos(new ArrayList<ContactoIndividual>(contactos));
+    	this.contactos= new ArrayList<ContactoIndividual>(contactos);
 		
 	}
-
 
 	public List<ContactoIndividual> getContactos() {
 		return contactos;

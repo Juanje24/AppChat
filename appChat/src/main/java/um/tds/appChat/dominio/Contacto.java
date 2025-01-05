@@ -25,14 +25,7 @@ public abstract class Contacto {
     // FUNCIONALIDAD
    
     public List<Mensaje> searchMessages(MessageSearchBuilder builder) { //revisar para cuando se usa en los grupos
-        return mensajes.stream()
-//                .filter(mensaje -> builder.getText().isEmpty() || mensaje.getTexto().contains(builder.getText().get()))
-//                .filter(mensaje -> builder.getNumero().isEmpty() || 
-//                		mensaje.getReceptor().equals(builder.getNumero().get()) ||
-//                		mensaje.getEmisor().equals(builder.getNumero().get()))
-//                .filter(mensaje -> builder.getNombreContacto().isEmpty() ||
-//                		mensaje.getNombreEmisor().equalsIgnoreCase(builder.getNombreContacto().get()) ||
-//                		this.getNombre().equalsIgnoreCase(builder.getNombreContacto().get()))
+    	return mensajes.stream()
         		.filter(mensaje -> builder.filtrar(mensaje))
                 .collect(Collectors.toList());
     }
@@ -88,7 +81,7 @@ public abstract class Contacto {
 	}
 
 	public Mensaje addMensaje(String texto, int emoji, String tlfEmisor,String nombreEmisor, int tipo) {
-		Mensaje mensaje = new Mensaje(texto, emoji, tlfEmisor, getTelefonoPropio(),nombreEmisor, tipo);
+		Mensaje mensaje = new Mensaje(texto, emoji, tlfEmisor, getTelefonoPropio(),nombreEmisor, nombre, tipo);
 		this.mensajes.add(mensaje);
 		return mensaje;
 	}

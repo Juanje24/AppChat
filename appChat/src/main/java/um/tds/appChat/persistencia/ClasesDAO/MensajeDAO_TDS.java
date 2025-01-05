@@ -24,6 +24,7 @@ public class MensajeDAO_TDS implements MensajeDAO {
 	private static final String EMISOR = "tlfEmisor";
 	private static final String RECEPTOR = "tlfReceptor";
 	private static final String NOMBRE_EMISOR = "nombreEmisor";
+	private static final String NOMBRE_RECEPTOR = "nombreReceptor";
 	private static final String TIPO = "tipo";
 	private static final String EMOJI = "emoji";
 	
@@ -48,10 +49,11 @@ public class MensajeDAO_TDS implements MensajeDAO {
 		String emisor = servicioPersistencia.recuperarPropiedadEntidad(eMensaje, EMISOR);
 		String receptor = servicioPersistencia.recuperarPropiedadEntidad(eMensaje, RECEPTOR);
 		String nombreEmisor = servicioPersistencia.recuperarPropiedadEntidad(eMensaje, NOMBRE_EMISOR);
+		String nombreReceptor = servicioPersistencia.recuperarPropiedadEntidad(eMensaje, NOMBRE_RECEPTOR);
 		int tipo = Integer.parseInt(servicioPersistencia.recuperarPropiedadEntidad(eMensaje, TIPO));
 		int emoji = Integer.parseInt(servicioPersistencia.recuperarPropiedadEntidad(eMensaje, EMOJI));
 		
-		Mensaje mensaje = new Mensaje(texto, emoji, emisor, receptor,nombreEmisor, tipo);
+		Mensaje mensaje = new Mensaje(texto, emoji, emisor, receptor,nombreEmisor, nombreReceptor,tipo);
 		mensaje.setFecha(fecha);
 		mensaje.setId(eMensaje.getId());
 		
@@ -68,6 +70,7 @@ public class MensajeDAO_TDS implements MensajeDAO {
 						new Propiedad(EMISOR, mensaje.getEmisor()),
 						new Propiedad(RECEPTOR, mensaje.getReceptor()),
 						new Propiedad(NOMBRE_EMISOR, mensaje.getNombreEmisor()),
+						new Propiedad(NOMBRE_RECEPTOR, mensaje.getNombreReceptor()),
 						new Propiedad(TIPO, String.valueOf(mensaje.getTipo())))));
 		return eMensaje;
 	}

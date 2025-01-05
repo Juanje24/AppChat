@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.StringTokenizer;
-import java.util.stream.Collectors;
 
 import um.tds.appChat.dominio.*;
 import um.tds.appChat.persistencia.*;
@@ -140,10 +139,15 @@ public enum AppChat {
 	
 	public List<Mensaje> buscarMensaje(String texto, String numero, String nombreContacto, LocalDate fecha) {
 		MessageSearchBuilder builder = new MessageSearchBuilder();
-		
+		if (!numero.equals("")) {
+			builder.setNumero(numero);
+		}
+		if (!nombreContacto.equals("")) {
+			builder.setNombreContacto(nombreContacto);
+		}
 	    builder.setText(texto);
-	    builder.setNumero(numero);
-	    builder.setNombreContacto(nombreContacto);
+	    
+	   
 	    builder.setFecha(fecha);
 	    
 	    return usuarioActual.searchMensajes(builder);

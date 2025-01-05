@@ -100,10 +100,12 @@ public class Principal extends JFrame {
 		});
 		panelNorte.add(añadirGrupo);
 		
-		JButton buscarMensaje = new JButton("Búsqueda");
+		ImageIcon iconoBusqueda = new ImageIcon(getClass().getResource("/iconos/search.png"));
+		Image iconoBusquedaEscalado = iconoBusqueda.getImage().getScaledInstance(25, 25, java.awt.Image.SCALE_SMOOTH);
+		JButton buscarMensaje = new JButton(new ImageIcon(iconoBusquedaEscalado));
 		buscarMensaje.setUI(new RoundButtonUI());
 		buscarMensaje.addActionListener(e -> {
-			PanelBusqueda panelBusqueda = new PanelBusqueda();
+			PanelBusqueda panelBusqueda = new PanelBusqueda(this);
 			panelBusqueda.setVisible(true);
 			this.setVisible(false);
 		});
