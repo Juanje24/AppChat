@@ -1,9 +1,23 @@
 package um.tds.appChat.singletons;
 
+
+
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.StringTokenizer;
+import java.util.stream.Collectors;
+
+import javax.swing.JPanel;
+
+import com.itextpdf.io.image.*;
+import com.itextpdf.kernel.pdf.*;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Image;
 
 import um.tds.appChat.dominio.*;
 import um.tds.appChat.persistencia.*;
@@ -13,6 +27,7 @@ import um.tds.appChat.persistencia.InterfacesDAO.*;
 public enum AppChat {
 	INSTANCE;
 	public static final String DAO_TDS = "um.tds.appChat.persistencia.FactoriaDAO_TDS";
+	private static final double PREMIUM = 100.0;
 	private FactoriaDAO factoriaDAO;
 	private UsuarioDAO usuarioDAO;
 	private ContactoIndividualDAO contactoIndividualDAO;
@@ -152,7 +167,87 @@ public enum AppChat {
 	    
 	    return usuarioActual.searchMensajes(builder);
 	}
+	public void logout() {
+		usuarioActual=null;
 		
+	}
+	public double getPrecioPremium() {
+		return PREMIUM;
+	}
+	public List<String> getDescuentosAplicables(){
+		List<Descuento> todosDescuentos = FactoriaDescuentos.INSTANCE.getAllDescuentos();
+		todosDescuentos.removeIf(descuento -> !descuento.aplicaDescuento(usuarioActual));
+		return todosDescuentos.stream()
+				.map(Descuento::getNombre)
+				.collect(Collectors.toList());
+		
+	}
+	public double getPrecioDescontado(String nombreDescuento) {
+		Descuento descuento = FactoriaDescuentos.INSTANCE.crearDescuento(nombreDescuento);
+		return descuento.getPrecio(PREMIUM);
+	}
+	public double hacerPremium(String nombreDescuento) {
+		Descuento descuento = FactoriaDescuentos.INSTANCE.crearDescuento(nombreDescuento);
+		double precioDescuento = descuento.getPrecio(PREMIUM);
+		usuarioActual.setPremium(true);
+		usuarioDAO.modificarUsuario(usuarioActual);
+		return precioDescuento;
+	}
+
+	public boolean isPremium() {
+		return usuarioActual.isPremium();
+	}
+	public void exportarPDF(JPanel panelCentro, String pdfPath) throws IOException {
+		
+		// Crear documento PDF
+        PdfWriter writer = new PdfWriter(pdfPath);
+        PdfDocument pdf = new PdfDocument(writer);
+        Document document = new Document(pdf);
+        
+		// Crear imagen del JPanel
+        BufferedImage bufferedImage = new BufferedImage(
+                panelCentro.getWidth(), panelCentro.getHeight(), BufferedImage.TYPE_INT_RGB);
+        Graphics2D g2d = bufferedImage.createGraphics();
+        panelCentro.paint(g2d);
+        g2d.dispose();
+
+        // Definir el tamaño máximo de la imagen que cabrá en cada página (por ejemplo, 800px de altura)
+        int pageHeight = 1300;  // Ajusta este valor según el tamaño de tu página
+        int imageHeight = bufferedImage.getHeight();
+        int numberOfPages = (int) Math.ceil((double) imageHeight / pageHeight);
+
+
+        // Dividir la imagen en varias subimágenes y agregar cada una a una nueva página
+        for (int i = 0; i < numberOfPages; i++) {
+            // Calcular el rango de la subimagen para la página actual
+            int yStart = i * pageHeight;
+            int yEnd = Math.min((i + 1) * pageHeight, imageHeight);
+            BufferedImage subImage = bufferedImage.getSubimage(0, yStart, bufferedImage.getWidth(), yEnd - yStart);
+
+            // Guardar la subimagen como archivo temporal
+            File tempFile = File.createTempFile("subpanel", ".png");
+            javax.imageio.ImageIO.write(subImage, "png", tempFile);
+
+            // Cargar la imagen en iText
+            ImageData imageData = ImageDataFactory.create(tempFile.getAbsolutePath());
+            Image image = new Image(imageData);
+
+            // Añadir la imagen al PDF
+            document.add(image);
+
+            // Eliminar el archivo temporal
+            tempFile.delete();
+
+            // Si no es la última página, agrega una nueva página al PDF
+            if (i < numberOfPages - 1) {
+                pdf.addNewPage();
+            }
+        }
+
+        // Cerrar el documento PDF
+        document.close();
+
+	}
 	
 	
 }

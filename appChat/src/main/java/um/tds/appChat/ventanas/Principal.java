@@ -4,6 +4,8 @@ import java.util.List;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -22,6 +24,8 @@ public class Principal extends JFrame {
 	private AppChat app = AppChat.INSTANCE;
 	private Contacto contactoSeleccionado;
 	private JPanel panelCentro;
+	private JButton serPremium;
+	private JFrame frame;
 
 	/**
 	 * Create the application.
@@ -39,7 +43,7 @@ public class Principal extends JFrame {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		JFrame frame = this;
+		frame = this;
 		this.setTitle("AppChat");
 		this.setBounds(100, 100, 1280, 720);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -112,7 +116,7 @@ public class Principal extends JFrame {
 		panelNorte.add(buscarMensaje);
 		
 		JButton verContactos = new JButton("Ver contactos");
-		verContactos.setSize(new Dimension(100, 50));
+		verContactos.setFont(new Font("Arial", Font.BOLD, 14));
 		verContactos.setUI(new RoundButtonUI());
 		verContactos.addActionListener(e -> {
 		    PanelVerContactos panelVerContactos = new PanelVerContactos(app.getUsuarioActual().getContactos());
@@ -123,6 +127,21 @@ public class Principal extends JFrame {
 		    dialog.setVisible(true);
 		});
 		panelNorte.add(verContactos);
+		
+		serPremium = new JButton("Premium");
+		serPremium.setFont(new Font("Arial", Font.BOLD, 14));
+		serPremium.setUI(new RoundButtonUI());
+		serPremium.addActionListener(e -> {
+		    PanelPremium panelPremium = new PanelPremium(this);
+		    panelPremium.setVisible(true);
+		    this.setVisible(false);
+		    
+		});
+		panelNorte.add(serPremium);
+		if(AppChat.INSTANCE.isPremium()) {
+			refrescarPremium();
+		}
+		
 		
 	    // Crear el JPanel para el usuario
 	    JPanel panelUsuario = new JPanel();
@@ -158,6 +177,19 @@ public class Principal extends JFrame {
 	        }
 	    });
 	    panelNorte.add(panelUsuario);
+	    
+	    
+	    ImageIcon iconoLogout = new ImageIcon(getClass().getResource("/iconos/logout.png"));
+		Image iconoLogoutEscalado = iconoLogout.getImage().getScaledInstance(30, 25, java.awt.Image.SCALE_SMOOTH);
+		JButton btnLogout= new JButton(new ImageIcon(iconoLogoutEscalado));
+		btnLogout.setUI(new RoundButtonUI());
+		btnLogout.addActionListener(e->{
+			AppChat.INSTANCE.logout();
+			Inicio ventanaLogin = new Inicio();
+			ventanaLogin.setVisible(true);
+			dispose();
+		});
+		panelNorte.add(btnLogout);
 	}
 	public void añadirContacto(Contacto c) {
 		panelContactos.addContact(c);
@@ -205,6 +237,36 @@ public class Principal extends JFrame {
                 panelCentro.revalidate();
                 panelCentro.repaint();
             }
+	}
+	public void refrescarPremium() {
+		serPremium.setText("Exportar PDF");
+		serPremium.setFont(new Font("Arial", Font.BOLD, 14));
+		serPremium.setUI(new RoundButtonUI());
+		serPremium.removeActionListener(serPremium.getActionListeners()[0]);
+		serPremium.addActionListener(e -> {
+			JFileChooser directoryChooser = new JFileChooser();
+	        directoryChooser.setDialogTitle("Seleccionar directorio para guardar PDF");
+	        directoryChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+	        int userSelection = directoryChooser.showSaveDialog(frame);
+
+	        if (userSelection == JFileChooser.APPROVE_OPTION) {
+	            File selectedDirectory = directoryChooser.getSelectedFile();
+	            String nombrePDF= JOptionPane.showInputDialog(frame, "Introduce el nombre del archivo PDF", "Exportar PDF", JOptionPane.PLAIN_MESSAGE);
+	            
+	            String pdfPath = new File(selectedDirectory, nombrePDF+".pdf").getAbsolutePath();
+	            try {
+					AppChat.INSTANCE.exportarPDF(((PanelChat)panelCentro).getPanelMensajes(), pdfPath);
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+	        }
+		    
+		});
+		this.setVisible(true);
+        this.revalidate();
+        this.repaint();
+        this.validate();
 	}
 	
 	 // Clase interna para el panel con dos campos de texto
@@ -325,6 +387,61 @@ public class Principal extends JFrame {
 			add(panelSur, BorderLayout.SOUTH);
         }
     }
-  
+    private class PanelPremium extends JDialog {
+        private static final long serialVersionUID = 1L;
+
+        public PanelPremium(JFrame parent) {
+        	setTitle("Hazte Premium");
+        	setLocationRelativeTo(parent);
+        	setSize(600, 400);
+            setLayout(new BorderLayout());
+            
+            
+            JLabel etiquetaPrecio = new JLabel("Precio: " + AppChat.INSTANCE.getPrecioPremium() + " €");
+            etiquetaPrecio.setFont(new Font("Arial", Font.BOLD, 16));
+            etiquetaPrecio.setHorizontalAlignment(SwingConstants.CENTER);
+            add(etiquetaPrecio, BorderLayout.NORTH);
+            
+            JComboBox<String> comboBox = new JComboBox<>(AppChat.INSTANCE.getDescuentosAplicables().toArray(new String[0])); 
+            JPanel panelCentral = new JPanel();
+            panelCentral.add(new JLabel("Selecciona un descuento de entre los aplicables:"));
+            panelCentral.add(comboBox);
+            
+            
+            JButton botonPagar = new JButton("Pagar");
+            botonPagar.setUI(new RoundButtonUI());
+            JButton botonCancelar = new JButton("Cancelar");
+            botonCancelar.setUI(new RoundButtonUI(SystemColor.textHighlight, RoundButtonUI.getRojoCancelar()));
+
+            // Panel para los botones
+            JPanel panelBotones = new JPanel();
+            panelBotones.add(botonPagar);
+            panelBotones.add(botonCancelar);
+
+            comboBox.addActionListener(e -> {
+                String opcionSeleccionada = (String) comboBox.getSelectedItem();
+                double precioConDescuento = AppChat.INSTANCE.getPrecioDescontado(opcionSeleccionada);
+                etiquetaPrecio.setText("Precio: " + precioConDescuento + " €");
+            });
+            
+            botonPagar.addActionListener(e -> {
+                String opcionSeleccionada = (String) comboBox.getSelectedItem();
+                double precioDescuento=AppChat.INSTANCE.hacerPremium(opcionSeleccionada);
+                JOptionPane.showMessageDialog(this, "¡Enhorabuena! Ahora eres Premium por " + precioDescuento + " €", "¡Felicidades!", JOptionPane.INFORMATION_MESSAGE);
+                ((Principal) parent).refrescarPremium();
+                dispose();
+            });
+
+            botonCancelar.addActionListener(e -> {
+            	parent.setVisible(true);
+                dispose();
+            });
+
+            // Agregar los paneles al diálogo
+            add(panelCentral, BorderLayout.CENTER);
+            add(panelBotones, BorderLayout.SOUTH);
+
+        }
+    }
 	
 }

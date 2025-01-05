@@ -6,7 +6,7 @@ public class DescuentoPorMensajes implements Descuento {
     
 	public static final String NOMBRE = "Descuento por número de mensajes";
 	
-	private static final int MINIMO_MENSAJES=100; //PODRÍAN SER ESTÁTICOS
+	private static final int MINIMO_MENSAJES=10; //PODRÍAN SER ESTÁTICOS
     private static int valor = 10;
     
 
@@ -21,7 +21,10 @@ public class DescuentoPorMensajes implements Descuento {
     }
     
     @Override
-    public int getValor() {
-    	return valor;
+	public double getPrecio(double precioOriginal) {
+    	return precioOriginal - (precioOriginal * valor / 100);
+    }
+    public String getNombre() {
+    	return NOMBRE;
     }
 }

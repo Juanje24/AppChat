@@ -30,6 +30,7 @@ public class PanelChat extends JPanel {
     int emoji=-1;
     private JScrollBar vertical;
     private int altura;
+    private JPanel panelMensajes;
 
     /**
      * Create the application.
@@ -119,9 +120,9 @@ public class PanelChat extends JPanel {
         add(panelSuperior, BorderLayout.NORTH);
 
      // Parte central: Panel para mostrar los mensajes
-        JPanel panelMensajes = new JPanel();
+        panelMensajes = new JPanel();
         panelMensajes.setLayout(new BoxLayout(panelMensajes, BoxLayout.Y_AXIS));
-        panelMensajes.setPreferredSize(new Dimension(250, 1000));
+        panelMensajes.setPreferredSize(new Dimension(250, 800));
         JScrollPane scrollPane = new JScrollPane(panelMensajes);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -232,7 +233,9 @@ public class PanelChat extends JPanel {
 
         add(panelInferior, BorderLayout.SOUTH);
     }
-
+	public JPanel getPanelMensajes() {
+		return panelMensajes;
+	}
     // Métodos para interactuar con el panel
     public String getTextoMensaje() {
         return areaTexto.getText();
