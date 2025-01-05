@@ -39,7 +39,7 @@ public abstract class Contacto {
 
 	public int getNumeroMensajesEntreFechas(LocalDate inicio, LocalDate fin) {
 		return (int) mensajes.stream()
-				.filter(mensaje -> mensaje.getFecha().isAfter(inicio) && mensaje.getFecha().isBefore(fin))
+				.filter(mensaje -> mensaje.getFecha().isAfter(inicio) && mensaje.getFecha().isBefore(fin.plusDays(1)))
 				.count();
 	}
     

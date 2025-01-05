@@ -20,7 +20,11 @@ public class DescuentoPorFecha implements Descuento {
     }
     
     @Override
-    public int getValor() {
-    	return valor;
+    public double getPrecio(double precioOriginal) {
+    	return precioOriginal - (precioOriginal * valor / 100);
     }
+
+	public String getNombre() {
+		return NOMBRE;
+	}
 }

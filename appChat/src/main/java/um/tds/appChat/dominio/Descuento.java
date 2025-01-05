@@ -2,5 +2,6 @@ package um.tds.appChat.dominio;
 
 public interface Descuento {
 	boolean aplicaDescuento(Usuario usuario);
-	int getValor();
+	double getPrecio(double precioOriginal);
+	String getNombre();
 }
