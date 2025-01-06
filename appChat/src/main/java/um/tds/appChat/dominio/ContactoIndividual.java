@@ -23,6 +23,7 @@ public class ContactoIndividual extends Contacto{
     public String getSaludo() {
     	return usuario.getSaludo();
     }
+
     
     
 }

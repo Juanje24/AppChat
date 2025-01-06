@@ -1,8 +1,5 @@
 package um.tds.appChat.singletons;
 
-
-
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -41,6 +38,10 @@ public enum AppChat {
 		grupoDAO = factoriaDAO.getGrupoDAO();
 		mensajeDAO = factoriaDAO.getMensajeDAO();
 		repositorioUsuarios = RepositorioUsuario.INSTANCE;
+		
+		
+		
+		
 	}
 	public Mensaje enviarMensajeContacto(Contacto c3, String string, int emoji) {
 		Mensaje msj = usuarioActual.sendMensaje( string, emoji, c3);
@@ -70,7 +71,6 @@ public enum AppChat {
 				contactoIndividualDAO.modificarContactoIndividual(c);
 				usuarioDAO.modificarUsuario(uReceptor);
 			}
-			
 			
 		}
 		return msj;		
@@ -104,7 +104,6 @@ public enum AppChat {
 		usuarioDAO.registrarUsuario(repositorioUsuarios.buscarUsuarioPorMovil(numTlf).get());
 		return true;
 	}
-
 	public boolean login(String telefono, String contrasena) {
 		if (repositorioUsuarios.buscarUsuarioPorMovil(telefono).isPresent()) {
 			usuarioActual = repositorioUsuarios.buscarUsuarioPorMovil(telefono).get();
@@ -112,6 +111,7 @@ public enum AppChat {
 		}
 		return false;
 	}
+	
 	public void recuperarUsuarios() {
 		List<Usuario> usuarios = usuarioDAO.recuperarTodosUsuarios();
 		repositorioUsuarios.cargarUsuarios(usuarios);
@@ -163,6 +163,7 @@ public enum AppChat {
 	public void logout() {
 		usuarioActual=null;
 		
+		
 	}
 	public double getPrecioPremium() {
 		return PREMIUM;
@@ -195,6 +196,18 @@ public enum AppChat {
 		exportador.exportarPDF(c.getMensajes(), c.getNombre(), usuarioActual.getNombre(), pdfPath );
 		
 
+	}
+	public void actualizarUsuario(Usuario usuario) {
+		Usuario usuarioActualizado= usuarioDAO.recuperarUsuarioPorId(usuario.getId());
+		repositorioUsuarios.modificarUsuario(usuarioActualizado);
+		if (usuarioActual.getTelefono().equals(usuarioActualizado.getTelefono())) {
+			usuarioActual = usuarioActualizado;
+		}
+		
+	}
+	public void actualizarUsuario(String tlf) {
+		Usuario u=repositorioUsuarios.buscarUsuarioPorMovil(tlf).get();
+		actualizarUsuario(u);
 	}
 	
 	

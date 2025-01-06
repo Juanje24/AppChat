@@ -34,8 +34,6 @@ public class Grupo extends Contacto{
 	public String getSaludo() {
 		return "";
 	}
-
-
     
     
     

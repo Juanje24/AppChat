@@ -76,31 +76,7 @@ public class Usuario {
         this(nombre, apellido, telefono, contraseña, birthday, "", "");
     }
 
-    
-    //FUNCIONALIDAD
-    
-    
-    
-//    public List<Mensaje> searchMessages(MessageSearchBuilder builder) {
-//        return contactos.stream()
-//                .filter(contacto -> builder.getNombreContacto().isEmpty() || contacto.getNombre().equalsIgnoreCase(builder.getNombreContacto().get()))
-//                .flatMap(contacto -> contacto.getMensajes().stream()
-//                        .filter(mensaje -> builder.getText().isEmpty() || mensaje.getContenido().contains(builder.getText().get()))
-//                        .filter(mensaje -> builder.getNumero().isEmpty() || mensaje.getNumero() == builder.getNumero().get())
-//                )
-//                .distinct()
-//                .collect(Collectors.toList());
-//    }
-    
-//    public List<Mensaje> searchMessageByText (String text){
-//    	return contactos.stream()
-//                .flatMap(contacto -> contacto.searchMessageByText(text).stream())
-//                .distinct()
-//                .collect(Collectors.toList());
-//    }
-    
-    
-    //GETTERS Y SETTERS
+
 
 	
 	public int getId() {
@@ -258,5 +234,6 @@ public class Usuario {
 				.flatMap(c -> c.searchMessages(builder).stream())
 				.collect(Collectors.toList());
 	}
+	
 
 }

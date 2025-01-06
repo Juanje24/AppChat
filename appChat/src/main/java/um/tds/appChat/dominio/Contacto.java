@@ -96,6 +96,7 @@ public abstract class Contacto {
 	public abstract String getTelefonoPropio();
 
 	public abstract String getSaludo();
+	
 
 
 

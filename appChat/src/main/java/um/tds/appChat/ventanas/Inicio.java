@@ -150,6 +150,7 @@ public class Inicio extends JFrame{
 			ventanaRegistro.mostrar();
 			
 		});
+		
 		panelSur.add(btnRegistrar);
 		panelSur.add(Box.createRigidArea(new Dimension(100,10)));
 		
@@ -168,6 +169,7 @@ public class Inicio extends JFrame{
 		passwordField.addActionListener(e -> iniciarSesion());
 	}
 	private void iniciarSesion() {
+		
 	    if (AppChat.INSTANCE.login(textField.getText(), new String(passwordField.getPassword()))) {
 	        new Principal(this).setVisible(true);
 	        this.setVisible(false);

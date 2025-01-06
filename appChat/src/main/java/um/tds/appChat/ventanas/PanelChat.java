@@ -122,7 +122,7 @@ public class PanelChat extends JPanel {
      // Parte central: Panel para mostrar los mensajes
         panelMensajes = new JPanel();
         panelMensajes.setLayout(new BoxLayout(panelMensajes, BoxLayout.Y_AXIS));
-        panelMensajes.setPreferredSize(new Dimension(250, 800));
+        panelMensajes.setPreferredSize(new Dimension(250, 600));
         scrollPane = new JScrollPane(panelMensajes);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -237,9 +237,7 @@ public class PanelChat extends JPanel {
         return areaTexto.getText();
     }
     public void bajarBarra() {
-        SwingUtilities.invokeLater(() -> {
-            scrollPane.getVerticalScrollBar().setValue(scrollPane.getVerticalScrollBar().getMaximum());
-        });
+    	SwingUtilities.invokeLater(() -> scrollPane.getVerticalScrollBar().setValue(scrollPane.getVerticalScrollBar().getMaximum()));
     }
     public void limpiarCampoMensaje() {
         areaTexto.setText("");
