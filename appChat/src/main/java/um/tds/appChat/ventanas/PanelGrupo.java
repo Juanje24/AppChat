@@ -15,7 +15,7 @@ public class PanelGrupo extends JFrame {
     private static final long serialVersionUID = 1L;
     private List<ContactoIndividual> contactos;
     private JFrame parent;
-    private String path;
+    private String path = "";
 
     public PanelGrupo() {
         super();
@@ -169,6 +169,14 @@ public class PanelGrupo extends JFrame {
 			List<ContactoIndividual> contactosGrupo = getContactosGrupo(modeloGrupo);
 			String nombre = nombreGrupo.getText();
 			String foto = path;
+			if(foto.equals("")) {
+                foto = Utils.getRutaResourceFromString("src/main/resources/iconos/grupoDefault.png");
+			}
+			if (nombre.equals("") || contactosGrupo.isEmpty()) {
+				JOptionPane.showMessageDialog(this, "El grupo debe tener un nombre y al menos un contacto", "Error",
+						JOptionPane.ERROR_MESSAGE);
+				return;
+			}
 			((Principal) parent).añadirContacto(AppChat.INSTANCE.crearGrupo(nombre, contactosGrupo, foto));
 			this.dispose();
 		});
