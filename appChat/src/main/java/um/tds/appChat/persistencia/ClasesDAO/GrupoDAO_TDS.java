@@ -135,6 +135,9 @@ public class GrupoDAO_TDS implements GrupoDAO {
 				prop.setValor(obtenerIDsContactos(grupo.getContactos()));
 			}
 			servicioPersistencia.modificarPropiedad(prop);
+			if (PoolDAO.getUnicaInstancia(2).contiene(grupo.getId())) {
+				PoolDAO.getUnicaInstancia(2).modificarObjeto(grupo.getId(), grupo);
+			}
 		}
 	}
 

@@ -25,7 +25,13 @@ public class PoolDAO {
 		pool.put(id, objeto);
 	}
 
+	public void modificarObjeto(int id, Object objeto) {
+		pool.replace(id, objeto);
+	}
 	public boolean contiene(int id) {
 		return pool.containsKey(id);
+	}
+	public void borrarTodos() {
+		pool.clear();
 	}
 }

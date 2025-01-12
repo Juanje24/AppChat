@@ -92,11 +92,37 @@ public abstract class Contacto {
 	public void setUrlImagen(String urlImagen) {
 		this.urlImagen = urlImagen;
 	}
+
+	public void setLeidos() {
+		for (Mensaje mensaje : mensajes) {
+			if (mensaje.getTipo() == BubbleText.RECEIVED) {
+				mensaje.setLeido(true);
+			}
+		}
+	}
+
+	public int getNumeroMensajesNoLeidos() {
+		int noLeidos = 0;
+		for (Mensaje mensaje : mensajes) {
+			if (mensaje.getTipo() == BubbleText.RECEIVED && !mensaje.isLeido()) {
+				noLeidos++;
+			}
+		}
+		return noLeidos;
+	}
 	
 	public abstract String getTelefonoPropio();
 
 	public abstract String getSaludo();
 	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Contacto) {
+			Contacto c = (Contacto) obj;
+			return c.getNombre().equals(nombre) && c.getTelefonoPropio().equals(getTelefonoPropio());
+		}
+		return super.equals(obj);
+	}
 
 
 

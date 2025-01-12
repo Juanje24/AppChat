@@ -25,7 +25,7 @@ public class ContactListModel extends AbstractListModel<Contacto> {
 
     public void addContact(Contacto contacto) {
         contactos.add(contacto);
-        fireIntervalAdded(this, contactos.size() - 2, contactos.size() - 1);
+        fireIntervalAdded(this, contactos.size() - 1, contactos.size() );
     }
 
     public void removeContact(Contacto contacto) {
@@ -39,7 +39,11 @@ public class ContactListModel extends AbstractListModel<Contacto> {
 	public void addContacts(List<Contacto> contactos2) {
 		if(contactos2.size()>0) {
 		contactos.addAll(contactos2);
-		fireIntervalAdded(this, contactos.size() - contactos2.size(), contactos.size() - 1);
+		fireIntervalAdded(this, contactos.size() - contactos2.size(), contactos.size());
 		}
 	}
+	 public void setContacts(List<Contacto> nuevosContactos) {
+	        this.contactos = nuevosContactos;
+	        fireContentsChanged(this, 0, nuevosContactos.size() - 1); // Notificar que la lista ha cambiado
+	    }
 }

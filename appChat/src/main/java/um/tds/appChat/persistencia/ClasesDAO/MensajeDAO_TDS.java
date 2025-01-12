@@ -27,6 +27,7 @@ public class MensajeDAO_TDS implements MensajeDAO {
 	private static final String NOMBRE_RECEPTOR = "nombreReceptor";
 	private static final String TIPO = "tipo";
 	private static final String EMOJI = "emoji";
+	private static final String LEIDO = "leido";
 	
 	
 	private ServicioPersistencia servicioPersistencia;
@@ -52,9 +53,11 @@ public class MensajeDAO_TDS implements MensajeDAO {
 		String nombreReceptor = servicioPersistencia.recuperarPropiedadEntidad(eMensaje, NOMBRE_RECEPTOR);
 		int tipo = Integer.parseInt(servicioPersistencia.recuperarPropiedadEntidad(eMensaje, TIPO));
 		int emoji = Integer.parseInt(servicioPersistencia.recuperarPropiedadEntidad(eMensaje, EMOJI));
+		boolean leido = Boolean.parseBoolean(servicioPersistencia.recuperarPropiedadEntidad(eMensaje, LEIDO));
 		
 		Mensaje mensaje = new Mensaje(texto, emoji, emisor, receptor,nombreEmisor, nombreReceptor,tipo);
 		mensaje.setFecha(fecha);
+		mensaje.setLeido(leido);
 		mensaje.setId(eMensaje.getId());
 		
 		return mensaje;
@@ -71,7 +74,9 @@ public class MensajeDAO_TDS implements MensajeDAO {
 						new Propiedad(RECEPTOR, mensaje.getReceptor()),
 						new Propiedad(NOMBRE_EMISOR, mensaje.getNombreEmisor()),
 						new Propiedad(NOMBRE_RECEPTOR, mensaje.getNombreReceptor()),
+						new Propiedad(LEIDO, String.valueOf(mensaje.isLeido())),
 						new Propiedad(TIPO, String.valueOf(mensaje.getTipo())))));
+		
 		return eMensaje;
 	}
 	
@@ -113,7 +118,7 @@ public class MensajeDAO_TDS implements MensajeDAO {
 				prop.setValor(String.valueOf(mensaje.getEmoji()));
 			}
 			else if (prop.getNombre().equals(FECHA)) {
-				prop.setValor(mensaje.getFecha().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+				prop.setValor(mensaje.getFecha().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 			} else if (prop.getNombre().equals(EMISOR)) {
 				prop.setValor(mensaje.getEmisor());
 			} else if (prop.getNombre().equals(RECEPTOR)) {
@@ -122,7 +127,9 @@ public class MensajeDAO_TDS implements MensajeDAO {
                 prop.setValor(mensaje.getNombreEmisor());
             } else if (prop.getNombre().equals(TIPO)) {
 				prop.setValor(String.valueOf(mensaje.getTipo()));
-			} 
+			} else if (prop.getNombre().equals(LEIDO)) {
+				prop.setValor(Boolean.toString(mensaje.isLeido()));
+			}
 			servicioPersistencia.modificarPropiedad(prop);
 		}
 

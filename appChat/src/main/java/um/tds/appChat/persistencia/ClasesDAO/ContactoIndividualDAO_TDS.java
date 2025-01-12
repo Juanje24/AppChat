@@ -120,6 +120,9 @@ public class ContactoIndividualDAO_TDS implements ContactoIndividualDAO{
 			}
 			servicioPersistencia.modificarPropiedad(prop);
 		}
+		if (PoolDAO.getUnicaInstancia(1).contiene(contactoIndividual.getId())) {
+			PoolDAO.getUnicaInstancia(1).modificarObjeto(contactoIndividual.getId(), contactoIndividual);
+		}
 	}
 
 	@Override

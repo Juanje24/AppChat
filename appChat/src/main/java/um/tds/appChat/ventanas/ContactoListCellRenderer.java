@@ -28,6 +28,7 @@ public class ContactoListCellRenderer extends JPanel implements ListCellRenderer
 	private JLabel lblImagen;
 	private JLabel lblNombre;
 	private JLabel lblUltimoMsg;
+	private JLabel lblMensajesNoLeidos;
 
 	public ContactoListCellRenderer() {
 		setLayout(new BorderLayout(10, 10)); // Espaciado entre imagen y texto
@@ -35,14 +36,16 @@ public class ContactoListCellRenderer extends JPanel implements ListCellRenderer
 		lblImagen = new JLabel();
 		lblNombre = new JLabel();
 		lblUltimoMsg = new JLabel();
+		lblMensajesNoLeidos = new JLabel();
 
 		lblNombre.setFont(new Font("Arial", Font.BOLD, 14));
 		lblUltimoMsg.setFont(new Font("Arial", Font.PLAIN, 12));
 
-		JPanel panelTexto = new JPanel(new GridLayout(3, 1)); // Para organizar los textos verticalmente
-		panelTexto.add(lblNombre);
-		panelTexto.add(lblUltimoMsg);
-
+		JPanel panelTexto = new JPanel(new BorderLayout()); // Para organizar los textos verticalmente
+		panelTexto.add(lblNombre, BorderLayout.CENTER);
+		panelTexto.add(lblMensajesNoLeidos, BorderLayout.EAST);
+		panelTexto.add(lblUltimoMsg , BorderLayout.SOUTH);
+		
 		add(lblImagen, BorderLayout.WEST);  // Imagen a la izquierda
 		add(panelTexto, BorderLayout.CENTER);  // Texto a la derecha
 	}
@@ -70,7 +73,15 @@ public class ContactoListCellRenderer extends JPanel implements ListCellRenderer
 		} else System.err.println("No se pudo cargar la imagen: " + fotoUsuario);
 
 		// Configuración del texto
-		lblNombre.setText(contacto.getNombre());
+		lblNombre.setText(contacto.getNombre()+" ");
+		int noLeidos = contacto.getNumeroMensajesNoLeidos();
+		if(noLeidos > 0) {
+            lblMensajesNoLeidos.setText(String.valueOf(noLeidos));
+            lblMensajesNoLeidos.setForeground(Color.RED);
+            lblMensajesNoLeidos.setFont(new Font("Arial", Font.BOLD, 14));
+        } else {
+            lblMensajesNoLeidos.setText("");
+        }
 		lblUltimoMsg.setText("");
 		lblUltimoMsg.setIcon(null);
 		try {

@@ -199,6 +199,7 @@ public class Usuario {
 		for (Contacto contacto : contactos) {
 			if (contacto.equals(c)) {
 				return contacto.addMensaje(texto,emoji, telefono,nombre, BubbleText.SENT);
+				
 			}
 		}
 		return null;
@@ -222,7 +223,13 @@ public class Usuario {
 	public void eliminarContacto(Contacto contacto) {
 		contactos.remove(contacto);
 	}
-
+	public void modificarContacto(Contacto contacto) {
+		for (Contacto c : contactos) {
+			if (c.equals(contacto)){
+				contactos.set(contactos.indexOf(c), contacto);
+			}
+		}
+	}
 	public int getNumMensajesEntreFecha(LocalDateTime inicio, LocalDateTime fin) {
 		return contactos.stream()
 		.mapToInt(c -> c.getNumeroMensajesEntreFechas(inicio, fin))

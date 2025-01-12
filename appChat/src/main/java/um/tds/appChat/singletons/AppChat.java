@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import um.tds.appChat.dominio.*;
 import um.tds.appChat.persistencia.*;
 import um.tds.appChat.persistencia.InterfacesDAO.*;
+import um.tds.appChat.ventanas.ActualizacionVistaListener;
 
 
 public enum AppChat {
@@ -25,6 +26,8 @@ public enum AppChat {
 	private MensajeDAO mensajeDAO;
 	private Usuario usuarioActual;
 	private RepositorioUsuario repositorioUsuarios;
+	private Peer peer;
+	private ActualizacionVistaListener listener;
 	
 	private AppChat() {
 		try {
@@ -38,6 +41,9 @@ public enum AppChat {
 		grupoDAO = factoriaDAO.getGrupoDAO();
 		mensajeDAO = factoriaDAO.getMensajeDAO();
 		repositorioUsuarios = RepositorioUsuario.INSTANCE;
+		peer = new Peer();
+		Thread peerThread = new Thread(peer);
+		peerThread.start();
 		
 		
 		
@@ -51,26 +57,32 @@ public enum AppChat {
 		} else {
 			grupoDAO.modificarGrupo((Grupo) c3);
 		}
-		//Falta la parte inversa, buscar en el usuario asociado a c3 el contacto con tlf=usuarioActual.getTlf() y añadir el mensaje
+		
 		StringTokenizer strTok = new StringTokenizer(c3.getTelefonoPropio(), " ");
 		while ( strTok.hasMoreElements()) { 
 			String tlf = (String) strTok.nextElement();
 			Usuario uReceptor = repositorioUsuarios.buscarUsuarioPorMovil(tlf).get();
 			Optional<ContactoIndividual> cEmisor = uReceptor.getContactoIndividual(usuarioActual.getTelefono());
 			if (cEmisor.isPresent()) {
+				
 				Mensaje msjRecv= uReceptor.recibeMensaje(string, emoji,usuarioActual.getTelefono(),cEmisor.get().getNombre(), cEmisor.get());
 				mensajeDAO.registrarMensaje(msjRecv);
 				contactoIndividualDAO.modificarContactoIndividual(cEmisor.get());
+				usuarioDAO.modificarUsuario(uReceptor);
+				System.out.println("Se ha encontrado");
 			}
 			else {
+				System.out.println("Se ha tenido que crear el contacto");
 				uReceptor.addContactoIndividual(usuarioActual.getTelefono(), usuarioActual);
 				ContactoIndividual c = uReceptor.getContactoIndividual(usuarioActual.getTelefono()).get();
 				contactoIndividualDAO.registrarContactoIndividual(c);
+				cEmisor= Optional.of(c);
 				Mensaje msjRecv= uReceptor.recibeMensaje(string, emoji,usuarioActual.getTelefono(),c.getNombre(), c);
 				mensajeDAO.registrarMensaje(msjRecv);
 				contactoIndividualDAO.modificarContactoIndividual(c);
 				usuarioDAO.modificarUsuario(uReceptor);
 			}
+			peer.sendMessage(String.valueOf(cEmisor.get().getId()));
 			
 		}
 		return msj;		
@@ -209,6 +221,39 @@ public enum AppChat {
 		Usuario u=repositorioUsuarios.buscarUsuarioPorMovil(tlf).get();
 		actualizarUsuario(u);
 	}
-	
+	public void recibidoMensajeSimultaneo(String message) {
+		String tlfActual = usuarioActual.getTelefono();
+		List<Usuario> usuarios = usuarioDAO.recuperarTodosUsuarios();
+		repositorioUsuarios.reemplazarUsuarios(usuarios);
+		usuarioActual = repositorioUsuarios.buscarUsuarioPorMovil(tlfActual).get();
+		ContactoIndividual c = contactoIndividualDAO.recuperarContactoIndividualPorId(Integer.parseInt(message));	
+		System.out.println("Numero de contactos: "+usuarioActual.getContactos().size());
+		for (Contacto cAux : usuarioActual.getContactos()) {
+			System.out.println("Contacto: "+cAux.getNombre()+" mensajes: "+cAux.getMensajes().size());
+		}
+		listener.actualizarVista(c.getNombre(), c.getNumeroMensajesNoLeidos());
+	}
+
+	public void leidoEnPersistencia(Contacto c) {
+		for (Mensaje m : c.getMensajes()) {
+            mensajeDAO.modificarMensaje(m);
+        }
+		
+	}
+	public void marcarMensajesLeidos(Contacto c) {
+		c.setLeidos();
+		for (Mensaje m : c.getMensajes()) {
+			mensajeDAO.modificarMensaje(m);
+		}
+		if (c instanceof ContactoIndividual) {
+			contactoIndividualDAO.modificarContactoIndividual((ContactoIndividual) c);
+		} else {
+			grupoDAO.modificarGrupo((Grupo) c);
+		}
+	}
+
+	public void setListener(ActualizacionVistaListener listener) {
+		this.listener = listener;
+	}
 	
 }

@@ -50,6 +50,11 @@ public enum RepositorioUsuario {
 	public void cargarUsuarios(Collection<Usuario> usuarios) {
 		this.usuarios.addAll(usuarios);
 	}
+	public void reemplazarUsuarios(Collection<Usuario> usuarios) {
+		this.usuarios.clear();
+		this.usuarios.addAll(usuarios);
+	
+	}
     //El repositorio es el que crea los usuarios nuevos, ya que tiene la colección de usuarios
     
     public List<Usuario> getAllUsuarios(){
@@ -63,15 +68,6 @@ public enum RepositorioUsuario {
     	
     }
 
-//    public void removeUsuario(String email) {
-//		usuarios.removeIf(usuario -> usuario.getEmail().equals(email));
-//	}
-
-//    private boolean usuarioExistente(Usuario usuario) {
-//		return searchUsuarioByTelefono(usuario.getTelefono()).isPresent();
-//	}
-
-    //public Optional<Usuario> searchUsuarioByEmail(String email) {
 	
 	public boolean containsUsuario(int id) {
 		return usuarios.stream().anyMatch(usuario -> usuario.getId() == id);

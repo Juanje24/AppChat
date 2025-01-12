@@ -14,6 +14,7 @@ public class Mensaje {
     private String nombreReceptor;
     private int tipo;
     private LocalDateTime fecha;
+    private boolean leido;
 
     public Mensaje (String texto, int emoji, String emisor, String receptor, String nombreEmisor, String nombreReceptor,  int tipo){
     	
@@ -25,6 +26,7 @@ public class Mensaje {
         this.nombreReceptor = nombreReceptor;
         this.tipo = tipo;
         this.fecha = LocalDateTime.now(); 
+        this.leido = false;
 
     }
 
@@ -110,6 +112,14 @@ public class Mensaje {
 
 	public void setFecha(LocalDateTime fecha) {
 		this.fecha = fecha;
+	}
+
+	public boolean isLeido() {
+		return leido;
+	}
+
+	public void setLeido(boolean leido) {
+		this.leido = leido;
 	}
 
 	@Override

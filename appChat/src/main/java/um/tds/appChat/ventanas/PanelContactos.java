@@ -30,6 +30,9 @@ public class PanelContactos extends JPanel {
 	public void removeContact(Contacto contacto) {
 		((ContactListModel) listaContactos.getModel()).removeContact(contacto);
 	}
+	public void reemplazarContactos(List<Contacto> nuevosContactos) {
+	    ((ContactListModel) listaContactos.getModel()).setContacts(nuevosContactos);
+	}
 
 	public void addContacts(List<Contacto> contactos) {
 		((ContactListModel) listaContactos.getModel()).addContacts(contactos);

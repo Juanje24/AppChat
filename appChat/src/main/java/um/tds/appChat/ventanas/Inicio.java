@@ -171,7 +171,9 @@ public class Inicio extends JFrame{
 	private void iniciarSesion() {
 		
 	    if (AppChat.INSTANCE.login(textField.getText(), new String(passwordField.getPassword()))) {
-	        new Principal(this).setVisible(true);
+	        Principal ventanaPrincipal = new Principal(this);
+	        AppChat.INSTANCE.setListener(ventanaPrincipal);
+            ventanaPrincipal.setVisible(true);
 	        this.setVisible(false);
 	        this.dispose();
 	    } else {

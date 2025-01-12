@@ -40,7 +40,7 @@ public class Registro extends JDialog {
 	private JTextField campoMovil;
 	private JTextField campoApellidos;
 	private JTextField campoNombre;
-	private String path;
+	private String path = "";
 	private Usuario u=null;
 
 	/**
@@ -238,10 +238,13 @@ public class Registro extends JDialog {
 					JOptionPane.showMessageDialog(this, "Las contraseñas no coinciden", "Error", JOptionPane.ERROR_MESSAGE);
 	                }
 				else if(campoNombre.getText().isEmpty() || campoApellidos.getText().isEmpty() || campoMovil.getText().isEmpty()
-						|| passwordField.getPassword().length==0 || dateChooser.getDate()==null  || path == null) {
+						|| passwordField.getPassword().length==0 || dateChooser.getDate()==null) {
 					JOptionPane.showMessageDialog(this, "Por favor, rellene los campos obligatorios", "Error", JOptionPane.ERROR_MESSAGE);
 				}
 				else {
+					if (path.equals("")) {
+			            path = Utils.getRutaResourceFromString("src/main/resources/iconos/userDefault.png");
+					}
 					if(AppChat.INSTANCE.registrarUsuario(campoNombre.getText(), campoApellidos.getText(), new String(passwordField.getPassword()),
 							dateChooser.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), campoMovil.getText(), path ,textArea.getText())) {
 						JOptionPane.showMessageDialog(this, "Usuario registrado correctamente", "Registro", JOptionPane.INFORMATION_MESSAGE);
@@ -261,6 +264,7 @@ public class Registro extends JDialog {
 			this.getContentPane().add(btnRegistrar, gbc_btnRegistrar);
 		}
 		else {
+			//Recuperamos los datos del usuario actual
 			campoNombre.setText(u.getNombre());
 			campoApellidos.setText(u.getApellido());
 			campoMovil.setText(u.getTelefono());

@@ -16,7 +16,7 @@ import um.tds.appChat.dominio.Contacto;
 import um.tds.appChat.dominio.ContactoIndividual;
 import um.tds.appChat.singletons.AppChat;
 
-public class Principal extends JFrame {
+public class Principal extends JFrame implements ActualizacionVistaListener {
 
 	private static final long serialVersionUID = 1L;
 	private PanelContactos panelContactos;
@@ -63,6 +63,9 @@ public class Principal extends JFrame {
                 if (!e.getValueIsAdjusting()) {
                    contactoSeleccionado = panelContactos.getContactoSeleccionado();
                     if (contactoSeleccionado != null) {
+                    	contactoSeleccionado.setLeidos();
+                    	AppChat.INSTANCE.leidoEnPersistencia(contactoSeleccionado);
+                    	                   	
                         ((PanelChat) panelCentro).setContacto(contactoSeleccionado);
                         frame.revalidate();
                         frame.repaint();
@@ -263,6 +266,18 @@ public class Principal extends JFrame {
         this.revalidate();
         this.repaint();
         this.validate();
+	}
+	public void actualizarVista(String nombre, int numMsjs) {
+		panelContactos.reemplazarContactos(AppChat.INSTANCE.getUsuarioActual().getContactos());
+		JOptionPane.showMessageDialog(this, "Nuevo mensaje de " + nombre + ". Tienes " + numMsjs + " mensajes sin leer", "¡Nuevo mensaje!", JOptionPane.INFORMATION_MESSAGE);
+		this.setVisible(true);
+		this.revalidate();
+		this.repaint();
+		this.validate();
+		panelContactos.revalidate();
+		panelContactos.repaint();
+		panelContactos.validate();
+		
 	}
 	
 	 // Clase interna para el panel con dos campos de texto
