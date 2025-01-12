@@ -1,7 +1,7 @@
 package um.tds.appChat.dominio;
 
 
-import java.sql.BatchUpdateException;
+
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 

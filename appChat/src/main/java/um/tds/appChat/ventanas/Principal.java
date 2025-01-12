@@ -277,6 +277,9 @@ public class Principal extends JFrame implements ActualizacionVistaListener {
 		panelContactos.revalidate();
 		panelContactos.repaint();
 		panelContactos.validate();
+		panelCentro.revalidate();
+		panelCentro.repaint();
+		panelCentro.validate();
 		
 	}
 	

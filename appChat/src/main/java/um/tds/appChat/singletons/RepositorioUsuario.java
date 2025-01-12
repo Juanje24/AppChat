@@ -50,11 +50,6 @@ public enum RepositorioUsuario {
 	public void cargarUsuarios(Collection<Usuario> usuarios) {
 		this.usuarios.addAll(usuarios);
 	}
-	public void reemplazarUsuarios(Collection<Usuario> usuarios) {
-		this.usuarios.clear();
-		this.usuarios.addAll(usuarios);
-	
-	}
     //El repositorio es el que crea los usuarios nuevos, ya que tiene la colección de usuarios
     
     public List<Usuario> getAllUsuarios(){

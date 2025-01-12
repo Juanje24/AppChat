@@ -97,12 +97,16 @@ public class UsuarioDAO_TDS implements UsuarioDAO {
 			}
 			servicioPersistencia.modificarPropiedad(prop);
 		}
+		if (PoolDAO.getUnicaInstancia(0).contiene(usuario.getId())) {
+			PoolDAO.getUnicaInstancia(0).modificarObjeto(usuario.getId(), usuario);
+		}
 	}
 
 	@Override
 	public Usuario recuperarUsuarioPorId(int id) {
 		//Si el objeto está en el pool, se devuelve
 		if (PoolDAO.getUnicaInstancia(0).contiene(id)) {
+			System.out.println("Recuperando de pool");
 			return (Usuario) PoolDAO.getUnicaInstancia(0).getObjeto(id);
 		}
 		//Si no, se recupera de la base de datos

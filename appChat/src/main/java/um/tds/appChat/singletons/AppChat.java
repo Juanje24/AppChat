@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 import um.tds.appChat.dominio.*;
 import um.tds.appChat.persistencia.*;
+import um.tds.appChat.persistencia.ClasesDAO.PoolDAO;
 import um.tds.appChat.persistencia.InterfacesDAO.*;
 import um.tds.appChat.ventanas.ActualizacionVistaListener;
 
@@ -68,7 +69,6 @@ public enum AppChat {
 				Mensaje msjRecv= uReceptor.recibeMensaje(string, emoji,usuarioActual.getTelefono(),cEmisor.get().getNombre(), cEmisor.get());
 				mensajeDAO.registrarMensaje(msjRecv);
 				contactoIndividualDAO.modificarContactoIndividual(cEmisor.get());
-				usuarioDAO.modificarUsuario(uReceptor);
 				System.out.println("Se ha encontrado");
 			}
 			else {
@@ -222,10 +222,8 @@ public enum AppChat {
 		actualizarUsuario(u);
 	}
 	public void recibidoMensajeSimultaneo(String message) {
-		String tlfActual = usuarioActual.getTelefono();
-		List<Usuario> usuarios = usuarioDAO.recuperarTodosUsuarios();
-		repositorioUsuarios.reemplazarUsuarios(usuarios);
-		usuarioActual = repositorioUsuarios.buscarUsuarioPorMovil(tlfActual).get();
+		PoolDAO.resetearPools();
+		usuarioActual = usuarioDAO.recuperarUsuarioPorId(usuarioActual.getId());
 		ContactoIndividual c = contactoIndividualDAO.recuperarContactoIndividualPorId(Integer.parseInt(message));	
 		System.out.println("Numero de contactos: "+usuarioActual.getContactos().size());
 		for (Contacto cAux : usuarioActual.getContactos()) {

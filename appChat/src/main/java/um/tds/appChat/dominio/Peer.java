@@ -37,11 +37,6 @@ public class Peer implements Runnable {
                     return;
                 }
                 System.out.println("Mensaje recibido del contacto con id: " + message);
-                try {
-					Thread.sleep(5000);
-				} catch (InterruptedException e) {
-					throw new RuntimeException(e);
-                }
                 AppChat.INSTANCE.recibidoMensajeSimultaneo(message);
             } catch (IOException e) {
                 System.out.println("Error al leer el mensaje");
@@ -49,6 +44,7 @@ public class Peer implements Runnable {
         }
     }
 
+	@SuppressWarnings("resource")
 	private static void startServer() {
           int puertoProvisional = 50000;
           while(!isServerOn) {

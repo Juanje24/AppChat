@@ -16,6 +16,14 @@ public class PoolDAO {
 		return unicaInstancia[tipo];
 		
 	}
+	public static void resetearPools() {
+		for (int i = 0; i < 4; i++) {
+			if(unicaInstancia[i] != null) {
+				unicaInstancia[i].pool.clear();
+			}
+			
+		}
+	}
 	
 	public Object getObjeto(int id) {
 		return pool.get(id);

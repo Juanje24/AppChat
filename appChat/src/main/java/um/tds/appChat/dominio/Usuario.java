@@ -241,6 +241,10 @@ public class Usuario {
 				.flatMap(c -> c.searchMessages(builder).stream())
 				.collect(Collectors.toList());
 	}
+
+	public boolean areMensajesNuevos() {
+		return contactos.stream().anyMatch(c->c.getNumeroMensajesNoLeidos()>0);
+	}
 	
 
 }

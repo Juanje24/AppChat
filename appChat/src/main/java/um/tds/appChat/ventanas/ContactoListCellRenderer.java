@@ -92,7 +92,13 @@ public class ContactoListCellRenderer extends JPanel implements ListCellRenderer
 				Image iconoEscalado = icono.getImage().getScaledInstance(32, 32, java.awt.Image.SCALE_SMOOTH);
 				lblUltimoMsg.setIcon(new ImageIcon(iconoEscalado));
 			} else {
-				lblUltimoMsg.setText(ultMsj.getTexto());
+				if (texto.length() > 20) {
+					texto = texto.substring(0, 20) + "...";
+					lblUltimoMsg.setText(texto);
+				}else {
+					lblUltimoMsg.setText(ultMsj.getTexto());
+				}
+
 				
 			}
 			
