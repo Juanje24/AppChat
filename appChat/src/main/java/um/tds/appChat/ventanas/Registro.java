@@ -11,6 +11,8 @@ import java.awt.GridBagConstraints;
 import javax.swing.JPasswordField;
 import java.awt.Insets;
 import java.awt.SystemColor;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JTextField;
 import javax.swing.ImageIcon;
@@ -72,6 +74,15 @@ public class Registro extends JDialog {
 		this.setVisible(true);
 	}
 	private void initialize() {
+		
+		
+		addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                ventanaPadre.setVisible(true);
+            }
+        });
+		
 		
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{177, 300, 98, 188, 43, 0};

@@ -204,10 +204,10 @@ public class Usuario {
 		}
 		return null;
 	}
-	public Mensaje recibeMensaje(String texto, int emoji,String tlfEmisor, String nombreEmisor, Contacto c) {
+	public Mensaje recibeMensaje(String texto, int emoji, Contacto c) {
 		for (Contacto contacto : contactos) {
 			if (contacto.equals(c)) {
-				return contacto.addMensaje(texto, emoji, tlfEmisor, nombreEmisor, BubbleText.RECEIVED);
+				return contacto.addMensaje(texto, emoji, telefono, nombre, BubbleText.RECEIVED);
 			}
 		}
 		return null;

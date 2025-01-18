@@ -1,6 +1,8 @@
 package um.tds.appChat.ventanas;
 
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,9 +50,17 @@ public class PanelGrupo extends JFrame {
     	
         setTitle("Crear Grupo");
         setBounds(100, 100, 900, 600);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout(10, 10)); // Espaciado entre bordes
-
+        
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                parent.setVisible(true);
+            }
+        });
+        
+        
+        
         // Panel norte
         JPanel panelNorte = new JPanel();
         panelNorte.setLayout(new GridLayout(1, 4, 10, 0)); // 3 filas, 2 columnas;

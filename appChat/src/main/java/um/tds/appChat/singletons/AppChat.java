@@ -74,7 +74,7 @@ public enum AppChat {
 			Optional<ContactoIndividual> cEmisor = uReceptor.getContactoIndividual(usuarioActual.getTelefono());
 			if (cEmisor.isPresent()) {
 				
-				Mensaje msjRecv= uReceptor.recibeMensaje(string, emoji,usuarioActual.getTelefono(),cEmisor.get().getNombre(), cEmisor.get());
+				Mensaje msjRecv= uReceptor.recibeMensaje(string, emoji, cEmisor.get());
 				mensajeDAO.registrarMensaje(msjRecv);
 				contactoIndividualDAO.modificarContactoIndividual(cEmisor.get());
 				System.out.println("Se ha encontrado");
@@ -85,7 +85,7 @@ public enum AppChat {
 				ContactoIndividual c = uReceptor.getContactoIndividual(usuarioActual.getTelefono()).get();
 				contactoIndividualDAO.registrarContactoIndividual(c);
 				cEmisor= Optional.of(c);
-				Mensaje msjRecv= uReceptor.recibeMensaje(string, emoji,usuarioActual.getTelefono(),c.getNombre(), c);
+				Mensaje msjRecv= uReceptor.recibeMensaje(string, emoji, c);
 				mensajeDAO.registrarMensaje(msjRecv);
 				contactoIndividualDAO.modificarContactoIndividual(c);
 				usuarioDAO.modificarUsuario(uReceptor);
@@ -184,8 +184,7 @@ public enum AppChat {
 	}
 	public void logout() {
 		usuarioActual=null;
-		//parar hilos
-		
+		peer.stop();		
 	}
 	public double getPrecioPremium() {
 		return PREMIUM;

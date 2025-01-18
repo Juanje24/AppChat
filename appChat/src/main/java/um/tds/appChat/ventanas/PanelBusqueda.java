@@ -1,6 +1,8 @@
 package um.tds.appChat.ventanas;
 
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
@@ -29,7 +31,17 @@ public class PanelBusqueda extends JDialog {
         setSize(800, 600);
         setLocationRelativeTo(parent);
         setLayout(new BorderLayout());
-
+        
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                parent.setVisible(true);
+            }
+        });
+        
+        
+        
+        
         // Panel superior con campos de texto y selector de fecha
         JPanel topPanel = new JPanel(new GridLayout(2, 4, 10, 10));
         topPanel.setBorder(BorderFactory.createEmptyBorder(10, 10,10, 10));
@@ -133,6 +145,7 @@ public class PanelBusqueda extends JDialog {
 					txtMensaje.setIcon(null);
 					txtMensaje.setText(mensaje.getTexto());					
 				}
+				txtMensaje.setFocusable(false);
                 
             }
 

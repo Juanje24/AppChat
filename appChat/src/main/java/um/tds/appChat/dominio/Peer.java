@@ -17,6 +17,7 @@ public class Peer implements Runnable {
     private static PrintWriter out;
     private static final Semaphore semaforo = new Semaphore(0);
     private static final Semaphore semaforoCliente = new Semaphore(0);
+    private boolean running;
 
     @Override
     public void run() {
@@ -26,10 +27,11 @@ public class Peer implements Runnable {
         clientThread.start();
         try {
             semaforoCliente.acquire();
+            running = true;
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        while(true) {
+        while(running) {
             try {
                 String message = in.readLine();
                 if(message == null) {
@@ -107,5 +109,20 @@ public class Peer implements Runnable {
 		} catch (Exception e) {
 			System.out.println("Error al enviar el mensaje a la otra instancia");
         }
+    }
+
+	public void stop() {
+		if (running) {
+			try {
+				System.out.println("Cerrando el socket...");
+				in.close();
+				out.close();
+				socket.close();
+			} catch (IOException e) {
+				System.out.println("Error al cerrar el socket");
+			}	
+		}
+        running = false;
+        
     }
 }

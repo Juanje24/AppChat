@@ -31,8 +31,12 @@ public abstract class Contacto {
     }
     public void modificarMensajes(String nuevoNombre) {
     	for (Mensaje mensaje : mensajes) {
-			if(mensaje.getTipo()==BubbleText.RECEIVED) {
+    		//Se cambian los nombres de los mensajes que tengan como emisor o receptor el nombre antiguo
+			if(mensaje.getEmisor().equals(this.getTelefonoPropio())) {
 				mensaje.setNombreEmisor(nuevoNombre);
+			}
+			else {
+				mensaje.setNombreReceptor(nuevoNombre);
 			}
     	}
     }
@@ -80,8 +84,14 @@ public abstract class Contacto {
 		this.mensajes = new LinkedList<Mensaje>(mensajes);
 	}
 
-	public Mensaje addMensaje(String texto, int emoji, String tlfEmisor,String nombreEmisor, int tipo) {
-		Mensaje mensaje = new Mensaje(texto, emoji, tlfEmisor, getTelefonoPropio(),nombreEmisor, nombre, tipo);
+	public Mensaje addMensaje(String texto, int emoji, String tlf,String nombre, int tipo) {
+		Mensaje mensaje;
+		if (tipo == BubbleText.RECEIVED) {
+			mensaje=new Mensaje(texto, emoji, getTelefonoPropio(), tlf,this.nombre, nombre, tipo);
+		}
+		else {
+			mensaje=new Mensaje(texto, emoji, tlf, getTelefonoPropio(),nombre, this.nombre, tipo);
+		}
 		this.mensajes.add(mensaje);
 		return mensaje;
 	}

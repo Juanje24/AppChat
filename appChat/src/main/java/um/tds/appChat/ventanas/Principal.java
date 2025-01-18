@@ -4,6 +4,8 @@ import java.util.List;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 
 import javax.swing.*;
@@ -14,7 +16,6 @@ import javax.swing.table.DefaultTableCellRenderer;
 import um.tds.appChat.utils.RoundButtonUI;
 import um.tds.appChat.dominio.Contacto;
 import um.tds.appChat.dominio.ContactoIndividual;
-import um.tds.appChat.dominio.Grupo;
 import um.tds.appChat.singletons.AppChat;
 
 public class Principal extends JFrame implements ActualizacionVistaListener {
@@ -202,7 +203,6 @@ public class Principal extends JFrame implements ActualizacionVistaListener {
 		    if (opcion == JOptionPane.YES_OPTION) {
 		        // Llamar al método del controlador
 		        AppChat.INSTANCE.startSimultaneo();
-		        JOptionPane.showMessageDialog(null, "La simultaneidad ha sido activada en el puerto 5000", "Confirmación", JOptionPane.INFORMATION_MESSAGE);
 		    }
 		});
 
@@ -443,7 +443,12 @@ public class Principal extends JFrame implements ActualizacionVistaListener {
         	setLocationRelativeTo(parent);
         	setSize(600, 400);
             setLayout(new BorderLayout());
-            
+            addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosing(WindowEvent e) {
+                    parent.setVisible(true);
+                }
+            });
             
             JLabel etiquetaPrecio = new JLabel("Precio: " + AppChat.INSTANCE.getPrecioPremium() + " €");
             etiquetaPrecio.setFont(new Font("Arial", Font.BOLD, 16));
