@@ -13,6 +13,7 @@ import java.awt.event.MouseEvent;
 import java.util.List;
 import tds.BubbleText;
 import um.tds.appChat.dominio.Contacto;
+import um.tds.appChat.dominio.Grupo;
 import um.tds.appChat.dominio.Mensaje;
 import um.tds.appChat.singletons.AppChat;
 import um.tds.appChat.utils.RoundButtonUI;
@@ -42,10 +43,16 @@ public class PanelChat extends JPanel {
 	}
     
 	private void initialize(Contacto contacto) {
+		boolean isGrupo;
+		if(contacto instanceof Grupo) {
+			isGrupo=true;
+		}else {
+			isGrupo=false;
+		}
         setLayout(new BorderLayout());
         JPanel panel = this;
         // Parte superior: Foto, nombre y botón de tres puntos
-        JPanel panelSuperior = new JPanel(new GridLayout(1,3,0,10));
+        JPanel panelSuperior = new JPanel(new BorderLayout());
         if (contacto != null) {
 
 	        JLabel fotoUsuario = new JLabel();
@@ -81,6 +88,16 @@ public class PanelChat extends JPanel {
 	                    
 	                }
 	            });
+	            JMenuItem itemCambiar = new JMenuItem("Gestionar miembros");
+	
+				if (isGrupo) {
+		         // Opción "Cambiar nombre"
+		           
+		            itemCambiar.addActionListener(ev -> {
+		                  PanelGrupo panelGrupo = new PanelGrupo(principal,  AppChat.INSTANCE.getUsuarioActual().getContactosIndividuales(), (Grupo) contacto);
+		                  panelGrupo.setVisible(true);
+		            });
+				}
 	
 	            // Opción "Eliminar"
 	            JMenuItem itemEliminar = new JMenuItem("Eliminar");
@@ -106,15 +123,21 @@ public class PanelChat extends JPanel {
 	
 	            // Añade las opciones al menú
 	            menu.add(itemCambiarNombre);
+	            if (isGrupo) {
+		        	   menu.add(itemCambiar);
+		           }
 	            menu.add(itemEliminar);
+	           
 	
 	            // Muestra el menú contextual
 	            menu.show(botonOpciones, 0, botonOpciones.getHeight());
 	        });
-	        
-	        panelSuperior.add(fotoUsuario);
-	        panelSuperior.add(etiquetaNombre);
-	        panelSuperior.add(botonOpciones);
+	        etiquetaNombre.setHorizontalAlignment(SwingConstants.CENTER); // Texto centrado horizontalmente
+	        etiquetaNombre.setVerticalAlignment(SwingConstants.CENTER);   // Texto centrado verticalmente
+	        botonOpciones.setPreferredSize(new Dimension(60, 50));
+	        panelSuperior.add(fotoUsuario, BorderLayout.WEST);
+	        panelSuperior.add(etiquetaNombre, BorderLayout.CENTER);
+	        panelSuperior.add(botonOpciones, BorderLayout.EAST);
         }
         panelSuperior.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
         add(panelSuperior, BorderLayout.NORTH);
@@ -257,6 +280,7 @@ public class PanelChat extends JPanel {
 		this.removeAll();
 		initialize(c);
 	}
+
 	// Método para ajustar el tamaño del JTextArea dinámicamente
 	private void ajustarTamañoAreaTexto() {
 	 int lineas = areaTexto.getLineCount();

@@ -25,11 +25,14 @@ public class GrupoDAO_TDS implements GrupoDAO {
 	private static final String URLIMAGEN = "urlImagen";
 	
 	private ServicioPersistencia servicioPersistencia;
-	private static GrupoDAO_TDS unicaInstancia = new GrupoDAO_TDS();
+	private static GrupoDAO_TDS unicaInstancia;
 	
 	
 	
 	public static GrupoDAO_TDS getUnicaInstancia() {
+		if (unicaInstancia == null) {
+			unicaInstancia = new GrupoDAO_TDS();
+		}
 		return unicaInstancia;
 	}
 	

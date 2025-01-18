@@ -25,9 +25,12 @@ public class ContactoIndividualDAO_TDS implements ContactoIndividualDAO{
 	private static final String USUARIO = "usuario";
 	
 	private ServicioPersistencia servicioPersistencia;
-	private static ContactoIndividualDAO_TDS unicaInstancia = new ContactoIndividualDAO_TDS();
+	private static ContactoIndividualDAO_TDS unicaInstancia;
 	
 	public static ContactoIndividualDAO_TDS getUnicaInstancia() { // patron singleton
+		if (unicaInstancia == null) {
+			unicaInstancia = new ContactoIndividualDAO_TDS();
+		}
 		return unicaInstancia;
 	}
 

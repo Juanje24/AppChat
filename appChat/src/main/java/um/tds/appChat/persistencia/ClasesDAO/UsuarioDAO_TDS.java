@@ -20,12 +20,16 @@ import java.util.stream.Collectors;
 
 public class UsuarioDAO_TDS implements UsuarioDAO {
 	private ServicioPersistencia servicioPersistencia;
-	private static UsuarioDAO_TDS unicaInstancia = new UsuarioDAO_TDS();
+	private static UsuarioDAO_TDS unicaInstancia;
 	
 	
 	public static UsuarioDAO_TDS getUnicaInstancia() {
-		return unicaInstancia;
+	    if (unicaInstancia == null) {
+	        unicaInstancia = new UsuarioDAO_TDS();
+	    }
+	    return unicaInstancia;
 	}
+
 	
 	public UsuarioDAO_TDS() {
 		servicioPersistencia = FactoriaServicioPersistencia.getInstance().getServicioPersistencia();
@@ -106,7 +110,6 @@ public class UsuarioDAO_TDS implements UsuarioDAO {
 	public Usuario recuperarUsuarioPorId(int id) {
 		//Si el objeto está en el pool, se devuelve
 		if (PoolDAO.getUnicaInstancia(0).contiene(id)) {
-			System.out.println("Recuperando de pool");
 			return (Usuario) PoolDAO.getUnicaInstancia(0).getObjeto(id);
 		}
 		//Si no, se recupera de la base de datos

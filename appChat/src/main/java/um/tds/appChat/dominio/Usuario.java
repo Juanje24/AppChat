@@ -245,6 +245,17 @@ public class Usuario {
 	public boolean areMensajesNuevos() {
 		return contactos.stream().anyMatch(c->c.getNumeroMensajesNoLeidos()>0);
 	}
+	public Grupo actualizarGrupo(int id, String nombre, List<ContactoIndividual> contactosGrupo, String foto) {
+		for (Contacto c : contactos) {
+			if (c.getId() == id) {
+                ((Grupo) c).setNombre(nombre);
+                ((Grupo) c).setContactos(contactosGrupo);
+                ((Grupo) c).setUrlImagen(foto);
+				return (Grupo) c;
+			}
+		}
+		return null;
+	}
 	
 
 }

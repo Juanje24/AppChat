@@ -31,9 +31,12 @@ public class MensajeDAO_TDS implements MensajeDAO {
 	
 	
 	private ServicioPersistencia servicioPersistencia;
-	private static MensajeDAO_TDS unicaInstancia = new MensajeDAO_TDS();
+	private static MensajeDAO_TDS unicaInstancia ;
 	
 	public static MensajeDAO_TDS getUnicaInstancia() {
+		if (unicaInstancia == null) {
+			unicaInstancia = new MensajeDAO_TDS();
+		}
 		return unicaInstancia;
 	}
 	

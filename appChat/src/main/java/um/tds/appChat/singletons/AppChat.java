@@ -27,8 +27,11 @@ public enum AppChat {
 	private MensajeDAO mensajeDAO;
 	private Usuario usuarioActual;
 	private RepositorioUsuario repositorioUsuarios;
+	private Descuento descuento;
 	private Peer peer;
+	private Thread peerThread;
 	private ActualizacionVistaListener listener;
+	private boolean simultaneo=false;
 	
 	private AppChat() {
 		try {
@@ -43,12 +46,17 @@ public enum AppChat {
 		mensajeDAO = factoriaDAO.getMensajeDAO();
 		repositorioUsuarios = RepositorioUsuario.INSTANCE;
 		peer = new Peer();
-		Thread peerThread = new Thread(peer);
+		
+		
+		
+		
+		
+	}
+
+	public void startSimultaneo() {
+		simultaneo = true;
+		peerThread = new Thread(peer);
 		peerThread.start();
-		
-		
-		
-		
 	}
 	public Mensaje enviarMensajeContacto(Contacto c3, String string, int emoji) {
 		Mensaje msj = usuarioActual.sendMensaje( string, emoji, c3);
@@ -82,7 +90,9 @@ public enum AppChat {
 				contactoIndividualDAO.modificarContactoIndividual(c);
 				usuarioDAO.modificarUsuario(uReceptor);
 			}
-			peer.sendMessage(String.valueOf(cEmisor.get().getId()));
+			if (simultaneo) {
+				peer.sendMessage(String.valueOf(cEmisor.get().getId()));
+			}
 			
 		}
 		return msj;		
@@ -139,7 +149,7 @@ public enum AppChat {
 	}
 	
 
-		public void actualizarNombreContacto(Contacto contacto, String nuevoNombre) {
+	public void actualizarNombreContacto(Contacto contacto, String nuevoNombre) {
 		contacto.modificarMensajes(nuevoNombre);
 		usuarioActual.modificarNombreContacto(contacto, nuevoNombre);
 		contacto.getMensajes().forEach(mensaje -> mensajeDAO.modificarMensaje(mensaje));
@@ -174,7 +184,7 @@ public enum AppChat {
 	}
 	public void logout() {
 		usuarioActual=null;
-		
+		//parar hilos
 		
 	}
 	public double getPrecioPremium() {
@@ -189,11 +199,11 @@ public enum AppChat {
 		
 	}
 	public double getPrecioDescontado(String nombreDescuento) {
-		Descuento descuento = FactoriaDescuentos.INSTANCE.crearDescuento(nombreDescuento);
+		descuento = FactoriaDescuentos.INSTANCE.crearDescuento(nombreDescuento);
 		return descuento.getPrecio(PREMIUM);
 	}
 	public double hacerPremium(String nombreDescuento) {
-		Descuento descuento = FactoriaDescuentos.INSTANCE.crearDescuento(nombreDescuento);
+		descuento = FactoriaDescuentos.INSTANCE.crearDescuento(nombreDescuento);
 		double precioDescuento = descuento.getPrecio(PREMIUM);
 		usuarioActual.setPremium(true);
 		usuarioDAO.modificarUsuario(usuarioActual);
@@ -252,6 +262,13 @@ public enum AppChat {
 
 	public void setListener(ActualizacionVistaListener listener) {
 		this.listener = listener;
+	}
+
+	public void actualizarGrupo(int id, String nombre, List<ContactoIndividual> contactosGrupo, String foto) {
+		Grupo g = usuarioActual.actualizarGrupo(id, nombre, contactosGrupo, foto);
+		grupoDAO.modificarGrupo(g);
+		usuarioDAO.modificarUsuario(usuarioActual);
+		
 	}
 	
 }

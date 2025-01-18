@@ -7,6 +7,7 @@ import java.util.List;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import um.tds.appChat.dominio.ContactoIndividual;
+import um.tds.appChat.dominio.Grupo;
 import um.tds.appChat.singletons.AppChat;
 import um.tds.appChat.utils.RoundButtonUI;
 import um.tds.appChat.utils.Utils;
@@ -16,6 +17,9 @@ public class PanelGrupo extends JFrame {
     private List<ContactoIndividual> contactos;
     private JFrame parent;
     private String path = "";
+    private Grupo grupo;
+    private JLabel lblFotos;
+    private JTextField nombreGrupo;
 
     public PanelGrupo() {
         super();
@@ -23,11 +27,21 @@ public class PanelGrupo extends JFrame {
 
     public PanelGrupo(JFrame frame, List<ContactoIndividual> contactosIndividuales) {
         this();
+        this.grupo=null;
         this.contactos = contactosIndividuales;
         this.setLocationRelativeTo(frame);
         this.parent = frame;
         initialize();
     }
+
+	public PanelGrupo(JFrame frame, List<ContactoIndividual> contactosIndividuales,Grupo g) {
+		this();
+		this.setLocationRelativeTo(frame);
+		this.contactos = contactosIndividuales;
+		this.parent = frame;
+		this.grupo = g;
+		initialize();
+	}
 
     private void initialize() {
     		
@@ -45,11 +59,11 @@ public class PanelGrupo extends JFrame {
         JLabel lblNombre = new JLabel("Nombre: ", SwingConstants.RIGHT);
         panelNorte.add(lblNombre);
         
-        JTextField nombreGrupo = new JTextField();
+        nombreGrupo = new JTextField();
         nombreGrupo.setPreferredSize(new Dimension(200, 1));
         panelNorte.add(nombreGrupo);
 
-        JLabel lblFotos = new JLabel("Imagen del grupo", SwingConstants.CENTER);
+        lblFotos = new JLabel("Imagen del grupo", SwingConstants.CENTER);
         lblFotos.setPreferredSize(new Dimension(50, 50)); // Tamaño para la imagen
         panelNorte.add(lblFotos);
 
@@ -180,6 +194,39 @@ public class PanelGrupo extends JFrame {
 			((Principal) parent).añadirContacto(AppChat.INSTANCE.crearGrupo(nombre, contactosGrupo, foto));
 			this.dispose();
 		});
+		
+		if (grupo != null) {
+			ImageIcon iconoImagen = new ImageIcon(getClass().getResource(grupo.getUrlImagen()));
+			Image imagenEscalada = iconoImagen.getImage().
+			getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+			lblFotos.setIcon(new ImageIcon(imagenEscalada));
+			lblFotos.setText("");
+			path=grupo.getUrlImagen();
+			nombreGrupo.setText(grupo.getNombre());
+			grupo.getContactos().forEach(modeloGrupo::addElement);
+			setTitle("Editar Grupo");
+			btnCrear.setText("Editar Grupo");
+			btnCrear.removeActionListener(btnCrear.getActionListeners()[0]);
+			btnCrear.addActionListener(e -> {
+				List<ContactoIndividual> contactosGrupo = getContactosGrupo(modeloGrupo);
+				String nombre = nombreGrupo.getText();
+				String foto = path;
+				if (foto.equals("")) {
+					foto = Utils.getRutaResourceFromString("src/main/resources/iconos/grupoDefault.png");
+				}
+				if (nombre.equals("") || contactosGrupo.isEmpty()) {
+					JOptionPane.showMessageDialog(this, "El grupo debe tener un nombre y al menos un contacto", "Error",
+							JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				grupo.setNombre(nombre);
+				grupo.setContactos(contactosGrupo);
+				grupo.setUrlImagen(foto);
+				((Principal) parent).refrescar();
+				AppChat.INSTANCE.actualizarGrupo(grupo.getId(),nombre, contactosGrupo, foto);
+				this.dispose();
+			});
+		}
 		
 		
     }

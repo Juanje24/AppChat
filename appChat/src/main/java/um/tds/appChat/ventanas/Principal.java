@@ -14,6 +14,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import um.tds.appChat.utils.RoundButtonUI;
 import um.tds.appChat.dominio.Contacto;
 import um.tds.appChat.dominio.ContactoIndividual;
+import um.tds.appChat.dominio.Grupo;
 import um.tds.appChat.singletons.AppChat;
 
 public class Principal extends JFrame implements ActualizacionVistaListener {
@@ -64,8 +65,7 @@ public class Principal extends JFrame implements ActualizacionVistaListener {
                    contactoSeleccionado = panelContactos.getContactoSeleccionado();
                     if (contactoSeleccionado != null) {
                     	contactoSeleccionado.setLeidos();
-                    	AppChat.INSTANCE.leidoEnPersistencia(contactoSeleccionado);
-                    	                   	
+                    	AppChat.INSTANCE.leidoEnPersistencia(contactoSeleccionado);              	
                         ((PanelChat) panelCentro).setContacto(contactoSeleccionado);
                         frame.revalidate();
                         frame.repaint();
@@ -181,6 +181,34 @@ public class Principal extends JFrame implements ActualizacionVistaListener {
 	    panelNorte.add(panelUsuario);
 	    
 	    
+	    ImageIcon iconoConex = new ImageIcon(getClass().getResource("/iconos/conect.png"));
+		Image iconoConexEscalado = iconoConex.getImage().getScaledInstance(30, 25, java.awt.Image.SCALE_SMOOTH);
+		JButton btnConex= new JButton(new ImageIcon(iconoConexEscalado));
+		btnConex.setUI(new RoundButtonUI());
+		btnConex.addActionListener(e -> {
+		   
+		    int opcion = JOptionPane.showOptionDialog(
+		            this,
+		            "¿Quieres activar la simultaneidad?", // Mensaje
+		            "Activar Simultaneidad", // Título
+		            JOptionPane.YES_NO_OPTION, // Opciones
+		            JOptionPane.QUESTION_MESSAGE, // Tipo de mensaje
+		            null, // Ícono personalizado (puede ser null para el ícono predeterminado)
+		            new Object[]{"Sí", "No"}, // Texto de los botones
+		            "Sí" // Opción predeterminada
+		    );
+
+		    // Si el usuario selecciona "Sí" (índice 0)
+		    if (opcion == JOptionPane.YES_OPTION) {
+		        // Llamar al método del controlador
+		        AppChat.INSTANCE.startSimultaneo();
+		        JOptionPane.showMessageDialog(null, "La simultaneidad ha sido activada en el puerto 5000", "Confirmación", JOptionPane.INFORMATION_MESSAGE);
+		    }
+		});
+
+		panelNorte.add(btnConex);
+	    
+	    
 	    ImageIcon iconoLogout = new ImageIcon(getClass().getResource("/iconos/logout.png"));
 		Image iconoLogoutEscalado = iconoLogout.getImage().getScaledInstance(30, 25, java.awt.Image.SCALE_SMOOTH);
 		JButton btnLogout= new JButton(new ImageIcon(iconoLogoutEscalado));
@@ -199,6 +227,12 @@ public class Principal extends JFrame implements ActualizacionVistaListener {
 		this.revalidate();
 		this.repaint();
 		this.validate();	
+	}
+	public void refrescar() {
+		this.setVisible(true);
+		this.revalidate();
+		this.repaint();
+		this.validate();
 	}
 	
 	public void eliminarContacto(Contacto c) {
