@@ -195,7 +195,6 @@ public class PanelGrupo extends JFrame {
 			String foto = path;
 			if(foto.trim().length()<1) {
                 foto = Utils.getRutaResourceFromString("src/main/resources/iconos/grupoDefault.png");
-                System.out.println("FOTO 2: "+foto);
 			}
 			if (nombre.equals("") || contactosGrupo.isEmpty()) {
 				JOptionPane.showMessageDialog(this, "El grupo debe tener un nombre y al menos un contacto", "Error",

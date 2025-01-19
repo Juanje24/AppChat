@@ -2,9 +2,10 @@ package um.tds.appChat.singletons;
 
 
 import java.time.LocalDate;
-
+import java.util.LinkedList;
 
 import um.tds.appChat.dominio.ContactoIndividual;
+import um.tds.appChat.dominio.Grupo;
 
 
 public class CargarAppChat {
@@ -21,7 +22,10 @@ public class CargarAppChat {
 		appChat.registrarUsuario("Dwayne", "Johnson", "dj", LocalDate.of(1972, 05, 02),"44" , "/users/rock.jpg", "I'm the rock");
 		appChat.registrarUsuario("Jack", "Sparrow", "js", LocalDate.of(1980, 12, 12), "55", "/users/jack.jpg", "I'm Jack Sparrow");
 		appChat.registrarUsuario("Gandalf", "El Gris", "gandalf", LocalDate.of(1000, 4, 3), "66","/users/gandalf.jpg", "You shall not pass");
-		
+		appChat.registrarUsuario("Fernando", "Alonso", "fa", LocalDate.of(1970, 2, 23), "14", "/users/nano.jpg", "Soy Fernando Alonso");
+		appChat.registrarUsuario("Frodo", "Bolson", "fb", LocalDate.of(1980, 6, 23), "24", "/users/frodo.jpg", "Soy Frodo Bolsón");
+		appChat.registrarUsuario("Sam", "Altman", "sa", LocalDate.of(1986, 3, 23), "34", "/users/sam.jpg", "I'm Sam Altman");
+		appChat.registrarUsuario("Donald", "Trump", "dt", LocalDate.of(1953, 9, 23), "54", "/users/trump.png", "I'm Donald Trump");
 		appChat.login("71", "jjog");
 		
 		ContactoIndividual c1 = appChat.agregarContacto("Marina", "11");
@@ -30,23 +34,38 @@ public class CargarAppChat {
 		ContactoIndividual c4 = appChat.agregarContacto("Dwayne", "44");
 		ContactoIndividual c5 = appChat.agregarContacto("Jack", "55");
 		ContactoIndividual c6 = appChat.agregarContacto("Gandalf", "66");
+		ContactoIndividual c7 = appChat.agregarContacto("Fernando", "14");
+		ContactoIndividual c8 = appChat.agregarContacto("Frodo", "24");
+		ContactoIndividual c9 = appChat.agregarContacto("Sam", "34");
+		ContactoIndividual c10 = appChat.agregarContacto("Donald", "54");
 		
-//		appChat.enviarMensajeContacto(c2, "Hola, ¿cómo estás?", -1, TipoMensaje.ENVIADO);
-//		appChat.enviarMensajeContacto(c2, "", 2, TipoMensaje.ENVIADO);
-//		
-//		appChat.enviarMensajeContacto(c3, "Cuando cantas?", -1, TipoMensaje.ENVIADO);
-//		appChat.enviarMensajeContacto(c2, "", 6, TipoMensaje.ENVIADO);
-//		
-//		appChat.login("22", "bb");
-//		
-//		//ContactoIndividual c1 =appChat.agregarContacto("jesus", "11");
-//		ContactoIndividual c1 =  RepositorioUsuario.INSTANCE.buscarUsuarioPorMovil("22").get().getContactoIndividual("11");
-//		ContactoIndividual c4 = appChat.agregarContacto("diego", "44");
-//		ContactoIndividual c5 = appChat.agregarContacto("anne", "55");
-//		
-//		appChat.enviarMensajeContacto(c1, "Vienes este finde?", -1, TipoMensaje.ENVIADO);
-//		appChat.enviarMensajeContacto(c1, "", 3, TipoMensaje.ENVIADO);
-//	    appChat.enviarMensajeContacto(c4, "Juegas esta semana?", -1, TipoMensaje.ENVIADO);	
+		LinkedList<ContactoIndividual> contactos = new LinkedList<ContactoIndividual>();
+		contactos.add(c2);
+		contactos.add(c3);
+		
+		LinkedList<ContactoIndividual> contactos2 = new LinkedList<ContactoIndividual>();
+		contactos2.add(c6);
+		contactos2.add(c8);
+		
+		
+		Grupo g1 =appChat.crearGrupo("NBA", contactos,"/iconos/grupoDefault.png");
+		Grupo g2 =appChat.crearGrupo("El señor de los anillos", contactos2,"/iconos/grupoDefault.png");
+		
+		appChat.enviarMensajeContacto(c1, "Hola", -1);
+		appChat.enviarMensajeContacto(c1, "Que tal?", -1);
+		
+		appChat.enviarMensajeContacto(g2, "Hola", -1);
+		appChat.enviarMensajeContacto(g2, "Sois la compañia del anillo", -1);
+		
+		appChat.enviarMensajeContacto(c2, "Hello", -1);
+		appChat.enviarMensajeContacto(c2, "How are you?", -1);
+		
+		appChat.logout();
+		
+		appChat.login("11", "mnn");
+		ContactoIndividual c11 = appChat.agregarContacto("Gandalf", "66");
+        appChat.enviarMensajeContacto(c11, "Hola", -1);
+		
 	    
 	    System.out.println("Fin de la carga de datos");
 	}

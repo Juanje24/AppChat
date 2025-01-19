@@ -10,7 +10,7 @@ public class Lanzador {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					CargarAppChat.cargarDatos();
+					//CargarAppChat.cargarDatos();
 					Inicio ventana = new Inicio();
 					ventana.setVisible(true);
 				} catch (Exception e) {

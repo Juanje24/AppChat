@@ -1,5 +1,6 @@
 package um.tds.appChat.ventanas;
 
+import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +20,8 @@ public class PanelContactos extends JPanel {
 		listaContactos = new JList<>(modelo);
 		listaContactos.setCellRenderer(new ContactoListCellRenderer());
 		JScrollPane scroll = new JScrollPane(listaContactos);
+		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		scroll.setMinimumSize(new Dimension(200, 1000));
 		add(scroll);
 		((ContactListModel) listaContactos.getModel()).addContacts(contactos);
 	}

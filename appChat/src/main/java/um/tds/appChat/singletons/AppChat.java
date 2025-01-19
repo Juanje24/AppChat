@@ -112,11 +112,9 @@ public enum AppChat {
 	}
 	//Método para enviar un mensaje a un contacto
 	public Mensaje enviarMensajeContacto(Contacto c3, String string, int emoji) {
-		System.out.println("Contacto individual ANTES: "+c3.getNombre()+" mensajes: "+c3.getMensajes().size());
 		Mensaje msj = usuarioActual.sendMensaje( string, emoji, c3);
 		mensajeDAO.registrarMensaje(msj);
 		if (c3 instanceof ContactoIndividual) {
-			System.out.println("Contacto individual DESPUÉS: "+c3.getNombre()+" mensajes: "+c3.getMensajes().size());
 			contactoIndividualDAO.modificarContactoIndividual((ContactoIndividual) usuarioActual.getContacto(c3));
 		} else {
 			grupoDAO.modificarGrupo((Grupo) usuarioActual.getContacto(c3));
