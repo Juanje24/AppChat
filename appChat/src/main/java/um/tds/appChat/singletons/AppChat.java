@@ -33,6 +33,7 @@ public enum AppChat {
 	private ActualizacionVistaListener listener;
 	private boolean simultaneo=false;
 	
+	//Constructor de la clase
 	private AppChat() {
 		try {
 			factoriaDAO = FactoriaDAO.getInstancia(DAO_TDS);
@@ -48,7 +49,35 @@ public enum AppChat {
 		peer = new Peer();
 		
 	}
+	//Método para el registro de un usuario
+	public boolean registrarUsuario(String nombre, String apellidos, String contrasena, LocalDate fechaNacimiento, String numTlf, String foto, String saludo) {
 
+		if (repositorioUsuarios.buscarUsuarioPorMovil(numTlf).isPresent()) {
+			return false;
+		}
+		repositorioUsuarios.addUsuario(nombre, apellidos, numTlf, contrasena, fechaNacimiento, saludo, foto);
+		usuarioDAO.registrarUsuario(repositorioUsuarios.buscarUsuarioPorMovil(numTlf).get());
+		return true;
+	}
+	//Método para el login de un usuario
+	public boolean login(String telefono, String contrasena) {
+		recuperarUsuarios();
+		if (repositorioUsuarios.buscarUsuarioPorMovil(telefono).isPresent()) {
+			usuarioActual = repositorioUsuarios.buscarUsuarioPorMovil(telefono).get();
+			return usuarioActual.getContraseña().equals(contrasena);
+		}
+		return false;
+	}
+	//Recuperar todos los usuarios de persistencia
+	public void recuperarUsuarios() {
+		List<Usuario> usuarios = usuarioDAO.recuperarTodosUsuarios();
+		repositorioUsuarios.cargarUsuarios(usuarios);
+	}
+	
+	public Usuario getUsuarioActual() {
+		return usuarioActual;
+	}
+	//Método para arrancar la comunicación simultánea de 2 sesiones
 	public void startSimultaneo() {
 		if (!simultaneo) {
 			simultaneo = true;
@@ -58,8 +87,28 @@ public enum AppChat {
 
 		
 	}
+	//Método para crear un contacto individual
+	public ContactoIndividual agregarContacto(String nombre, String tlf) {
+		Optional<Usuario> contacto = repositorioUsuarios.buscarUsuarioPorMovil(tlf);
+		if (contacto.isPresent() && !usuarioActual.isTlfEnContactos(tlf) ) {
+			usuarioActual.addContactoIndividual(nombre,contacto.get());
+			contactoIndividualDAO.registrarContactoIndividual(usuarioActual.getContactoIndividual(tlf).get());
+			usuarioDAO.modificarUsuario(usuarioActual);
+			return usuarioActual.getContactoIndividual(tlf).get();
+		}
+		else{
+			return null;
+		}
+	}
+	//Método para crear un grupo
+	public Grupo crearGrupo(String nombre, List<ContactoIndividual> contactosGrupo, String foto) {
+		Grupo g=usuarioActual.addGrupo(nombre, contactosGrupo,foto);
+		grupoDAO.registrarGrupo(g);
+		usuarioDAO.modificarUsuario(usuarioActual);
+		return g;
+	}
+	//Método para enviar un mensaje a un contacto
 	public Mensaje enviarMensajeContacto(Contacto c3, String string, int emoji) {
-		PoolDAO.resetearPools();
 		Mensaje msj = usuarioActual.sendMensaje( string, emoji, c3);
 		mensajeDAO.registrarMensaje(msj);
 		if (c3 instanceof ContactoIndividual) {
@@ -96,52 +145,24 @@ public enum AppChat {
 		}
 		return msj;		
 }
-
-	public ContactoIndividual agregarContacto(String nombre, String tlf) {
-		Optional<Usuario> contacto = repositorioUsuarios.buscarUsuarioPorMovil(tlf);
-		if (contacto.isPresent() && !usuarioActual.isTlfEnContactos(tlf) ) {
-			usuarioActual.addContactoIndividual(nombre,contacto.get());
-			contactoIndividualDAO.registrarContactoIndividual(usuarioActual.getContactoIndividual(tlf).get());
-			usuarioDAO.modificarUsuario(usuarioActual);
-			return usuarioActual.getContactoIndividual(tlf).get();
-		}
-		else{
-			return null;
-		}
-	}
-	public Grupo crearGrupo(String nombre, List<ContactoIndividual> contactosGrupo, String foto) {
-		Grupo g=usuarioActual.addGrupo(nombre, contactosGrupo,foto);
-		grupoDAO.registrarGrupo(g);
-		usuarioDAO.modificarUsuario(usuarioActual);
-		return g;
+	public void recibidoMensajeSimultaneo(String message) {
+		PoolDAO.resetearPools();
+		usuarioActual = usuarioDAO.recuperarUsuarioPorId(usuarioActual.getId());
+		ContactoIndividual c = contactoIndividualDAO.recuperarContactoIndividualPorId(Integer.parseInt(message));
+		usuarioActual.modificarContacto(c);
+		repositorioUsuarios.modificarUsuario(usuarioActual);
+		listener.actualizarVista(c.getNombre(), c.getNumeroMensajesNoLeidos());
 	}
 
-	public boolean registrarUsuario(String nombre, String apellidos, String contrasena, LocalDate fechaNacimiento, String numTlf, String foto, String saludo) {
-
-		if (repositorioUsuarios.buscarUsuarioPorMovil(numTlf).isPresent()) {
-			return false;
-		}
-		repositorioUsuarios.addUsuario(nombre, apellidos, numTlf, contrasena, fechaNacimiento, saludo, foto);
-		usuarioDAO.registrarUsuario(repositorioUsuarios.buscarUsuarioPorMovil(numTlf).get());
-		return true;
+	public void leidoEnPersistencia(Contacto c) {
+		for (Mensaje m : c.getMensajes()) {
+            mensajeDAO.modificarMensaje(m);
+        }
 	}
-	public boolean login(String telefono, String contrasena) {
-		recuperarUsuarios();
-		if (repositorioUsuarios.buscarUsuarioPorMovil(telefono).isPresent()) {
-			usuarioActual = repositorioUsuarios.buscarUsuarioPorMovil(telefono).get();
-			return usuarioActual.getContraseña().equals(contrasena);
-		}
-		return false;
+	public void setListener(ActualizacionVistaListener listener) {
+		this.listener = listener;
 	}
 	
-	public void recuperarUsuarios() {
-		List<Usuario> usuarios = usuarioDAO.recuperarTodosUsuarios();
-		repositorioUsuarios.cargarUsuarios(usuarios);
-	}
-
-	public Usuario getUsuarioActual() {
-		return usuarioActual;
-	}
 	public void actualizarUsuario(String nombre, String apellidos, String contrasena, LocalDate fechaNacimiento, String numTlf, String foto, String saludo) {
 			Usuario usuario = repositorioUsuarios.modificarUsuario(nombre, apellidos, numTlf, contrasena, fechaNacimiento, saludo, foto);
 			usuarioDAO.modificarUsuario(usuario);
@@ -184,7 +205,7 @@ public enum AppChat {
 	}
 	public void logout() {
 		usuarioActual=null;
-		peer.stop();		
+		pararSimultaneo();		
 	}
 
 	public void pararSimultaneo() {
@@ -235,34 +256,9 @@ public enum AppChat {
 		Usuario u=repositorioUsuarios.buscarUsuarioPorMovil(tlf).get();
 		actualizarUsuario(u);
 	}
-	public void recibidoMensajeSimultaneo(String message) {
-		PoolDAO.resetearPools();
-		usuarioActual = usuarioDAO.recuperarUsuarioPorId(usuarioActual.getId());
-		ContactoIndividual c = contactoIndividualDAO.recuperarContactoIndividualPorId(Integer.parseInt(message));	
-		repositorioUsuarios.modificarUsuario(usuarioActual);
-		listener.actualizarVista(c.getNombre(), c.getNumeroMensajesNoLeidos());
-	}
+	
 
-	public void leidoEnPersistencia(Contacto c) {
-		for (Mensaje m : c.getMensajes()) {
-            mensajeDAO.modificarMensaje(m);
-        }
-	}
-	public void marcarMensajesLeidos(Contacto c) {
-		c.setLeidos();
-		for (Mensaje m : c.getMensajes()) {
-			mensajeDAO.modificarMensaje(m);
-		}
-		if (c instanceof ContactoIndividual) {
-			contactoIndividualDAO.modificarContactoIndividual((ContactoIndividual) c);
-		} else {
-			grupoDAO.modificarGrupo((Grupo) c);
-		}
-	}
-
-	public void setListener(ActualizacionVistaListener listener) {
-		this.listener = listener;
-	}
+	
 
 	public void actualizarGrupo(int id, String nombre, List<ContactoIndividual> contactosGrupo, String foto) {
 		Grupo g = usuarioActual.actualizarGrupo(id, nombre, contactosGrupo, foto);

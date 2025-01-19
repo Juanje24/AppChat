@@ -105,7 +105,6 @@ public class Peer implements Runnable {
     }
     public void sendMessage(String message) {
         try{
-        	Thread.sleep(2000);
         	out.println(message);
 		} catch (Exception e) {
 			System.out.println("Error al enviar el mensaje a la otra instancia");
