@@ -51,6 +51,10 @@ public class UsuarioDAO_TDS implements UsuarioDAO {
 
 		//registrar Contactos,grupos y mensajes
 		eUsuario = new Entidad();
+		Propiedad propDescuento = new Propiedad("descuento", "NA");
+		if (usuario.getDescuento() != null) {
+			propDescuento.setValor(usuario.getDescuento().getNombre());
+		}
 		eUsuario.setNombre("Usuario");
 		eUsuario.setPropiedades(new ArrayList<Propiedad>(
 				Arrays.asList(new Propiedad("nombre", usuario.getNombre()),
@@ -62,6 +66,7 @@ public class UsuarioDAO_TDS implements UsuarioDAO {
 						new Propiedad("saludo", usuario.getSaludo()),
 						new Propiedad("urlImagen", usuario.getUrlImagen()),
 		                new Propiedad("contactos", obtenerCodigosContactos(usuario.getContactos())),
+		                propDescuento,
 		                new Propiedad("fechaRegistro", usuario.getFechaRegistro().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))))));
 	   eUsuario = servicioPersistencia.registrarEntidad(eUsuario);
 	   usuario.setId(eUsuario.getId());
@@ -98,6 +103,12 @@ public class UsuarioDAO_TDS implements UsuarioDAO {
 				prop.setValor(obtenerCodigosContactos(usuario.getContactos()));
 			} else if (prop.getNombre().equals("fechaRegistro")) {
 				prop.setValor(usuario.getFechaRegistro().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+			} else if (prop.getNombre().equals("descuento")) {
+				if (usuario.getDescuento() != null) {
+					prop.setValor(usuario.getDescuento().getNombre());
+				} else {
+					prop.setValor("NA");
+				}
 			}
 			servicioPersistencia.modificarPropiedad(prop);
 		}
@@ -124,9 +135,15 @@ public class UsuarioDAO_TDS implements UsuarioDAO {
 		String saludo = servicioPersistencia.recuperarPropiedadEntidad(eUsuario, "saludo");
 		String urlImagen = servicioPersistencia.recuperarPropiedadEntidad(eUsuario, "urlImagen");
 		LocalDate fechaRegistro = LocalDate.parse(servicioPersistencia.recuperarPropiedadEntidad(eUsuario, "fechaRegistro"), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-		
+		Descuento descuento=null; 
+		if (!servicioPersistencia.recuperarPropiedadEntidad(eUsuario, "descuento").equals("NA")) {
+			descuento = FactoriaDescuentos.INSTANCE.crearDescuento(servicioPersistencia.recuperarPropiedadEntidad(eUsuario, "descuento"));
+		}
 		Usuario usuario = new Usuario( nombre,apellido, telefono, contraseña,  birthday, saludo, urlImagen,premium);
 		usuario.setFechaRegistro(fechaRegistro);
+		if (descuento != null) {
+			usuario.setDescuento(descuento);
+		}
 		PoolDAO.getUnicaInstancia(0).addObjeto(id, usuario);
 		List<Contacto> contactos = obtenerContactosDesdeIDs(servicioPersistencia.recuperarPropiedadEntidad(eUsuario, "contactos"));
 		usuario.setId(id);

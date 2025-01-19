@@ -23,6 +23,7 @@ public class Usuario {
     private String urlImagen;
     private List<Contacto> contactos; 
     private LocalDate fechaRegistro;
+    private Descuento descuento; 
 
     
     //CONSTRUCTORES
@@ -40,7 +41,8 @@ public class Usuario {
         this.premium = isPremium;
         this.contactos = new LinkedList<Contacto>(contactos);
         this.fechaRegistro = LocalDate.now();
-    }
+        this.descuento=null;
+   }
     public Usuario( String nombre,String apellido, String telefono, String contraseña, LocalDate birthday,
    		 String saludo, String urlImagen, boolean isPremium){
        this.nombre = nombre;
@@ -54,6 +56,7 @@ public class Usuario {
        this.premium = isPremium;
        this.contactos = new LinkedList<Contacto>();
        this.fechaRegistro = LocalDate.now();
+       this.descuento=null;
    }
     
     
@@ -69,6 +72,7 @@ public class Usuario {
         this.premium = false;
         this.contactos = new LinkedList<>();
         this.fechaRegistro = LocalDate.now();
+        this.descuento=null;
     }
     
     
@@ -144,6 +148,14 @@ public class Usuario {
 
 	public void setFechaRegistro(LocalDate fechaRegistro) {
 		this.fechaRegistro = fechaRegistro;
+	}
+
+	public Descuento getDescuento() {
+		return descuento;
+	}
+
+	public void setDescuento(Descuento descuento) {
+		this.descuento = descuento;
 	}
 	
 	public void addContactoIndividual(String nombre,Usuario usuario) {

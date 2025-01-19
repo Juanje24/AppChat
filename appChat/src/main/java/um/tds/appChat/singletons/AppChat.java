@@ -231,6 +231,7 @@ public enum AppChat {
 		descuento = FactoriaDescuentos.INSTANCE.crearDescuento(nombreDescuento);
 		double precioDescuento = descuento.getPrecio(PREMIUM);
 		usuarioActual.setPremium(true);
+		usuarioActual.setDescuento(descuento);
 		usuarioDAO.modificarUsuario(usuarioActual);
 		return precioDescuento;
 	}
