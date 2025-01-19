@@ -238,9 +238,9 @@ public class Usuario {
 		.sum();
 		
 	}
-	public List<Mensaje> searchMensajes(MotorBusqueda builder){
+	public List<Mensaje> searchMensajes(MotorBusqueda busqueda){
 		return contactos.stream()
-				.flatMap(c -> c.searchMessages(builder).stream())
+				.flatMap(c -> c.searchMessages(busqueda).stream())
 				.collect(Collectors.toList());
 	}
 

@@ -13,13 +13,6 @@ public class MotorBusqueda {
 
 	public MotorBusqueda() {
 	}
-	public MotorBusqueda(String texto, String numero, String nombreContacto, LocalDateTime fecha) {
-		this.text = Optional.ofNullable(texto);
-		this.numero = Optional.ofNullable(numero);
-		this.nombreContacto = Optional.ofNullable(nombreContacto);
-		this.fecha = Optional.ofNullable(fecha);
-	}
-	
 	
     public void setText(String text) {
         this.text = Optional.ofNullable(text);

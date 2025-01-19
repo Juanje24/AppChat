@@ -31,7 +31,9 @@ public enum AppChat {
 	private Peer peer;
 	private Thread peerThread;
 	private ActualizacionVistaListener listener;
+	private FactoriaDescuentos factoriaDescuentos;
 	private boolean simultaneo=false;
+	private MotorBusqueda motorBusqueda;
 	
 	//Constructor de la clase
 	private AppChat() {
@@ -46,6 +48,7 @@ public enum AppChat {
 		grupoDAO = factoriaDAO.getGrupoDAO();
 		mensajeDAO = factoriaDAO.getMensajeDAO();
 		repositorioUsuarios = RepositorioUsuario.INSTANCE;
+		factoriaDescuentos = FactoriaDescuentos.INSTANCE;
 		peer = new Peer();
 		
 	}
@@ -201,19 +204,19 @@ public enum AppChat {
 	}
 	
 	public List<Mensaje> buscarMensaje(String texto, String numero, String nombreContacto, LocalDateTime fecha) {
-		MotorBusqueda builder = new MotorBusqueda();
+		motorBusqueda = new MotorBusqueda();
 		if (!numero.equals("")) {
-			builder.setNumero(numero);
+			motorBusqueda.setNumero(numero);
 		}
 		if (!nombreContacto.equals("")) {
-			builder.setNombreContacto(nombreContacto);
+			motorBusqueda.setNombreContacto(nombreContacto);
 		}
-	    builder.setText(texto);
+	    motorBusqueda.setText(texto);
 	    
 	   
-	    builder.setFecha(fecha);
+	    motorBusqueda.setFecha(fecha);
 	    
-	    return usuarioActual.searchMensajes(builder);
+	    return usuarioActual.searchMensajes(motorBusqueda);
 	}
 	public void logout() {
 		usuarioActual=null;
@@ -236,11 +239,11 @@ public enum AppChat {
 		
 	}
 	public double getPrecioDescontado(String nombreDescuento) {
-		descuento = FactoriaDescuentos.INSTANCE.crearDescuento(nombreDescuento);
+		descuento = factoriaDescuentos.crearDescuento(nombreDescuento);
 		return descuento.getPrecio(PREMIUM);
 	}
 	public double hacerPremium(String nombreDescuento) {
-		descuento = FactoriaDescuentos.INSTANCE.crearDescuento(nombreDescuento);
+		descuento = factoriaDescuentos.crearDescuento(nombreDescuento);
 		double precioDescuento = descuento.getPrecio(PREMIUM);
 		usuarioActual.setPremium(true);
 		usuarioActual.setDescuento(descuento);
