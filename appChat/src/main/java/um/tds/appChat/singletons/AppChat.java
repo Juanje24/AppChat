@@ -153,7 +153,7 @@ public enum AppChat {
 			
 		}
 		return msj;		
-}
+	}
 	public void recibidoMensajeSimultaneo(String message) {
 		PoolDAO.resetearPools();
 		usuarioActual = usuarioDAO.recuperarUsuarioPorId(usuarioActual.getId());

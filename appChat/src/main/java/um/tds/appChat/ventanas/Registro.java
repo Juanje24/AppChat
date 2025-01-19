@@ -186,7 +186,7 @@ public class Registro extends JDialog {
 		gbc_dateChooser.gridy = 5;
 		this.getContentPane().add(dateChooser, gbc_dateChooser);
 		
-		JLabel lblSubirFoto = new JLabel("Seleccione una imagen ");
+		JLabel lblSubirFoto = new JLabel("Seleccione una imagen (opcional) ");
 		GridBagConstraints gbc_lblSubirFoto = new GridBagConstraints();
 		gbc_lblSubirFoto.insets = new Insets(0, 0, 5, 5);
 		gbc_lblSubirFoto.gridx = 3;

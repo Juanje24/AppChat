@@ -14,7 +14,7 @@ public class CargarAppChat {
 	public static void cargarDatos() {
 		AppChat appChat = AppChat.INSTANCE;
 		appChat.recuperarUsuarios();
-		appChat.registrarUsuario("Juanje", "Ortiz", "jjog", LocalDate.of(2004, 02, 24),"717719424" ,"/users/foto perfil.jpg", "Hola, soy Juanje");
+		appChat.registrarUsuario("Juanje", "Ortiz", "jj", LocalDate.of(2004, 02, 24),"71" ,"/users/foto perfil.jpg", "Hola, soy Juanje");
 		appChat.registrarUsuario("Marina", "Montoro", "mnn", LocalDate.of(2004, 10, 05),"11" , "/users/noa.jpeg", "Hola,soy Marina");
 		appChat.registrarUsuario("Stephen", "Curry", "sc", LocalDate.of(1988, 03, 14),"22" , "/users/curry.jpg", "Hello, I'm Stephen");
 		appChat.registrarUsuario("Lebron", "James", "lb", LocalDate.of(1984, 12, 30),"33" , "/users/lebron.jpg", "I'm the king");
@@ -22,7 +22,7 @@ public class CargarAppChat {
 		appChat.registrarUsuario("Jack", "Sparrow", "js", LocalDate.of(1980, 12, 12), "55", "/users/jack.jpg", "I'm Jack Sparrow");
 		appChat.registrarUsuario("Gandalf", "El Gris", "gandalf", LocalDate.of(1000, 4, 3), "66","/users/gandalf.jpg", "You shall not pass");
 		
-		appChat.login("717719424", "jjog");
+		appChat.login("71", "jjog");
 		
 		ContactoIndividual c1 = appChat.agregarContacto("Marina", "11");
 		ContactoIndividual c2 = appChat.agregarContacto("Curry", "22");

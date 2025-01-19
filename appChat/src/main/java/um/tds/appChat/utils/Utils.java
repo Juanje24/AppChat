@@ -27,15 +27,17 @@ public class Utils {
 	}
 
 	public static String getRutaResourceFromString(String source) {
-	    String target = "";
-	    String basePath = "src" + File.separator + "main" + File.separator + "resources" + File.separator;
+	    String basePath = "src/main/resources/";
 	    if (source.contains(basePath)) {
-	        target = source.substring(source.indexOf(basePath) + basePath.length());
-	        // Cambia cualquier separador del sistema a "/"
-	        target = "/" + target.replace(File.separator, "/");
+	        // Obtén la parte relativa al classpath
+	        String target = source.substring(source.indexOf(basePath) + basePath.length());
+	        // Cambia los separadores del sistema por "/"
+	        return "/" + target.replace("\\", "/"); // O usa replace(File.separator, "/") si prefieres
+	    } else {
+	        throw new IllegalArgumentException("La ruta no contiene el basePath esperado: " + basePath);
 	    }
-	    return target;
 	}
+
 	public static BubbleText getBubbleFromMensaje(Mensaje msj, JPanel panel) {
 		if(msj.getTipo()==BubbleText.SENT) {
 			if (!msj.getTexto().equals("") && msj.getEmoji() == -1) {
