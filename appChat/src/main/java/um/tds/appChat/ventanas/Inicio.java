@@ -23,7 +23,6 @@ import java.awt.FlowLayout;
 import javax.swing.JButton;
 import javax.swing.JPasswordField;
 import java.awt.Panel;
-import java.awt.SystemColor;
 import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.GridBagConstraints;
@@ -155,7 +154,7 @@ public class Inicio extends JFrame{
 		panelSur.add(Box.createRigidArea(new Dimension(100,10)));
 		
 		btnCancelar = new JButton("Cancelar");
-		btnCancelar.setUI(new RoundButtonUI(SystemColor.textHighlight,new Color(255,100,100)));
+		btnCancelar.setUI(new RoundButtonUI(Color.BLACK,new Color(255,100,100)));
 		btnCancelar.addActionListener( e -> {
 		    this.setVisible(false);
 		    this.dispose();

@@ -8,8 +8,8 @@ public class Mensaje {
     private int id;
     private String texto;
     private int emoji;
-    private String tlfEmisor; //telefono
-    private String tlfReceptor; //telefono
+    private String tlfEmisor; 
+    private String tlfReceptor; 
     private String nombreEmisor;
     private String nombreReceptor;
     private int tipo;

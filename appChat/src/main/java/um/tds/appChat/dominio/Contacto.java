@@ -14,41 +14,13 @@ public abstract class Contacto {
     private List<Mensaje> mensajes;
     private String urlImagen;
     
-    // CONSTRUCTORES
+    // CONSTRUCTOR
     
     public Contacto(String nombre, String urlImagen) {
     	this.nombre = nombre;
     	this.mensajes = new LinkedList<Mensaje>();
     	this.urlImagen = urlImagen;
-    }
-    
-    // FUNCIONALIDAD
-   
-    public List<Mensaje> searchMessages(MessageSearchBuilder builder) { //revisar para cuando se usa en los grupos
-    	return mensajes.stream()
-        		.filter(mensaje -> builder.filtrar(mensaje))
-                .collect(Collectors.toList());
-    }
-    public void modificarMensajes(String nuevoNombre) {
-    	for (Mensaje mensaje : mensajes) {
-    		//Se cambian los nombres de los mensajes que tengan como emisor o receptor el nombre antiguo
-			if(mensaje.getEmisor().equals(this.getTelefonoPropio())) {
-				mensaje.setNombreEmisor(nuevoNombre);
-			}
-			else {
-				mensaje.setNombreReceptor(nuevoNombre);
-			}
-    	}
-    }
-
-	public int getNumeroMensajesEntreFechas(LocalDateTime inicio, LocalDateTime fin) {
-		return (int) mensajes.stream()
-				.filter(mensaje -> mensaje.getFecha().isAfter(inicio) && mensaje.getFecha().isBefore(fin.plusDays(1)))
-				.count();
-	}
-    
-    
-    // GETTERS Y SETTERS
+    }    
 
     public int getId() {
 		return id;
@@ -104,23 +76,41 @@ public abstract class Contacto {
 	}
 
 	public void setLeidos() {
-		for (Mensaje mensaje : mensajes) {
-			if (mensaje.getTipo() == BubbleText.RECEIVED) {
-				mensaje.setLeido(true);
-			}
-		}
+	    mensajes.stream()
+	            .filter(mensaje -> mensaje.getTipo() == BubbleText.RECEIVED)
+	            .forEach(mensaje -> mensaje.setLeido(true));
 	}
 
-	public int getNumeroMensajesNoLeidos() {
-		int noLeidos = 0;
-		for (Mensaje mensaje : mensajes) {
-			if (mensaje.getTipo() == BubbleText.RECEIVED && !mensaje.isLeido()) {
-				noLeidos++;
+	public List<Mensaje> searchMessages(MotorBusqueda busqueda) { 
+    	return mensajes.stream()
+        		.filter(mensaje -> busqueda.filtrar(mensaje))
+                .collect(Collectors.toList());
+    }
+    public void modificarMensajes(String nuevoNombre) {
+    	for (Mensaje mensaje : mensajes) {
+    		//Se cambian los nombres de los mensajes que tengan como emisor o receptor el nombre antiguo
+			if(mensaje.getEmisor().equals(this.getTelefonoPropio())) {
+				mensaje.setNombreEmisor(nuevoNombre);
 			}
-		}
-		return noLeidos;
+			else {
+				mensaje.setNombreReceptor(nuevoNombre);
+			}
+    	}
+    }
+
+	public int getNumeroMensajesEntreFechas(LocalDateTime inicio, LocalDateTime fin) {
+		return (int) mensajes.stream()
+				.filter(mensaje -> mensaje.getFecha().isAfter(inicio) && mensaje.getFecha().isBefore(fin.plusDays(1)))
+				.count();
 	}
 	
+	public int getNumeroMensajesNoLeidos() {
+	    return (int) mensajes.stream()
+	            .filter(mensaje -> mensaje.getTipo() == BubbleText.RECEIVED && !mensaje.isLeido())
+	            .count();
+	}
+
+	//Se delega en la clase que herede de contacto la implementación de este método
 	public abstract String getTelefonoPropio();
 
 	public abstract String getSaludo();

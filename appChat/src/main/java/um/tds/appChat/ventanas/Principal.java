@@ -449,7 +449,7 @@ public class Principal extends JFrame implements ActualizacionVistaListener {
             JPanel panelSur = new JPanel();
             panelSur.setLayout(new FlowLayout(FlowLayout.RIGHT));
             JButton botonCerrar = new JButton("Cerrar");
-            botonCerrar.setUI(new RoundButtonUI(SystemColor.textHighlight, RoundButtonUI.getRojoCancelar()));
+            botonCerrar.setUI(new RoundButtonUI(Color.BLACK, RoundButtonUI.getRojoCancelar()));
 			botonCerrar.addActionListener(e -> {
 				SwingUtilities.getWindowAncestor(panel).dispose();
 			});
@@ -486,7 +486,7 @@ public class Principal extends JFrame implements ActualizacionVistaListener {
             JButton botonPagar = new JButton("Pagar");
             botonPagar.setUI(new RoundButtonUI());
             JButton botonCancelar = new JButton("Cancelar");
-            botonCancelar.setUI(new RoundButtonUI(SystemColor.textHighlight, RoundButtonUI.getRojoCancelar()));
+            botonCancelar.setUI(new RoundButtonUI(Color.BLACK, RoundButtonUI.getRojoCancelar()));
 
             // Panel para los botones
             JPanel panelBotones = new JPanel();

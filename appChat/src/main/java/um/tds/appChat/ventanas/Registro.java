@@ -10,7 +10,6 @@ import javax.swing.JOptionPane;
 import java.awt.GridBagConstraints;
 import javax.swing.JPasswordField;
 import java.awt.Insets;
-import java.awt.SystemColor;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -320,7 +319,7 @@ public class Registro extends JDialog {
 		}
 		
 		JButton btnCancelar = new JButton("Cancelar");
-		btnCancelar.setUI(new RoundButtonUI(SystemColor.textHighlight,new Color(255,100,100)));
+		btnCancelar.setUI(new RoundButtonUI(Color.BLACK,new Color(255,100,100)));
         
 		btnCancelar.addActionListener( e -> {
 		    this.setVisible(false);

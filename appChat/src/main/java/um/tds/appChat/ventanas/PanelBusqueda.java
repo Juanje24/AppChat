@@ -80,7 +80,7 @@ public class PanelBusqueda extends JDialog {
         JPanel bottomPanel = new JPanel();
         bottomPanel.add(btnBuscar);
         JButton btnCancelar = new JButton("Cerrar");
-		btnCancelar.setUI(new RoundButtonUI(SystemColor.textHighlight,new Color(255,100,100)));
+		btnCancelar.setUI(new RoundButtonUI(Color.BLACK,new Color(255,100,100)));
 		btnCancelar.addActionListener(e->{
 			parent.setVisible(true);
 			dispose();

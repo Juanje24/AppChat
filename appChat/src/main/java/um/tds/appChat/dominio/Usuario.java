@@ -46,7 +46,6 @@ public class Usuario {
     public Usuario( String nombre,String apellido, String telefono, String contraseña, LocalDate birthday,
    		 String saludo, String urlImagen, boolean isPremium){
        this.nombre = nombre;
-       //this.id = id;
        this.apellido = apellido;
        this.telefono = telefono;
        this.contraseña = contraseña;
@@ -62,7 +61,6 @@ public class Usuario {
     
     public Usuario(String nombre, String apellido, String telefono, String contraseña, LocalDate birthday, String saludo, String urlImagen){
         this.nombre = nombre;
-        //this.id = new Random().nextInt(40000);
         this.apellido = apellido;
         this.telefono = telefono;
         this.contraseña = contraseña;
@@ -171,38 +169,27 @@ public class Usuario {
 
 
 	public Optional<ContactoIndividual> getContactoIndividual(String telefono) {
-		Optional<ContactoIndividual> contacto = Optional.empty();
-		for (Contacto c: contactos) {
-			if (c instanceof ContactoIndividual) {
-				if (((ContactoIndividual) c).getUsuario().getTelefono().equals(telefono)) {
-					contacto = Optional.of((ContactoIndividual) c);
-				}
-			}
-		}
-		return contacto;
+	    return contactos.stream()
+	            .filter(c -> c instanceof ContactoIndividual)
+	            .map(c -> (ContactoIndividual) c)
+	            .filter(contacto -> contacto.getUsuario().getTelefono().equals(telefono))
+	            .findFirst();
 	}
-
 
 	public boolean isTlfEnContactos(String tlf) {
-		for (Contacto c : contactos) {
-			if (c instanceof ContactoIndividual) {
-				if (((ContactoIndividual) c).getUsuario().getTelefono().equals(tlf)) {
-					return true;
-				}
-			}
-		}
-		return false;
+	    return contactos.stream()
+	            .filter(c -> c instanceof ContactoIndividual)
+	            .map(c -> (ContactoIndividual) c)
+	            .anyMatch(contacto -> contacto.getUsuario().getTelefono().equals(tlf));
 	}
-	public List<ContactoIndividual> getContactosIndividuales() {
 
-		List<ContactoIndividual> individuales = new LinkedList<>();
-		for (Contacto c : contactos) {
-			if (c instanceof ContactoIndividual) {
-				individuales.add((ContactoIndividual) c);
-			}
-		}
-		return individuales;
+	public List<ContactoIndividual> getContactosIndividuales() {
+	    return contactos.stream()
+	            .filter(c -> c instanceof ContactoIndividual)
+	            .map(c -> (ContactoIndividual) c)
+	            .collect(Collectors.toList());
 	}
+
 	public void addContacto(Contacto c) {
 		this.contactos.add(c);
 		
@@ -212,48 +199,46 @@ public class Usuario {
 				.filter(contacto -> contacto.equals(c))
 				.findFirst().get();
 	}
-	public Mensaje sendMensaje(String texto,int emoji, Contacto c) {
-		for (Contacto contacto : contactos) {
-			if (contacto.equals(c)) {
-				return contacto.addMensaje(texto,emoji, telefono,nombre, BubbleText.SENT);
-				
-			}
-		}
-		return null;
+	public Mensaje sendMensaje(String texto, int emoji, Contacto c) {
+	    return contactos.stream()
+	            .filter(contacto -> contacto.equals(c))
+	            .findFirst()
+	            .map(contacto -> contacto.addMensaje(texto, emoji, telefono, nombre, BubbleText.SENT))
+	            .orElse(null);
 	}
+
 	public Mensaje recibeMensaje(String texto, int emoji, Contacto c) {
-		for (Contacto contacto : contactos) {
-			if (contacto.equals(c)) {
-				return contacto.addMensaje(texto, emoji, telefono, nombre, BubbleText.RECEIVED);
-			}
-		}
-		return null;
+	    return contactos.stream()
+	            .filter(contacto -> contacto.equals(c))
+	            .findFirst()
+	            .map(contacto -> contacto.addMensaje(texto, emoji, telefono, nombre, BubbleText.RECEIVED))
+	            .orElse(null);
 	}
+
 	public void modificarNombreContacto(Contacto contacto, String nuevoNombre) {
-		for (Contacto c : contactos) {
-			if (c.equals(contacto)) {
-				c.setNombre(nuevoNombre);
-			}
-		}
-		
+	    contactos.stream()
+	            .filter(c -> c.equals(contacto))
+	            .findFirst()
+	            .ifPresent(c -> c.setNombre(nuevoNombre));
 	}
+
 	public void eliminarContacto(Contacto contacto) {
 		contactos.remove(contacto);
 	}
 	public void modificarContacto(Contacto contacto) {
-		for (Contacto c : contactos) {
-			if (c.equals(contacto)){
-				contactos.set(contactos.indexOf(c), contacto);
-			}
-		}
+	    contactos.stream()
+	            .filter(c -> c.equals(contacto))
+	            .findFirst()
+	            .ifPresent(c -> contactos.set(contactos.indexOf(c), contacto));
 	}
+
 	public int getNumMensajesEntreFecha(LocalDateTime inicio, LocalDateTime fin) {
 		return contactos.stream()
 		.mapToInt(c -> c.getNumeroMensajesEntreFechas(inicio, fin))
 		.sum();
 		
 	}
-	public List<Mensaje> searchMensajes(MessageSearchBuilder builder){
+	public List<Mensaje> searchMensajes(MotorBusqueda builder){
 		return contactos.stream()
 				.flatMap(c -> c.searchMessages(builder).stream())
 				.collect(Collectors.toList());

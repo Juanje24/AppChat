@@ -6,7 +6,7 @@ public class DescuentoPorFecha implements Descuento {
 	
 	public static final String NOMBRE = "Descuento por creación de cuenta entre fechas con promoción";
 	
-    private static LocalDate inicio = LocalDate.of(2025, 1, 1); //PODRÍAN SER ESTÁTICOS
+    private static LocalDate inicio = LocalDate.of(2025, 1, 1); 
     private static LocalDate fin = LocalDate.of(2025, 1, 31);
     private int valor = 25;
 

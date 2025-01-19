@@ -3,7 +3,7 @@ package um.tds.appChat.dominio;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-public class MessageSearchBuilder {
+public class MotorBusqueda {
 	//A pesar de que no se recomienda usar Optional como atributos de clase, en este caso se ha decidido usarlo 
 	//ya que el manejo del Optional es privado a esta clase
 	private Optional<String> text = Optional.empty();
@@ -11,9 +11,9 @@ public class MessageSearchBuilder {
     private Optional<String> nombreContacto = Optional.empty();
     private Optional<LocalDateTime> fecha = Optional.empty();
 
-	public MessageSearchBuilder() {
+	public MotorBusqueda() {
 	}
-	public MessageSearchBuilder(String texto, String numero, String nombreContacto, LocalDateTime fecha) {
+	public MotorBusqueda(String texto, String numero, String nombreContacto, LocalDateTime fecha) {
 		this.text = Optional.ofNullable(texto);
 		this.numero = Optional.ofNullable(numero);
 		this.nombreContacto = Optional.ofNullable(nombreContacto);

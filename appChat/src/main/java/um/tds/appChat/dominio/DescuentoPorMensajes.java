@@ -6,7 +6,7 @@ public class DescuentoPorMensajes implements Descuento {
     
 	public static final String NOMBRE = "Descuento por número de mensajes";
 	
-	private static final int MINIMO_MENSAJES=10; //PODRÍAN SER ESTÁTICOS
+	private static final int MINIMO_MENSAJES=20;
     private static int valor = 10;
     
 

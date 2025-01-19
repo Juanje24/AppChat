@@ -201,7 +201,7 @@ public enum AppChat {
 	}
 	
 	public List<Mensaje> buscarMensaje(String texto, String numero, String nombreContacto, LocalDateTime fecha) {
-		MessageSearchBuilder builder = new MessageSearchBuilder();
+		MotorBusqueda builder = new MotorBusqueda();
 		if (!numero.equals("")) {
 			builder.setNumero(numero);
 		}
