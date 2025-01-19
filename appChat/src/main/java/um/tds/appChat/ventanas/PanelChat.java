@@ -288,6 +288,11 @@ public class PanelChat extends JPanel {
 	 areaTexto.setPreferredSize(new Dimension(300, altura));
 	 areaTexto.revalidate();
 	}
+
+	public void reiniciar() {
+		this.removeAll();
+		initialize(null);
+	}
 	
 	
 	private class EmojiSelectorDialog extends JDialog {

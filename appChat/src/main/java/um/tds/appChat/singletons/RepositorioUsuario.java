@@ -15,9 +15,7 @@ public enum RepositorioUsuario {
 
     private Set<Usuario> usuarios = new HashSet<Usuario>();
 
-    public void setUsuarios(Collection<Usuario> setUsuarios) {
-		this.usuarios.addAll(setUsuarios);
-	}
+
 	
 	public void deleteRepositorio() {
 		usuarios.clear();
@@ -48,6 +46,7 @@ public enum RepositorioUsuario {
 	}
  
 	public void cargarUsuarios(Collection<Usuario> usuarios) {
+		this.usuarios.clear();
 		this.usuarios.addAll(usuarios);
 	}
     //El repositorio es el que crea los usuarios nuevos, ya que tiene la colección de usuarios

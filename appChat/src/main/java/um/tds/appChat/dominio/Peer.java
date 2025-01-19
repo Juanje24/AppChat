@@ -105,6 +105,7 @@ public class Peer implements Runnable {
     }
     public void sendMessage(String message) {
         try{
+        	Thread.sleep(2000);
         	out.println(message);
 		} catch (Exception e) {
 			System.out.println("Error al enviar el mensaje a la otra instancia");
@@ -115,8 +116,6 @@ public class Peer implements Runnable {
 		if (running) {
 			try {
 				System.out.println("Cerrando el socket...");
-				in.close();
-				out.close();
 				socket.close();
 			} catch (IOException e) {
 				System.out.println("Error al cerrar el socket");

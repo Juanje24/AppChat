@@ -47,18 +47,19 @@ public enum AppChat {
 		repositorioUsuarios = RepositorioUsuario.INSTANCE;
 		peer = new Peer();
 		
-		
-		
-		
-		
 	}
 
 	public void startSimultaneo() {
-		simultaneo = true;
-		peerThread = new Thread(peer);
-		peerThread.start();
+		if (!simultaneo) {
+			simultaneo = true;
+			peerThread = new Thread(peer);
+			peerThread.start();
+		}
+
+		
 	}
 	public Mensaje enviarMensajeContacto(Contacto c3, String string, int emoji) {
+		PoolDAO.resetearPools();
 		Mensaje msj = usuarioActual.sendMensaje( string, emoji, c3);
 		mensajeDAO.registrarMensaje(msj);
 		if (c3 instanceof ContactoIndividual) {
@@ -77,10 +78,8 @@ public enum AppChat {
 				Mensaje msjRecv= uReceptor.recibeMensaje(string, emoji, cEmisor.get());
 				mensajeDAO.registrarMensaje(msjRecv);
 				contactoIndividualDAO.modificarContactoIndividual(cEmisor.get());
-				System.out.println("Se ha encontrado");
 			}
 			else {
-				System.out.println("Se ha tenido que crear el contacto");
 				uReceptor.addContactoIndividual(usuarioActual.getTelefono(), usuarioActual);
 				ContactoIndividual c = uReceptor.getContactoIndividual(usuarioActual.getTelefono()).get();
 				contactoIndividualDAO.registrarContactoIndividual(c);
@@ -127,6 +126,7 @@ public enum AppChat {
 		return true;
 	}
 	public boolean login(String telefono, String contrasena) {
+		recuperarUsuarios();
 		if (repositorioUsuarios.buscarUsuarioPorMovil(telefono).isPresent()) {
 			usuarioActual = repositorioUsuarios.buscarUsuarioPorMovil(telefono).get();
 			return usuarioActual.getContraseña().equals(contrasena);
@@ -186,6 +186,11 @@ public enum AppChat {
 		usuarioActual=null;
 		peer.stop();		
 	}
+
+	public void pararSimultaneo() {
+		peer.stop();
+		simultaneo = false;
+	}
 	public double getPrecioPremium() {
 		return PREMIUM;
 	}
@@ -234,10 +239,7 @@ public enum AppChat {
 		PoolDAO.resetearPools();
 		usuarioActual = usuarioDAO.recuperarUsuarioPorId(usuarioActual.getId());
 		ContactoIndividual c = contactoIndividualDAO.recuperarContactoIndividualPorId(Integer.parseInt(message));	
-		System.out.println("Numero de contactos: "+usuarioActual.getContactos().size());
-		for (Contacto cAux : usuarioActual.getContactos()) {
-			System.out.println("Contacto: "+cAux.getNombre()+" mensajes: "+cAux.getMensajes().size());
-		}
+		repositorioUsuarios.modificarUsuario(usuarioActual);
 		listener.actualizarVista(c.getNombre(), c.getNumeroMensajesNoLeidos());
 	}
 
@@ -245,7 +247,6 @@ public enum AppChat {
 		for (Mensaje m : c.getMensajes()) {
             mensajeDAO.modificarMensaje(m);
         }
-		
 	}
 	public void marcarMensajesLeidos(Contacto c) {
 		c.setLeidos();

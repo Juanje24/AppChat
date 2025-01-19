@@ -24,7 +24,6 @@ public class Mensaje {
         this.tlfReceptor = receptor;
         this.nombreEmisor = nombreEmisor;
         this.nombreReceptor = nombreReceptor;
-        System.out.println("tlfEmisor: "+tlfEmisor+" tlfReceptor: "+tlfReceptor+" nombreEmisor: "+nombreEmisor+" nombreReceptor: "+nombreReceptor);
         this.tipo = tipo;
         this.fecha = LocalDateTime.now(); 
         this.leido = false;

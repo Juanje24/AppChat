@@ -27,6 +27,7 @@ public class Principal extends JFrame implements ActualizacionVistaListener {
 	private JPanel panelCentro;
 	private JButton serPremium;
 	private JFrame frame;
+	private boolean simultaneo=false;
 
 	/**
 	 * Create the application.
@@ -47,7 +48,12 @@ public class Principal extends JFrame implements ActualizacionVistaListener {
 		frame = this;
 		this.setTitle("AppChat");
 		this.setBounds(100, 100, 1280, 720);
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				AppChat.INSTANCE.logout();
+			}
+		});
 		this.getContentPane().setLayout(new BorderLayout(0, 0));
 		
 		JPanel panelNorte = new JPanel();
@@ -63,6 +69,7 @@ public class Principal extends JFrame implements ActualizacionVistaListener {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 if (!e.getValueIsAdjusting()) {
+                	//Logica para seleccionar un contacto
                    contactoSeleccionado = panelContactos.getContactoSeleccionado();
                     if (contactoSeleccionado != null) {
                     	contactoSeleccionado.setLeidos();
@@ -187,23 +194,44 @@ public class Principal extends JFrame implements ActualizacionVistaListener {
 		JButton btnConex= new JButton(new ImageIcon(iconoConexEscalado));
 		btnConex.setUI(new RoundButtonUI());
 		btnConex.addActionListener(e -> {
-		   
-		    int opcion = JOptionPane.showOptionDialog(
-		            this,
-		            "¿Quieres activar la simultaneidad?", // Mensaje
-		            "Activar Simultaneidad", // Título
-		            JOptionPane.YES_NO_OPTION, // Opciones
-		            JOptionPane.QUESTION_MESSAGE, // Tipo de mensaje
-		            null, // Ícono personalizado (puede ser null para el ícono predeterminado)
-		            new Object[]{"Sí", "No"}, // Texto de los botones
-		            "Sí" // Opción predeterminada
-		    );
+		    if(!simultaneo) {
+		    	int opcion = JOptionPane.showOptionDialog(
+			            this,
+			            "¿Quieres activar la simultaneidad?", // Mensaje
+			            "Activar Simultaneidad", // Título
+			            JOptionPane.YES_NO_OPTION, // Opciones
+			            JOptionPane.QUESTION_MESSAGE, // Tipo de mensaje
+			            null, // Ícono personalizado (puede ser null para el ícono predeterminado)
+			            new Object[]{"Sí", "No"}, // Texto de los botones
+			            "Sí" // Opción predeterminada
+			    );
 
-		    // Si el usuario selecciona "Sí" (índice 0)
-		    if (opcion == JOptionPane.YES_OPTION) {
-		        // Llamar al método del controlador
-		        AppChat.INSTANCE.startSimultaneo();
+			    // Si el usuario selecciona "Sí" (índice 0)
+			    if (opcion == JOptionPane.YES_OPTION) {
+			        // Llamar al método del controlador
+			    	simultaneo=true;
+			        AppChat.INSTANCE.startSimultaneo();
+			    }
+		    }else {
+		    	int opcion = JOptionPane.showOptionDialog(
+			            this,
+			            "¿Quieres parar la simultaneidad?", // Mensaje
+			            "Detener simultaneidad", // Título
+			            JOptionPane.YES_NO_OPTION, // Opciones
+			            JOptionPane.QUESTION_MESSAGE, // Tipo de mensaje
+			            null, // Ícono personalizado (puede ser null para el ícono predeterminado)
+			            new Object[]{"Sí", "No"}, // Texto de los botones
+			            "Sí" // Opción predeterminada
+			    );
+
+			    // Si el usuario selecciona "Sí" (índice 0)
+			    if (opcion == JOptionPane.YES_OPTION) {
+			        // Llamar al método del controlador
+			    	simultaneo=false;
+			        AppChat.INSTANCE.pararSimultaneo();
+			    }
 		    }
+		    
 		});
 
 		panelNorte.add(btnConex);
@@ -303,17 +331,11 @@ public class Principal extends JFrame implements ActualizacionVistaListener {
 	}
 	public void actualizarVista(String nombre, int numMsjs) {
 		panelContactos.reemplazarContactos(AppChat.INSTANCE.getUsuarioActual().getContactos());
-		JOptionPane.showMessageDialog(this, "Nuevo mensaje de " + nombre + ". Tienes " + numMsjs + " mensajes sin leer", "¡Nuevo mensaje!", JOptionPane.INFORMATION_MESSAGE);
 		this.setVisible(true);
-		this.revalidate();
-		this.repaint();
-		this.validate();
-		panelContactos.revalidate();
-		panelContactos.repaint();
-		panelContactos.validate();
-		panelCentro.revalidate();
-		panelCentro.repaint();
-		panelCentro.validate();
+		panelContactos.borrarSeleccion();
+		((PanelChat) panelCentro).reiniciar();
+        frame.revalidate();
+        frame.repaint();
 		
 	}
 	

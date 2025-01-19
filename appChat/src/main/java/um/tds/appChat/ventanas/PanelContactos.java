@@ -43,4 +43,8 @@ public class PanelContactos extends JPanel {
 	public Contacto getContactoSeleccionado() {
 		return listaContactos.getSelectedValue();
 	}
+
+	public void borrarSeleccion() {
+		listaContactos.clearSelection();
+	}
 }
