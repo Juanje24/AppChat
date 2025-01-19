@@ -3,7 +3,6 @@ package um.tds.appChat;
 import java.awt.EventQueue;
 
 import um.tds.appChat.ventanas.Inicio;
-import um.tds.appChat.singletons.CargarAppChat;
 
 public class Lanzador {
 	public static void main(String[] args) {
