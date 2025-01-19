@@ -207,6 +207,11 @@ public class Usuario {
 		this.contactos.add(c);
 		
 	}
+	public Contacto getContacto(Contacto c) {
+		return contactos.stream()
+				.filter(contacto -> contacto.equals(c))
+				.findFirst().get();
+	}
 	public Mensaje sendMensaje(String texto,int emoji, Contacto c) {
 		for (Contacto contacto : contactos) {
 			if (contacto.equals(c)) {

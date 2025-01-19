@@ -111,6 +111,8 @@ public class ContactoIndividualDAO_TDS implements ContactoIndividualDAO{
 
 	@Override
 	public void modificarContactoIndividual(ContactoIndividual contactoIndividual) {
+		System.out.println("modificando contacto individual con nombre: " + contactoIndividual.getNombre()+ " y mensajes: " + contactoIndividual.getMensajes().size());
+		
 		Entidad eIndividual = servicioPersistencia.recuperarEntidad(contactoIndividual.getId());
 		for (Propiedad prop : eIndividual.getPropiedades()) {
 			if (prop.getNombre().equals(NOMBRE)) {

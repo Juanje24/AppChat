@@ -109,21 +109,26 @@ public enum AppChat {
 	}
 	//Método para enviar un mensaje a un contacto
 	public Mensaje enviarMensajeContacto(Contacto c3, String string, int emoji) {
+		System.out.println("Contacto individual ANTES: "+c3.getNombre()+" mensajes: "+c3.getMensajes().size());
 		Mensaje msj = usuarioActual.sendMensaje( string, emoji, c3);
 		mensajeDAO.registrarMensaje(msj);
 		if (c3 instanceof ContactoIndividual) {
-			contactoIndividualDAO.modificarContactoIndividual((ContactoIndividual) c3);
+			System.out.println("Contacto individual DESPUÉS: "+c3.getNombre()+" mensajes: "+c3.getMensajes().size());
+			contactoIndividualDAO.modificarContactoIndividual((ContactoIndividual) usuarioActual.getContacto(c3));
 		} else {
-			grupoDAO.modificarGrupo((Grupo) c3);
+			grupoDAO.modificarGrupo((Grupo) usuarioActual.getContacto(c3));
 		}
 		
 		StringTokenizer strTok = new StringTokenizer(c3.getTelefonoPropio(), " ");
 		while ( strTok.hasMoreElements()) { 
 			String tlf = (String) strTok.nextElement();
 			Usuario uReceptor = repositorioUsuarios.buscarUsuarioPorMovil(tlf).get();
+			//Realmente con esto valdría, pero si queremos que sea simultaneo hay que traerlo de persistencia
+			if (simultaneo) {
+				uReceptor = usuarioDAO.recuperarUsuarioPorId(uReceptor.getId());
+			}
 			Optional<ContactoIndividual> cEmisor = uReceptor.getContactoIndividual(usuarioActual.getTelefono());
 			if (cEmisor.isPresent()) {
-				
 				Mensaje msjRecv= uReceptor.recibeMensaje(string, emoji, cEmisor.get());
 				mensajeDAO.registrarMensaje(msjRecv);
 				contactoIndividualDAO.modificarContactoIndividual(cEmisor.get());
@@ -139,6 +144,7 @@ public enum AppChat {
 				usuarioDAO.modificarUsuario(uReceptor);
 			}
 			if (simultaneo) {
+				System.out.println("Mensajes con el contacto "+c3.getNombre()+": "+c3.getMensajes().size()	);
 				peer.sendMessage(String.valueOf(cEmisor.get().getId()));
 			}
 			
@@ -148,7 +154,13 @@ public enum AppChat {
 	public void recibidoMensajeSimultaneo(String message) {
 		PoolDAO.resetearPools();
 		usuarioActual = usuarioDAO.recuperarUsuarioPorId(usuarioActual.getId());
+		for (Contacto c : usuarioActual.getContactos()) {
+			if (c.getId()==Integer.parseInt(message)) {
+				System.out.println("Contacto encontrado con "+c.getMensajes().size()+" mensajes");
+			}
+		}
 		ContactoIndividual c = contactoIndividualDAO.recuperarContactoIndividualPorId(Integer.parseInt(message));
+		System.out.println("Contacto recuperado de persistencia con "+c.getMensajes().size()+" mensajes");
 		usuarioActual.modificarContacto(c);
 		repositorioUsuarios.modificarUsuario(usuarioActual);
 		listener.actualizarVista(c.getNombre(), c.getNumeroMensajesNoLeidos());

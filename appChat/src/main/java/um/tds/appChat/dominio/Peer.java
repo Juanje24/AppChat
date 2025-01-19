@@ -34,14 +34,14 @@ public class Peer implements Runnable {
         while(running) {
             try {
                 String message = in.readLine();
-                if(message == null) {
+                if(message == null || message.equals("")) {
                     System.out.println("El cliente se ha desconectado");
                     return;
                 }
-                System.out.println("Mensaje recibido del contacto con id: " + message);
-                AppChat.INSTANCE.recibidoMensajeSimultaneo(message);
+               AppChat.INSTANCE.recibidoMensajeSimultaneo(message);
             } catch (IOException e) {
                 System.out.println("Error al leer el mensaje");
+                running = false;
             }
         }
     }
